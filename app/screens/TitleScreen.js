@@ -4,8 +4,6 @@ import { signUp } from "../routes/authRoutes";
 
 function TitleScreen({ navigation }) {
   const onSignUpPress = async () => {
-    const data = await signUp();
-    console.log(data);
     navigation.navigate("Sign Up");
   };
 

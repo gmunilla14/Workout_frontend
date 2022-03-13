@@ -10,6 +10,7 @@ import {
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { signUp } from "../routes/authRoutes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().min(4).max(32).trim().label("Username"),
@@ -28,15 +29,16 @@ const validationSchema = Yup.object().shape({
     .required("Must confirm password")
     .oneOf([Yup.ref("password")], "Passwords must match"),
 });
+
 function SignUpScreen(props) {
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="never">
       <Formik
         initialValues={{
-          username: "",
-          email: "",
-          password: "",
-          passwordConfirm: "",
+          username: "User1",
+          email: "user1@mail.com",
+          password: "Password1",
+          passwordConfirm: "Password1",
         }}
         onSubmit={async (values) => {
           const user = {
@@ -44,8 +46,11 @@ function SignUpScreen(props) {
             email: values.email,
             password: values.password,
           };
-          const data = await signUp(user);
-          console.log(data);
+          const response = await signUp(user);
+          console.log(response);
+          if (response.status === 200) {
+            await AsyncStorage.setItem("token", response.data.token);
+          }
         }}
         validationSchema={validationSchema}
       >
@@ -90,6 +95,11 @@ function SignUpScreen(props) {
           </>
         )}
       </Formik>
+
+      <Button
+        title="Check storage"
+        onPress={async () => console.log(await AsyncStorage.getItem("token"))}
+      />
     </ScrollView>
   );
 }

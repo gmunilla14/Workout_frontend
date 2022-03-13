@@ -6,7 +6,7 @@ export const signUp = async (user) => {
       "http://192.168.4.66:3000/api/1.0/signup",
       user
     );
-    return response.data;
+    return response;
   } catch (err) {
     console.log(err);
     return;
