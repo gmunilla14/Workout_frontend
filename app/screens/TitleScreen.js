@@ -2,14 +2,16 @@ import React from "react";
 import { View, StyleSheet, Button, TouchableOpacity, Text } from "react-native";
 import { signUp } from "../routes/authRoutes";
 
-function SignUpScreen(props) {
+function TitleScreen({ navigation }) {
   const onSignUpPress = async () => {
     const data = await signUp();
     console.log(data);
+    navigation.navigate("Sign Up");
   };
 
   const onLoginPress = () => {
     console.log("Cutie");
+    navigation.navigate("Login");
   };
   return (
     <>
@@ -32,4 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignUpScreen;
+export default TitleScreen;

@@ -1,9 +1,4 @@
 import axios from "axios";
-import { create } from "apisauce";
-
-const apiClient = create({
-  baseURL: "http://192.168.4.66:3000/api/1.0",
-});
 
 export const signUp = async () => {
   try {
@@ -21,3 +16,5 @@ export const signUp = async () => {
     return;
   }
 };
+
+export const login = async () => {};
