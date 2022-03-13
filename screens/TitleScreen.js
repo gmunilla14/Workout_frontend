@@ -3,9 +3,9 @@ import { View, StyleSheet, Button, TouchableOpacity, Text } from "react-native";
 import { signUp } from "../routes/authRoutes";
 
 function SignUpScreen(props) {
-  const onSignUpPress = () => {
-    console.log("Love you");
-    signUp();
+  const onSignUpPress = async () => {
+    const data = await signUp();
+    console.log(data);
   };
 
   const onLoginPress = () => {

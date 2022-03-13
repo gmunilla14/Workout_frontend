@@ -2,15 +2,22 @@ import axios from "axios";
 import { create } from "apisauce";
 
 const apiClient = create({
-  baseURL: "http://192.168.4.66/api/1.0",
+  baseURL: "http://192.168.4.66:3000/api/1.0",
 });
 
 export const signUp = async () => {
-  apiClient.post("/signup").then((response) => {
-    if (!response.ok) {
-      console.log(response.problem);
-    } else {
-      console.log(response);
-    }
-  });
+  try {
+    const response = await axios.post(
+      "http://192.168.4.66:3000/api/1.0/signup",
+      {
+        username: "user",
+        email: "user@mail.com",
+        password: "Password1",
+      }
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
 };
