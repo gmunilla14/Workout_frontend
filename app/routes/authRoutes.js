@@ -1,14 +1,10 @@
 import axios from "axios";
 
-export const signUp = async () => {
+export const signUp = async (user) => {
   try {
     const response = await axios.post(
       "http://192.168.4.66:3000/api/1.0/signup",
-      {
-        username: "user",
-        email: "user@mail.com",
-        password: "Password1",
-      }
+      user
     );
     return response.data;
   } catch (err) {

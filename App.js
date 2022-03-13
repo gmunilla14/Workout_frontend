@@ -6,10 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 export default function App() {
   return (
     <NavigationContainer>
-      <View style={styles.container}>
-        <AuthNavigator />
-        <StatusBar style="auto" />
-      </View>
+      <AuthNavigator />
     </NavigationContainer>
   );
 }
