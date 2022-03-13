@@ -1,4 +1,5 @@
 import axios from "axios";
+import { setHeaders } from "./utils";
 
 export const signUp = async (user) => {
   try {
@@ -14,3 +15,16 @@ export const signUp = async (user) => {
 };
 
 export const login = async () => {};
+
+export const activate = async (token) => {
+  try {
+    const response = await axios.post(
+      "http://192.168.4.66:3000/api/1.0/activate",
+      token,
+      await setHeaders()
+    );
+    return response;
+  } catch (err) {
+    return err.response;
+  }
+};

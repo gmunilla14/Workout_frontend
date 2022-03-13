@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import TitleScreen from "../screens/TitleScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import LoginScreen from "../screens/LoginScreen";
-
+import ActivateScreen from "../screens/ActivateScreen";
 const Stack = createStackNavigator();
 
 function AuthNavigator(props) {
@@ -13,6 +13,7 @@ function AuthNavigator(props) {
       <Stack.Screen name="Title" component={TitleScreen} />
       <Stack.Screen name="Sign Up" component={SignUpScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Activate" component={ActivateScreen} />
     </Stack.Navigator>
   );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Button, TouchableOpacity, Text } from "react-native";
 import { signUp } from "../routes/authRoutes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function TitleScreen({ navigation }) {
   const onSignUpPress = async () => {
@@ -19,6 +20,12 @@ function TitleScreen({ navigation }) {
       <TouchableOpacity style={styles.container} onPress={onLoginPress}>
         <Text>Log In</Text>
       </TouchableOpacity>
+      <Button
+        title="Sign Out"
+        onPress={async () => {
+          await AsyncStorage.removeItem("token");
+        }}
+      />
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -30,7 +30,14 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password")], "Passwords must match"),
 });
 
-function SignUpScreen(props) {
+function SignUpScreen({ navigation }) {
+  useEffect(async () => {
+    const userToken = await AsyncStorage.getItem("token");
+    if (userToken) {
+      navigation.navigate("Activate");
+    }
+  });
+
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="never">
       <Formik
@@ -47,9 +54,10 @@ function SignUpScreen(props) {
             password: values.password,
           };
           const response = await signUp(user);
-          console.log(response);
+          console.log(response.data);
           if (response.status === 200) {
             await AsyncStorage.setItem("token", response.data.token);
+            navigation.navigate("Activate");
           }
         }}
         validationSchema={validationSchema}
