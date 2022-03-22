@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Button, FlatList } from "react-native";
-import { getPlans } from "../routes/planRoutes";
+import { getPlans } from "../store/actions/planActions";
 import { Picker } from "@react-native-picker/picker";
 import { createWorkout } from "../routes/workoutRoutes";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,6 @@ function WorkoutClockScreen(props) {
   const [maxSet, setMaxSet] = useState(0);
   const [maxGroup, setMaxGroup] = useState(0);
 
-  const [plans, setPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(false);
 
   const [startBound, setStartBound] = useState(0);
@@ -26,12 +25,12 @@ function WorkoutClockScreen(props) {
 
   const exercises = useSelector((state) => state.exercises);
   const muscles = useSelector((state) => state.muscles);
+  const plans = useSelector((state) => state.plans);
 
   console.log(exercises);
 
-  useEffect(async () => {
-    const planList = await getPlans();
-    setPlans(planList);
+  useEffect(() => {
+    dispatch(getPlans());
   }, []);
 
   useEffect(() => {

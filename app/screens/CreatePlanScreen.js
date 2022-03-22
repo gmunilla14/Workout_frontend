@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
 import { Picker } from "@react-native-picker/picker";
-import { createPlan } from "../routes/planRoutes";
+import { createPlan } from "../store/actions/planActions";
 import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch, useSelector } from "react-redux";
 function CreatePlanScreen(props) {
@@ -29,7 +29,7 @@ function CreatePlanScreen(props) {
         }}
         onSubmit={async (values) => {
           console.log(values);
-          await createPlan(values);
+          dispatch(createPlan(values));
         }}
       >
         {({ handleChange, handleSubmit, values, setFieldValue }) => (
