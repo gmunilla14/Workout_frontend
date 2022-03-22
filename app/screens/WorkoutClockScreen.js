@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Text, Button, FlatList } from "react-native";
 import { getPlans } from "../store/actions/planActions";
 import { Picker } from "@react-native-picker/picker";
-import { createWorkout } from "../routes/workoutRoutes";
+import { createWorkout } from "../store/actions/workoutActions";
 import { useDispatch, useSelector } from "react-redux";
 import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
+
 function WorkoutClockScreen(props) {
   const [minutes, setMinutes] = useState("00");
   const [seconds, setSeconds] = useState("00");
@@ -26,8 +27,6 @@ function WorkoutClockScreen(props) {
   const exercises = useSelector((state) => state.exercises);
   const muscles = useSelector((state) => state.muscles);
   const plans = useSelector((state) => state.plans);
-
-  console.log(exercises);
 
   useEffect(() => {
     dispatch(getPlans());
@@ -84,9 +83,6 @@ function WorkoutClockScreen(props) {
       setMaxSet(workout.groups[currentGroup + 1].sets.length - 1);
       setCurrentGroup(currentGroup + 1);
     }
-
-    console.log("Interval");
-    console.log("----------------------------------------");
   };
   const onStopButton = () => {
     const now = new Date();
@@ -106,7 +102,6 @@ function WorkoutClockScreen(props) {
     setWorkout({ ...workout, groups: workoutGroups, endTime });
 
     setClockRunning(false);
-    console.log(workout);
   };
 
   useEffect(() => {
@@ -135,7 +130,6 @@ function WorkoutClockScreen(props) {
         selectedValue={selectedPlan}
         onValueChange={(itemValue, itemIndex) => {
           setSelectedPlan(itemValue);
-          console.log(itemValue);
           let maxGroups = 0;
           let maxSets = 0;
           let sets = [];
@@ -181,7 +175,6 @@ function WorkoutClockScreen(props) {
       <Button
         title="Workout"
         onPress={async () => {
-          console.log(workout);
           let newWorkout = { ...workout };
           newWorkout.groups.forEach((group, index) => {
             delete newWorkout.groups[index]._id;
@@ -190,8 +183,7 @@ function WorkoutClockScreen(props) {
             });
           });
           delete newWorkout.uid;
-          console.log(newWorkout);
-          await createWorkout(newWorkout);
+          dispatch(createWorkout(newWorkout));
         }}
       />
       <Button
