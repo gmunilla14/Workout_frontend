@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Button } from "react-native";
+import { View, StyleSheet, Text, Button, FlatList } from "react-native";
 import { getPlans } from "../routes/planRoutes";
 import { Picker } from "@react-native-picker/picker";
 import { createWorkout } from "../routes/workoutRoutes";
-
+import { useDispatch, useSelector } from "react-redux";
+import { findExercises } from "../store/actions/exerciseActions";
+import { findMuscles } from "../store/actions/muscleActions";
 function WorkoutClockScreen(props) {
   const [minutes, setMinutes] = useState("00");
   const [seconds, setSeconds] = useState("00");
@@ -19,6 +21,13 @@ function WorkoutClockScreen(props) {
 
   const [startBound, setStartBound] = useState(0);
   const [workout, setWorkout] = useState({});
+
+  const dispatch = useDispatch();
+
+  const exercises = useSelector((state) => state.exercises);
+  const muscles = useSelector((state) => state.muscles);
+
+  console.log(exercises);
 
   useEffect(async () => {
     const planList = await getPlans();
@@ -185,6 +194,31 @@ function WorkoutClockScreen(props) {
           console.log(newWorkout);
           await createWorkout(newWorkout);
         }}
+      />
+      <Button
+        title="Get Exercises"
+        onPress={() => {
+          dispatch(findExercises());
+        }}
+      />
+
+      <FlatList
+        data={exercises}
+        keyExtractor={(exercise) => exercise._id.toString()}
+        renderItem={({ item }) => <Text>{item.name}</Text>}
+      />
+
+      <Button
+        title="Get Muscles"
+        onPress={() => {
+          dispatch(findMuscles());
+        }}
+      />
+
+      <FlatList
+        data={muscles}
+        keyExtractor={(muscle) => muscle._id.toString()}
+        renderItem={({ item }) => <Text>{item.name}</Text>}
       />
     </View>
   );
