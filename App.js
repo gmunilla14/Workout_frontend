@@ -15,7 +15,7 @@ const store = createStore(rootReducer, applyMiddleware(thunk));
 export default function App() {
   return (
     <Provider store={store}>
-      <WorkoutClockScreen />
+      <CreatePlanScreen />
     </Provider>
   );
 }

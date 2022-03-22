@@ -26,6 +26,12 @@ function TitleScreen({ navigation }) {
           await AsyncStorage.removeItem("token");
         }}
       />
+      <Button
+        title="Go to app"
+        onPress={() => {
+          navigation.navigate("App");
+        }}
+      />
     </>
   );
 }

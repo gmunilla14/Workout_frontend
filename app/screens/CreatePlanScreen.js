@@ -9,15 +9,18 @@ import { createExercise } from "../routes/exerciseRoutes";
 import { getExercises } from "../routes/exerciseRoutes";
 import { Picker } from "@react-native-picker/picker";
 import { createPlan } from "../routes/planRoutes";
+import { findExercises } from "../store/actions/exerciseActions";
+import { useDispatch, useSelector } from "react-redux";
 function CreatePlanScreen(props) {
-  const [exercises, setExercises] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState();
   const [selectedSets, setSelectedSets] = useState(0);
   const [selectedRest, setSelectedRest] = useState(0);
 
-  useEffect(async () => {
-    const exerciseList = await getExercises();
-    setExercises(exerciseList);
+  const dispatch = useDispatch();
+  const exercises = useSelector((state) => state.exercises);
+
+  useEffect(() => {
+    dispatch(findExercises());
   }, []);
 
   return (

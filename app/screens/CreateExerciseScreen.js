@@ -6,19 +6,23 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
 import { getMuscles } from "../routes/muscleRoutes";
 import { createExercise } from "../routes/exerciseRoutes";
-
+import { findMuscles } from "../store/actions/muscleActions";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 function CreateExerciseScreen(props) {
-  const [muscles, setMuscles] = useState([]);
   const [chosenMuscles, setChosenMuscles] = useState([]);
+
+  const dispatch = useDispatch();
   useEffect(async () => {
     const userToken = await AsyncStorage.getItem("token");
     if (userToken) {
       console.log(jwtDecode(userToken));
     }
 
-    const musclesList = await getMuscles();
-    setMuscles(musclesList);
+    dispatch(findMuscles());
   }, []);
+
+  const muscles = useSelector((state) => state.muscles);
 
   const handleChangeMuscle = (id, values, setFieldValue) => {
     let currentMuscles = values.muscles;
