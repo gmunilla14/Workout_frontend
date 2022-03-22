@@ -1,7 +1,7 @@
 import axios from "axios";
 import { setHeaders } from "../../routes/utils";
 
-export const findExercises = () => {
+export const getExercises = () => {
   return async (dispatch) => {
     try {
       const exercises = await axios.get(

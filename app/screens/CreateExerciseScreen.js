@@ -4,9 +4,8 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
-import { getMuscles } from "../routes/muscleRoutes";
 import { createExercise } from "../routes/exerciseRoutes";
-import { findMuscles } from "../store/actions/muscleActions";
+import { getMuscles } from "../store/actions/muscleActions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 function CreateExerciseScreen(props) {
@@ -19,7 +18,7 @@ function CreateExerciseScreen(props) {
       console.log(jwtDecode(userToken));
     }
 
-    dispatch(findMuscles());
+    dispatch(getMuscles());
   }, []);
 
   const muscles = useSelector((state) => state.muscles);

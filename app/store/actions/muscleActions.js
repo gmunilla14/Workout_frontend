@@ -1,7 +1,7 @@
 import axios from "axios";
 import { setHeaders } from "../../routes/utils";
 
-export const findMuscles = () => {
+export const getMuscles = () => {
   return async (dispatch) => {
     try {
       const muscles = await axios.get(

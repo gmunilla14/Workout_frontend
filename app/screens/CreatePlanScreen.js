@@ -4,12 +4,10 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
-import { getMuscles } from "../routes/muscleRoutes";
 import { createExercise } from "../routes/exerciseRoutes";
-import { getExercises } from "../routes/exerciseRoutes";
 import { Picker } from "@react-native-picker/picker";
 import { createPlan } from "../routes/planRoutes";
-import { findExercises } from "../store/actions/exerciseActions";
+import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch, useSelector } from "react-redux";
 function CreatePlanScreen(props) {
   const [selectedExercise, setSelectedExercise] = useState();
@@ -20,7 +18,7 @@ function CreatePlanScreen(props) {
   const exercises = useSelector((state) => state.exercises);
 
   useEffect(() => {
-    dispatch(findExercises());
+    dispatch(getExercises());
   }, []);
 
   return (
@@ -107,7 +105,6 @@ function CreatePlanScreen(props) {
           </>
         )}
       </Formik>
-      <Button title="Get Exercises" onPress={getExercises} />
       <Button
         title="Get Selected Ex"
         onPress={() => {

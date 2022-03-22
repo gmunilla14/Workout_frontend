@@ -4,8 +4,8 @@ import { getPlans } from "../routes/planRoutes";
 import { Picker } from "@react-native-picker/picker";
 import { createWorkout } from "../routes/workoutRoutes";
 import { useDispatch, useSelector } from "react-redux";
-import { findExercises } from "../store/actions/exerciseActions";
-import { findMuscles } from "../store/actions/muscleActions";
+import { getExercises } from "../store/actions/exerciseActions";
+import { getMuscles } from "../store/actions/muscleActions";
 function WorkoutClockScreen(props) {
   const [minutes, setMinutes] = useState("00");
   const [seconds, setSeconds] = useState("00");
@@ -198,7 +198,7 @@ function WorkoutClockScreen(props) {
       <Button
         title="Get Exercises"
         onPress={() => {
-          dispatch(findExercises());
+          dispatch(getExercises());
         }}
       />
 
@@ -211,7 +211,7 @@ function WorkoutClockScreen(props) {
       <Button
         title="Get Muscles"
         onPress={() => {
-          dispatch(findMuscles());
+          dispatch(getMuscles());
         }}
       />
 
