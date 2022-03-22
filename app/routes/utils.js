@@ -9,3 +9,5 @@ export const setHeaders = async () => {
   };
   return header;
 };
+
+export const url = "http://192.168.4.66:3000/api/1.0";
