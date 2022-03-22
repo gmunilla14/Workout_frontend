@@ -27,7 +27,9 @@
     "react-redux": "^7.2.6",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "react-native-gesture-handler": "~2.1.0",
+    "@react-native-masked-view/masked-view": "0.2.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

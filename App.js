@@ -10,12 +10,17 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import rootReducer from "./app/store/reducers/rootReducer";
+import WorkoutNavigator from "./app/navigation/WorkoutNavigator";
+import WorkoutGroup from "./app/components/WorkoutGroup";
+import ChooseWorkoutScreen from "./app/screens/ChooseWorkoutScreen";
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default function App() {
   return (
     <Provider store={store}>
-      <WorkoutClockScreen />
+      <NavigationContainer>
+        <WorkoutNavigator />
+      </NavigationContainer>
     </Provider>
   );
 }

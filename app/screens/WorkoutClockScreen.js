@@ -89,8 +89,6 @@ function WorkoutClockScreen({ route }) {
     setWorkout({ ...workout, groups: workoutGroups });
 
     setStartBound(now.getTime());
-    console.log("--------------------------------------------");
-    console.log(workoutGroups);
 
     if (currentSet < maxSet) {
       setCurrentSet(currentSet + 1);
@@ -178,7 +176,14 @@ function WorkoutClockScreen({ route }) {
           if (index < currentGroup) {
             return <Text>Done</Text>;
           } else {
-            return <WorkoutGroup group={item} exercises={exercises} />;
+            return (
+              <WorkoutGroup
+                group={item}
+                exercises={exercises}
+                doingWorkout={true}
+                currentSet={currentSet}
+              />
+            );
           }
         }}
       />
