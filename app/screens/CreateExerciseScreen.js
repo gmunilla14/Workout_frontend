@@ -4,8 +4,8 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
-import { createExercise } from "../routes/exerciseRoutes";
 import { getMuscles } from "../store/actions/muscleActions";
+import { createExercise } from "../store/actions/exerciseActions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 function CreateExerciseScreen(props) {
@@ -39,7 +39,7 @@ function CreateExerciseScreen(props) {
         }}
         onSubmit={async (values) => {
           console.log(values);
-          await createExercise(values);
+          dispatch(createExercise(values));
         }}
       >
         {({ handleChange, handleSubmit, errors, values, setFieldValue }) => (

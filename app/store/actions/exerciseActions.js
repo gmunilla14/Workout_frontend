@@ -14,3 +14,18 @@ export const getExercises = () => {
     }
   };
 };
+
+export const createExercise = (newExercise) => {
+  return async (dispatch) => {
+    try {
+      await axios.post(
+        "http://192.168.4.66:3000/api/1.0/exercises",
+        newExercise,
+        await setHeaders()
+      );
+      dispatch({ type: "ADD_EXERCISE" });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};

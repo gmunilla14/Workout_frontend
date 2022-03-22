@@ -4,7 +4,6 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
-import { createExercise } from "../routes/exerciseRoutes";
 import { Picker } from "@react-native-picker/picker";
 import { createPlan } from "../routes/planRoutes";
 import { getExercises } from "../store/actions/exerciseActions";
