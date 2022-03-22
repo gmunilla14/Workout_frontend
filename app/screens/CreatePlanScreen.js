@@ -11,6 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 function CreatePlanScreen(props) {
   const [selectedExercise, setSelectedExercise] = useState();
   const [selectedSets, setSelectedSets] = useState(0);
+  const [selectedReps, setSelectedReps] = useState(0);
+
+  const [selectedWeight, setSelectedWeight] = useState(0);
+
   const [selectedRest, setSelectedRest] = useState(0);
 
   const dispatch = useDispatch();
@@ -64,6 +68,16 @@ function CreatePlanScreen(props) {
             />
 
             <TextInput
+              placeholder="Reps"
+              onChangeText={(text) => setSelectedReps(text)}
+            />
+
+            <TextInput
+              placeholder="Weight"
+              onChangeText={(text) => setSelectedWeight(text)}
+            />
+
+            <TextInput
               placeholder="Rest Duration"
               onChangeText={(text) => setSelectedRest(text)}
             />
@@ -76,6 +90,8 @@ function CreatePlanScreen(props) {
                   if (i === 0) {
                     sets.push({
                       type: "exercise",
+                      reps: Number(selectedReps),
+                      weight: Number(selectedWeight),
                     });
                   } else {
                     sets.push({
@@ -85,6 +101,8 @@ function CreatePlanScreen(props) {
 
                     sets.push({
                       type: "exercise",
+                      reps: Number(selectedReps),
+                      weight: Number(selectedWeight),
                     });
                   }
                 }
