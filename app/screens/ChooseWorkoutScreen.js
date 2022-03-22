@@ -19,9 +19,6 @@ function ChooseWorkoutScreen({ navigation }) {
   const plans = useSelector((state) => state.plans);
   const exercises = useSelector((state) => state.exercises);
 
-  const [maxSet, setMaxSet] = useState(0);
-  const [maxGroup, setMaxGroup] = useState(0);
-
   return (
     <View style={styles.container}>
       <Button
@@ -43,8 +40,31 @@ function ChooseWorkoutScreen({ navigation }) {
       <FlatList
         data={selectedPlan.groups}
         keyExtractor={(group) => group._id.toString()}
-        renderItem={({ item }) => (
-          <WorkoutGroup group={item} exercises={exercises} />
+        renderItem={({ item, index }) => (
+          <>
+            <WorkoutGroup group={item} exercises={exercises} />
+            <Button
+              title="+ Add Set"
+              onPress={() => {
+                let groups = [...selectedPlan.groups];
+                let groupLength = groups[index].sets.length;
+                let groupSets = groups[index].sets;
+                groupSets.push({
+                  ...groupSets[groupLength - 2],
+                  _id: String(Math.floor(Math.random() * 100000000) + 1),
+                });
+                groupSets.push({
+                  ...groupSets[groupLength - 1],
+                  _id: String(Math.floor(Math.random() * 100000000) + 1),
+                });
+                groups[index].sets = groupSets;
+                setSelectedPlan({
+                  ...selectedPlan,
+                  groups: groups,
+                });
+              }}
+            />
+          </>
         )}
       />
     </View>
