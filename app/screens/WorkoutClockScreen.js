@@ -6,8 +6,9 @@ import { createWorkout } from "../store/actions/workoutActions";
 import { useDispatch, useSelector } from "react-redux";
 import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
-
-function WorkoutClockScreen(props) {
+import WorkoutGroup from "../components/WorkoutGroup";
+function WorkoutClockScreen({ route }) {
+  const sentPlan = route.params;
   const [minutes, setMinutes] = useState("00");
   const [seconds, setSeconds] = useState("00");
   const [milliseconds, setMilliseconds] = useState("000");
@@ -17,8 +18,6 @@ function WorkoutClockScreen(props) {
   const [maxSet, setMaxSet] = useState(0);
   const [maxGroup, setMaxGroup] = useState(0);
 
-  const [selectedPlan, setSelectedPlan] = useState(false);
-
   const [startBound, setStartBound] = useState(0);
   const [workout, setWorkout] = useState({});
 
@@ -26,7 +25,27 @@ function WorkoutClockScreen(props) {
 
   const exercises = useSelector((state) => state.exercises);
   const muscles = useSelector((state) => state.muscles);
-  const plans = useSelector((state) => state.plans);
+
+  useEffect(() => {
+    let maxGroups = 0;
+    let maxSets = 0;
+    let sets = [];
+    sentPlan.groups.forEach((group) => {
+      maxGroups += 1;
+      group.sets.forEach((set) => {
+        maxSets += 1;
+        sets.push(set);
+      });
+    });
+    setMaxGroup(sentPlan.groups.length - 1);
+    setMaxSet(sentPlan.groups[0].sets.length - 1);
+
+    setWorkout({
+      ...workout,
+      planID: sentPlan._id,
+      groups: sentPlan.groups,
+    });
+  }, []);
 
   useEffect(() => {
     dispatch(getPlans());
@@ -42,14 +61,9 @@ function WorkoutClockScreen(props) {
       setStartBound(now.getTime());
       setWorkout({
         ...workout,
-        planID: selectedPlan._id,
-        uid: selectedPlan.creatorID,
-        startTime: now.getTime(),
-        groups: selectedPlan.groups,
-      });
 
-      setMaxGroup(selectedPlan.groups.length - 1);
-      setMaxSet(selectedPlan.groups[0].sets.length - 1);
+        startTime: now.getTime(),
+      });
     }
   }, [clockRunning]);
 
@@ -75,6 +89,8 @@ function WorkoutClockScreen(props) {
     setWorkout({ ...workout, groups: workoutGroups });
 
     setStartBound(now.getTime());
+    console.log("--------------------------------------------");
+    console.log(workoutGroups);
 
     if (currentSet < maxSet) {
       setCurrentSet(currentSet + 1);
@@ -126,28 +142,6 @@ function WorkoutClockScreen(props) {
 
   return (
     <View style={styles.container}>
-      <Picker
-        selectedValue={selectedPlan}
-        onValueChange={(itemValue, itemIndex) => {
-          setSelectedPlan(itemValue);
-          let maxGroups = 0;
-          let maxSets = 0;
-          let sets = [];
-          itemValue.groups.forEach((group) => {
-            maxGroups += 1;
-            group.sets.forEach((set) => {
-              maxSets += 1;
-              sets.push(set);
-            });
-          });
-          setMaxGroup(maxGroups);
-          setMaxSet(maxSets);
-        }}
-      >
-        {plans.map((plan) => {
-          return <Picker.Item key={plan._id} label={plan.name} value={plan} />;
-        })}
-      </Picker>
       <Text>
         {minutes}:{seconds}.{milliseconds}
       </Text>
@@ -162,16 +156,7 @@ function WorkoutClockScreen(props) {
           )}
         </>
       )}
-      {selectedPlan !== false && (
-        <>
-          {selectedPlan.groups.map((group) => {
-            let elements = group.sets.map((set) => {
-              return <Text>{set.type}</Text>;
-            });
-            return elements;
-          })}
-        </>
-      )}
+
       <Button
         title="Workout"
         onPress={async () => {
@@ -186,30 +171,16 @@ function WorkoutClockScreen(props) {
           dispatch(createWorkout(newWorkout));
         }}
       />
-      <Button
-        title="Get Exercises"
-        onPress={() => {
-          dispatch(getExercises());
-        }}
-      />
-
       <FlatList
-        data={exercises}
-        keyExtractor={(exercise) => exercise._id.toString()}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
-      />
-
-      <Button
-        title="Get Muscles"
-        onPress={() => {
-          dispatch(getMuscles());
+        data={workout.groups}
+        keyExtractor={(group) => group._id.toString()}
+        renderItem={({ item, index }) => {
+          if (index < currentGroup) {
+            return <Text>Done</Text>;
+          } else {
+            return <WorkoutGroup group={item} exercises={exercises} />;
+          }
         }}
-      />
-
-      <FlatList
-        data={muscles}
-        keyExtractor={(muscle) => muscle._id.toString()}
-        renderItem={({ item }) => <Text>{item.name}</Text>}
       />
     </View>
   );
