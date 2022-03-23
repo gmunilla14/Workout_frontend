@@ -4,6 +4,8 @@ const planReducer = (state = [], action) => {
       return action.plans.data.plans;
     case "ADD_PLANS":
       return state;
+    case "EDIT_PLANS":
+      return state;
     default:
       return state;
   }

@@ -22,3 +22,14 @@ export const createPlan = (newPlan) => {
     }
   };
 };
+
+export const editPlan = (id, editedPlan) => {
+  return async (dispatch) => {
+    try {
+      await axios.put(`${url}/plans/${id}`, editedPlan, await setHeaders());
+      dispatch({ type: "EDIT_PLAN" });
+    } catch (err) {
+      console.log(err.response);
+    }
+  };
+};
