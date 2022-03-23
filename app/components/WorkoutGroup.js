@@ -5,7 +5,14 @@ import { useEffect } from "react";
 import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch } from "react-redux";
 
-function WorkoutGroup({ group, currentSet, doingWorkout }) {
+function WorkoutGroup({
+  group,
+  currentSet,
+  doingWorkout,
+  setSelectedPlan,
+  groupIndex,
+  selectedPlan,
+}) {
   const dispatch = useDispatch();
 
   const exercises = useSelector((state) => state.exercises);
@@ -91,7 +98,20 @@ function WorkoutGroup({ group, currentSet, doingWorkout }) {
                   {item.type === "exercise" ? (
                     <>
                       <Text>Set {Math.floor((index + 1) / 2) + 1}</Text>
+
                       <Text>Reps {item.reps}</Text>
+                      <Button
+                        title="+"
+                        onPress={() => {
+                          let currentGroups = selectedPlan.groups;
+                          currentGroups[groupIndex].sets[index]["reps"] =
+                            currentGroups[groupIndex].sets[index]["reps"] + 1;
+                          setSelectedPlan({
+                            ...selectedPlan,
+                            groups: currentGroups,
+                          });
+                        }}
+                      />
                       <Text>Weight {item.weight}</Text>
                     </>
                   ) : (

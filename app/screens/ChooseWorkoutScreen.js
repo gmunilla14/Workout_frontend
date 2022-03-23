@@ -85,7 +85,13 @@ function ChooseWorkoutScreen({ navigation }) {
         keyExtractor={(group) => group._id.toString()}
         renderItem={({ item, index }) => (
           <>
-            <WorkoutGroup group={item} exercises={exercises} />
+            <WorkoutGroup
+              group={item}
+              groupIndex={index}
+              exercises={exercises}
+              setSelectedPlan={setSelectedPlan}
+              selectedPlan={selectedPlan}
+            />
             <Button
               title="+ Add Set"
               onPress={() => {
