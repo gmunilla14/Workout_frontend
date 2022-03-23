@@ -24,6 +24,16 @@ function WorkoutGroup({
     exerciseList[0].muscles.includes(mus._id)
   );
 
+  const incrementPlan = (field, value, groupIndex, index) => {
+    let currentGroups = selectedPlan.groups;
+    currentGroups[groupIndex].sets[index][field] =
+      currentGroups[groupIndex].sets[index][field] + value;
+    setSelectedPlan({
+      ...selectedPlan,
+      groups: currentGroups,
+    });
+  };
+
   return (
     <>
       {doingWorkout ? (
@@ -103,19 +113,45 @@ function WorkoutGroup({
                       <Button
                         title="+"
                         onPress={() => {
-                          let currentGroups = selectedPlan.groups;
-                          currentGroups[groupIndex].sets[index]["reps"] =
-                            currentGroups[groupIndex].sets[index]["reps"] + 1;
-                          setSelectedPlan({
-                            ...selectedPlan,
-                            groups: currentGroups,
-                          });
+                          incrementPlan("reps", 1, groupIndex, index);
+                        }}
+                      />
+                      <Button
+                        title="-"
+                        onPress={() => {
+                          incrementPlan("reps", -1, groupIndex, index);
                         }}
                       />
                       <Text>Weight {item.weight}</Text>
+                      <Button
+                        title="+"
+                        onPress={() => {
+                          incrementPlan("weight", 1, groupIndex, index);
+                        }}
+                      />
+                      <Button
+                        title="-"
+                        onPress={() => {
+                          incrementPlan("weight", -1, groupIndex, index);
+                        }}
+                      />
                     </>
                   ) : (
-                    <Text>Rest for {item.duration}</Text>
+                    <>
+                      <Text>Rest for {item.duration}</Text>
+                      <Button
+                        title="+"
+                        onPress={() => {
+                          incrementPlan("duration", 1, groupIndex, index);
+                        }}
+                      />
+                      <Button
+                        title="-"
+                        onPress={() => {
+                          incrementPlan("duration", -1, groupIndex, index);
+                        }}
+                      />
+                    </>
                   )}
                 </View>
               )}
