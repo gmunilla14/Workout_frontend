@@ -138,11 +138,23 @@ function WorkoutClockScreen({ route }) {
     }
   });
 
+  const getCurrentExercise = (exerciseID) => {
+    const exerciseList = exercises.filter((ex) => ex._id === exerciseID);
+    return exerciseList[0];
+  };
+
+  const incrementWorkout = (field, value, groupIndex, index) => {
+    let currentGroups = workout.groups;
+    currentGroups[groupIndex].sets[index][field] =
+      currentGroups[groupIndex].sets[index][field] + value;
+    setWorkout({
+      ...workout,
+      groups: currentGroups,
+    });
+  };
+
   return (
     <View style={styles.container}>
-      <Text>
-        {minutes}:{seconds}.{milliseconds}
-      </Text>
       {!clockRunning ? (
         <Button title="Start" onPress={onStartButton} />
       ) : (
@@ -151,6 +163,77 @@ function WorkoutClockScreen({ route }) {
             <Button title="Stop" onPress={onStopButton} />
           ) : (
             <Button title="Interval" onPress={onIntervalButton} />
+          )}
+
+          {workout.groups[currentGroup].sets[currentSet].type === "exercise" ? (
+            <>
+              <Text>Workout</Text>
+              <View>
+                <Text>
+                  {minutes}:{seconds}.{milliseconds}
+                </Text>
+              </View>
+              <Text>
+                {
+                  getCurrentExercise(workout.groups[currentGroup].exerciseID)
+                    .name
+                }
+              </Text>
+              <Text>
+                {workout.groups[currentGroup].sets[currentSet].reps} Reps
+              </Text>
+              <Text>
+                {workout.groups[currentGroup].sets[currentSet].weight} LBS
+              </Text>
+              <Text>Notes</Text>
+              <Text>
+                {
+                  getCurrentExercise(workout.groups[currentGroup].exerciseID)
+                    .notes
+                }
+              </Text>
+            </>
+          ) : (
+            <>
+              <Text>Workout</Text>
+              <View>
+                <Text>
+                  {minutes}:{seconds}.{milliseconds}
+                </Text>
+              </View>
+              <Text>Review Last Set</Text>
+              <Text>
+                {workout.groups[currentGroup].sets[currentSet - 1].reps} Reps
+              </Text>
+              <Button
+                title="+"
+                onPress={() => {
+                  incrementWorkout("reps", 1, currentGroup, currentSet - 1);
+                }}
+              />
+              <Button
+                title="-"
+                onPress={() => {
+                  incrementWorkout("reps", -1, currentGroup, currentSet - 1);
+                }}
+              />
+              <Text>
+                {workout.groups[currentGroup].sets[currentSet - 1].weight} LBS
+              </Text>
+
+              <Button
+                title="+"
+                onPress={() => {
+                  incrementWorkout("weight", 1, currentGroup, currentSet - 1);
+                }}
+              />
+              <Button
+                title="-"
+                onPress={() => {
+                  incrementWorkout("weight", -1, currentGroup, currentSet - 1);
+                }}
+              />
+            </>
           )}
         </>
       )}
