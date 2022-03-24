@@ -14,7 +14,18 @@ export const signUp = async (user) => {
   }
 };
 
-export const login = async () => {};
+export const signIn = async (user) => {
+  try {
+    const response = await axios.post(
+      "http://192.168.4.66:3000/api/1.0/signin",
+      user
+    );
+    return response;
+  } catch (err) {
+    console.log(err);
+    return;
+  }
+};
 
 export const activate = async (token) => {
   try {

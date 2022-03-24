@@ -57,7 +57,14 @@ function SignUpScreen({ navigation }) {
           console.log(response.data);
           if (response.status === 200) {
             await AsyncStorage.setItem("token", response.data.token);
-            navigation.navigate("Activate");
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: "App Nav",
+                },
+              ],
+            });
           }
         }}
         validationSchema={validationSchema}
@@ -99,14 +106,17 @@ function SignUpScreen({ navigation }) {
               <Text>{errors.passwordConfirm}</Text>
             </View>
 
-            <Button title="Log In" onPress={handleSubmit} />
+            <Button title="Sign Up" onPress={handleSubmit} />
           </>
         )}
       </Formik>
 
+      <Text>Already have an account? </Text>
       <Button
-        title="Check storage"
-        onPress={async () => console.log(await AsyncStorage.getItem("token"))}
+        title="Log In"
+        onPress={() => {
+          navigation.navigate("Login");
+        }}
       />
     </ScrollView>
   );
@@ -114,13 +124,12 @@ function SignUpScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "red",
     marginTop: 50,
     height: 1000,
   },
   holder: {
     padding: 10,
-    backgroundColor: "blue",
+    backgroundColor: "white",
     margin: 20,
   },
 });

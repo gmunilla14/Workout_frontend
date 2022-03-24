@@ -9,48 +9,46 @@ import {
 } from "react-native";
 import * as Yup from "yup";
 import { Formik } from "formik";
+import { signIn } from "../routes/authRoutes";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const validationSchema = Yup.object().shape({
-  username: Yup.string().required().min(4).max(32).trim().label("Username"),
   email: Yup.string().required().email().trim().label("Email"),
-  password: Yup.string()
-    .required()
-    .min(6)
-    .max(100)
-    .trim()
-    .matches(
-      /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9]).*$/,
-      "Password must have at least one uppercase letter, one lowercase letter, and one number"
-    )
-    .label("Password"),
-  passwordConfirm: Yup.string()
-    .required("Must confirm password")
-    .oneOf([Yup.ref("password")], "Passwords must match"),
+  password: Yup.string().required().min(6).max(100).trim().label("Password"),
 });
 
-function LoginScreen(props) {
+function LoginScreen({ navigation }) {
   return (
     <ScrollView style={styles.container} keyboardShouldPersistTaps="never">
       <Formik
         initialValues={{
-          username: "",
           email: "",
           password: "",
-          passwordConfirm: "",
         }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={async (values) => {
+          console.log(values);
+          const user = {
+            email: values.email,
+            password: values.password,
+          };
+          const response = await signIn(user);
+          console.log(response.status);
+          if (response.status === 200) {
+            await AsyncStorage.setItem("token", response.data.token);
+            navigation.reset({
+              index: 0,
+              routes: [
+                {
+                  name: "App Nav",
+                },
+              ],
+            });
+          }
+        }}
         validationSchema={validationSchema}
       >
         {({ handleChange, handleSubmit, errors }) => (
           <>
-            <View style={styles.holder}>
-              <TextInput
-                placeholder="Username"
-                name="username"
-                onChangeText={handleChange("username")}
-              />
-              <Text>{errors.username}</Text>
-            </View>
             <View style={styles.holder}>
               <TextInput
                 placeholder="Email"
@@ -69,16 +67,14 @@ function LoginScreen(props) {
               <Text>{errors.password}</Text>
             </View>
 
-            <View style={styles.holder}>
-              <TextInput
-                placeholder="Confirm Password"
-                name="passwordConfirm"
-                onChangeText={handleChange("passwordConfirm")}
-              />
-              <Text>{errors.passwordConfirm}</Text>
-            </View>
-
             <Button title="Log In" onPress={handleSubmit} />
+            <Text>Dont have an account?</Text>
+            <Button
+              title="Sign up"
+              onPress={() => {
+                navigation.navigate("Sign Up");
+              }}
+            />
           </>
         )}
       </Formik>
@@ -88,13 +84,12 @@ function LoginScreen(props) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "red",
     marginTop: 50,
     height: 1000,
   },
   holder: {
     padding: 10,
-    backgroundColor: "blue",
+    backgroundColor: "white",
     margin: 20,
   },
 });

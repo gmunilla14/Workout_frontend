@@ -58,6 +58,14 @@ function HomeScreen({ navigation }) {
         title="Sign Out"
         onPress={async () => {
           await AsyncStorage.removeItem("token");
+          navigation.reset({
+            index: 0,
+            routes: [
+              {
+                name: "Auth Nav",
+              },
+            ],
+          });
         }}
       />
     </View>

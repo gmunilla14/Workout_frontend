@@ -9,15 +9,28 @@ import CreatePlanScreen from "../screens/CreatePlanScreen";
 import CreateExerciseScreen from "../screens/CreateExerciseScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
+import jwtDecode from "jwt-decode";
+import ActivateScreen from "../screens/ActivateScreen";
+
 const Stack = createStackNavigator();
 
 function AppNavigator({ navigation }) {
   useEffect(async () => {
     const userToken = await AsyncStorage.getItem("token");
+    const user = jwtDecode(userToken);
     if (!userToken) {
       navigation.navigate("Auth Nav");
+    } else if (user.inactive) {
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: "Activate",
+          },
+        ],
+      });
     }
-  });
+  }, []);
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={HomeScreen} />
@@ -25,6 +38,7 @@ function AppNavigator({ navigation }) {
       <Stack.Screen name="Clock" component={WorkoutClockScreen} />
       <Stack.Screen name="Create Plan" component={CreatePlanScreen} />
       <Stack.Screen name="Create Exercise" component={CreateExerciseScreen} />
+      <Stack.Screen name="Activate" component={ActivateScreen} />
     </Stack.Navigator>
   );
 }

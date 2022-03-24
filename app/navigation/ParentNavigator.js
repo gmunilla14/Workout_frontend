@@ -22,19 +22,19 @@ function ParentNavigator(props) {
     } else {
       setLoggedIn(false);
     }
-  }, [loggedIn]);
+  });
 
   console.log(loggedIn);
 
   return (
     <>
       {loggedIn ? (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="App Nav" component={AppNavigator} />
           <Stack.Screen name="Auth Nav" component={AuthNavigator} />
         </Stack.Navigator>
       ) : (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="Auth Nav" component={AuthNavigator} />
           <Stack.Screen name="App Nav" component={AppNavigator} />
         </Stack.Navigator>

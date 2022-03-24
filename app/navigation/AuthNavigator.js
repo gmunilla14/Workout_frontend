@@ -14,15 +14,21 @@ function AuthNavigator({ navigation }) {
   useEffect(async () => {
     const userToken = await AsyncStorage.getItem("token");
     if (userToken) {
-      navigation.navigate("App Nav");
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: "App Nav",
+          },
+        ],
+      });
     }
   });
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Title" component={TitleScreen} />
       <Stack.Screen name="Sign Up" component={SignUpScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Activate" component={ActivateScreen} />
     </Stack.Navigator>
   );
 }
