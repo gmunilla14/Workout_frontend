@@ -7,9 +7,17 @@ import HomeScreen from "../screens/HomeScreen";
 import PreWorkoutScreen from "../screens/PreWorkoutScreen";
 import CreatePlanScreen from "../screens/CreatePlanScreen";
 import CreateExerciseScreen from "../screens/CreateExerciseScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
 const Stack = createStackNavigator();
 
-function AppNavigator(props) {
+function AppNavigator({ navigation }) {
+  useEffect(async () => {
+    const userToken = await AsyncStorage.getItem("token");
+    if (!userToken) {
+      navigation.navigate("Auth Nav");
+    }
+  });
   return (
     <Stack.Navigator>
       <Stack.Screen name="Home" component={HomeScreen} />

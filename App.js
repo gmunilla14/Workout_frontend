@@ -15,13 +15,14 @@ import WorkoutGroup from "./app/components/WorkoutGroup";
 import ChooseWorkoutScreen from "./app/screens/ChooseWorkoutScreen";
 import HomeScreen from "./app/screens/HomeScreen";
 import AppNavigator from "./app/navigation/AppNavigator";
+import ParentNavigator from "./app/navigation/ParentNavigator";
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <AppNavigator />
+        <ParentNavigator />
       </NavigationContainer>
     </Provider>
   );

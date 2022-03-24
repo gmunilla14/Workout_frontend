@@ -6,6 +6,8 @@ import { getPlans } from "../store/actions/planActions";
 import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -49,6 +51,13 @@ function HomeScreen({ navigation }) {
         title="+ Create New Exercise"
         onPress={() => {
           navigation.navigate("Create Exercise");
+        }}
+      />
+
+      <Button
+        title="Sign Out"
+        onPress={async () => {
+          await AsyncStorage.removeItem("token");
         }}
       />
     </View>
