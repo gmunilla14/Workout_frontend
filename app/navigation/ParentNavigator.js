@@ -11,34 +11,17 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
+import TitleScreen from "../screens/TitleScreen";
 const Stack = createStackNavigator();
 
 function ParentNavigator(props) {
-  const [loggedIn, setLoggedIn] = useState(false);
-  useEffect(async () => {
-    const userToken = await AsyncStorage.getItem("token");
-    if (userToken) {
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
-    }
-  });
-
-  console.log(loggedIn);
-
   return (
     <>
-      {loggedIn ? (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="App Nav" component={AppNavigator} />
-          <Stack.Screen name="Auth Nav" component={AuthNavigator} />
-        </Stack.Navigator>
-      ) : (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Auth Nav" component={AuthNavigator} />
-          <Stack.Screen name="App Nav" component={AppNavigator} />
-        </Stack.Navigator>
-      )}
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Title" component={TitleScreen} />
+        <Stack.Screen name="App Nav" component={AppNavigator} />
+        <Stack.Screen name="Auth Nav" component={AuthNavigator} />
+      </Stack.Navigator>
     </>
   );
 }

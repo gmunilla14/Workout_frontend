@@ -2,36 +2,20 @@ import React from "react";
 import { View, StyleSheet, Button, TouchableOpacity, Text } from "react-native";
 import { signUp } from "../routes/authRoutes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { useEffect } from "react";
 function TitleScreen({ navigation }) {
-  const onSignUpPress = async () => {
-    navigation.navigate("Sign Up");
-  };
+  useEffect(async () => {
+    const userToken = await AsyncStorage.getItem("token");
+    if (userToken) {
+      navigation.navigate("App Nav");
+    } else {
+      navigation.navigate("Auth Nav");
+    }
+  });
 
-  const onLoginPress = () => {
-    console.log("Cutie");
-    navigation.navigate("Login");
-  };
   return (
     <>
-      <TouchableOpacity style={styles.container} onPress={onSignUpPress}>
-        <Text>Sign Up</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.container} onPress={onLoginPress}>
-        <Text>Log In</Text>
-      </TouchableOpacity>
-      <Button
-        title="Sign Out"
-        onPress={async () => {
-          await AsyncStorage.removeItem("token");
-        }}
-      />
-      <Button
-        title="Go to app"
-        onPress={() => {
-          navigation.navigate("App");
-        }}
-      />
+      <View style={styles.container}></View>
     </>
   );
 }
@@ -42,6 +26,7 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     padding: 10,
     marginTop: 10,
+    height: "100%",
   },
 });
 
