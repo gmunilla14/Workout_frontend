@@ -8,7 +8,7 @@ import { getMuscles } from "../store/actions/muscleActions";
 import { createExercise } from "../store/actions/exerciseActions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-function CreateExerciseScreen(props) {
+function CreateExerciseScreen({ navigation }) {
   const [chosenMuscles, setChosenMuscles] = useState([]);
 
   const dispatch = useDispatch();
@@ -37,9 +37,10 @@ function CreateExerciseScreen(props) {
           muscles: [],
           notes: "",
         }}
-        onSubmit={async (values) => {
+        onSubmit={async (values, { resetForm }) => {
           console.log(values);
           dispatch(createExercise(values));
+          navigation.goBack();
         }}
       >
         {({ handleChange, handleSubmit, errors, values, setFieldValue }) => (
@@ -49,12 +50,14 @@ function CreateExerciseScreen(props) {
               placeholder="Name"
               name="name"
               onChangeText={handleChange("name")}
+              value={values.name || ""}
             />
 
             <TextInput
               placeholder="Notes"
               name="notes"
               onChangeText={handleChange("notes")}
+              value={values.notes || ""}
             />
 
             {muscles.map((muscle) => {

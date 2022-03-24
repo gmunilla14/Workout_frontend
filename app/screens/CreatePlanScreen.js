@@ -8,7 +8,7 @@ import { Picker } from "@react-native-picker/picker";
 import { createPlan } from "../store/actions/planActions";
 import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch, useSelector } from "react-redux";
-function CreatePlanScreen(props) {
+function CreatePlanScreen({ navigation }) {
   const [selectedExercise, setSelectedExercise] = useState();
   const [selectedSets, setSelectedSets] = useState(0);
   const [selectedReps, setSelectedReps] = useState(0);
@@ -34,6 +34,7 @@ function CreatePlanScreen(props) {
         onSubmit={async (values) => {
           console.log(values);
           dispatch(createPlan(values));
+          navigation.goBack();
         }}
       >
         {({ handleChange, handleSubmit, values, setFieldValue }) => (
