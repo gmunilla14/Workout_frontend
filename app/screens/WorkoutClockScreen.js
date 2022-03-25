@@ -27,13 +27,9 @@ function WorkoutClockScreen({ route }) {
   const muscles = useSelector((state) => state.muscles);
 
   useEffect(() => {
-    let maxGroups = 0;
-    let maxSets = 0;
     let sets = [];
     sentPlan.groups.forEach((group) => {
-      maxGroups += 1;
       group.sets.forEach((set) => {
-        maxSets += 1;
         sets.push(set);
       });
     });

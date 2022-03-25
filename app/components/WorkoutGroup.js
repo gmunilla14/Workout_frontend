@@ -1,10 +1,17 @@
 import React from "react";
-import { View, StyleSheet, Text, Button, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Button,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch } from "react-redux";
-
+import IncrementPill from "./IncrementPill";
 function WorkoutGroup({
   group,
   currentSet,
@@ -17,6 +24,7 @@ function WorkoutGroup({
 
   const exercises = useSelector((state) => state.exercises);
   const muscles = useSelector((state) => state.muscles);
+  const [maxGroup, setMaxGroup] = useState(0);
 
   const exerciseList = exercises.filter((ex) => ex._id === group.exerciseID);
 
@@ -24,14 +32,20 @@ function WorkoutGroup({
     exerciseList[0].muscles.includes(mus._id)
   );
 
-  const incrementPlan = (field, value, groupIndex, index) => {
-    let currentGroups = selectedPlan.groups;
-    currentGroups[groupIndex].sets[index][field] =
-      currentGroups[groupIndex].sets[index][field] + value;
-    setSelectedPlan({
-      ...selectedPlan,
-      groups: currentGroups,
-    });
+  useEffect(() => {
+    setMaxGroup(selectedPlan.groups.length - 1);
+  }, []);
+
+  const swapSets = (index1, index2) => {
+    const tempGroup = JSON.parse(JSON.stringify(selectedPlan.groups[index1]));
+    let initialGroups = [...selectedPlan.groups];
+
+    initialGroups[index1] = selectedPlan.groups[index2];
+    initialGroups[index2] = tempGroup;
+
+    console.log(initialGroups);
+
+    setSelectedPlan({ ...selectedPlan, groups: initialGroups });
   };
 
   return (
@@ -90,16 +104,53 @@ function WorkoutGroup({
       ) : (
         <>
           <View style={styles.container}>
-            <Text>{exerciseList[0].name}</Text>
-            <Text>Muscles</Text>
-            <FlatList
-              data={muscleList}
-              keyExtractor={(muscle) => muscle._id.toString()}
-              renderItem={({ item }) => {
-                return <Text>{item.name}</Text>;
-              }}
-              listKey={(item) => "Mu" + item._id.toString()}
-            />
+            <View style={styles.header}>
+              <View>
+                <Text>{exerciseList[0].name}</Text>
+                <Text>Muscles</Text>
+                <FlatList
+                  data={muscleList}
+                  keyExtractor={(muscle) => muscle._id.toString()}
+                  renderItem={({ item }) => {
+                    return <Text>{item.name}</Text>;
+                  }}
+                  listKey={(item) => "Mu" + item._id.toString()}
+                />
+              </View>
+              <View>
+                {groupIndex === 0 ? (
+                  <>
+                    <Text style={styles.disabled}>Up</Text>
+                  </>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      onPress={() => {
+                        swapSets(groupIndex, groupIndex - 1);
+                      }}
+                    >
+                      <Text>Up</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+                {groupIndex === maxGroup ? (
+                  <>
+                    <Text style={styles.disabled}>Down</Text>
+                  </>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      onPress={() => {
+                        swapSets(groupIndex, groupIndex + 1);
+                      }}
+                    >
+                      <Text>Down</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+              </View>
+            </View>
+
             <FlatList
               data={group.sets}
               keyExtractor={(set) => set._id.toString()}
@@ -108,48 +159,36 @@ function WorkoutGroup({
                   {item.type === "exercise" ? (
                     <>
                       <Text>Set {Math.floor((index + 1) / 2) + 1}</Text>
+                      <View style={styles.dataHolder}>
+                        <IncrementPill
+                          text={String(item.reps) + " REPS"}
+                          field="reps"
+                          groupIndex={index}
+                          index={index}
+                          selectedPlan={selectedPlan}
+                          setSelectedPlan={setSelectedPlan}
+                        />
 
-                      <Text>Reps {item.reps}</Text>
-                      <Button
-                        title="+"
-                        onPress={() => {
-                          incrementPlan("reps", 1, groupIndex, index);
-                        }}
-                      />
-                      <Button
-                        title="-"
-                        onPress={() => {
-                          incrementPlan("reps", -1, groupIndex, index);
-                        }}
-                      />
-                      <Text>Weight {item.weight}</Text>
-                      <Button
-                        title="+"
-                        onPress={() => {
-                          incrementPlan("weight", 1, groupIndex, index);
-                        }}
-                      />
-                      <Button
-                        title="-"
-                        onPress={() => {
-                          incrementPlan("weight", -1, groupIndex, index);
-                        }}
-                      />
+                        <IncrementPill
+                          text={String(item.weight) + " LBS"}
+                          field="weight"
+                          groupIndex={index}
+                          index={index}
+                          selectedPlan={selectedPlan}
+                          setSelectedPlan={setSelectedPlan}
+                        />
+                      </View>
                     </>
                   ) : (
                     <>
-                      <Text>Rest for {item.duration}</Text>
-                      <Button
-                        title="+"
-                        onPress={() => {
-                          incrementPlan("duration", 1, groupIndex, index);
-                        }}
-                      />
-                      <Button
-                        title="-"
-                        onPress={() => {
-                          incrementPlan("duration", -1, groupIndex, index);
-                        }}
+                      <Text>Rest</Text>
+                      <IncrementPill
+                        text={String(item.duration)}
+                        field="duration"
+                        groupIndex={index}
+                        index={index}
+                        selectedPlan={selectedPlan}
+                        setSelectedPlan={setSelectedPlan}
                       />
                     </>
                   )}
@@ -179,6 +218,17 @@ const styles = StyleSheet.create({
   },
   show: {
     backgroundColor: "white",
+  },
+  dataHolder: {
+    flexDirection: "row",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 10,
+  },
+  disabled: {
+    color: "white",
   },
 });
 
