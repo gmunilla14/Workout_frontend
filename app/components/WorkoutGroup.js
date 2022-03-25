@@ -33,7 +33,9 @@ function WorkoutGroup({
   );
 
   useEffect(() => {
-    setMaxGroup(selectedPlan.groups.length - 1);
+    if (selectedPlan) {
+      setMaxGroup(selectedPlan.groups.length - 1);
+    }
   }, []);
 
   const swapSets = (index1, index2) => {
