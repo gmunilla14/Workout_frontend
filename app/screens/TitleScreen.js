@@ -7,9 +7,23 @@ function TitleScreen({ navigation }) {
   useEffect(async () => {
     const userToken = await AsyncStorage.getItem("token");
     if (userToken) {
-      navigation.navigate("App Nav");
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: "App Nav",
+          },
+        ],
+      });
     } else {
-      navigation.navigate("Auth Nav");
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: "Auth Nav",
+          },
+        ],
+      });
     }
   });
 
