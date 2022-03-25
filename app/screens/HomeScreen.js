@@ -64,7 +64,7 @@ function HomeScreen({ navigation }) {
           navigation.navigate("Create Plan");
         }}
       >
-        <Text style={{ ...styles.subtext, fontSize: 18, fontWeight: 700 }}>
+        <Text style={{ ...styles.subtext, fontSize: 18, fontWeight: "700" }}>
           + New Plan
         </Text>
       </TouchableOpacity>
@@ -74,7 +74,7 @@ function HomeScreen({ navigation }) {
           navigation.navigate("Create Exercise");
         }}
       >
-        <Text style={{ ...styles.subtext, fontSize: 18, fontWeight: 700 }}>
+        <Text style={{ ...styles.subtext, fontSize: 18, fontWeight: "700" }}>
           + Create New Exercise
         </Text>
       </TouchableOpacity>
