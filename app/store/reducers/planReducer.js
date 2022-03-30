@@ -2,8 +2,8 @@ const planReducer = (state = [], action) => {
   switch (action.type) {
     case "GET_PLANS":
       return action.plans.data.plans;
-    case "ADD_PLANS":
-      return state;
+    case "ADD_PLAN":
+      return [action.plan, ...state];
     case "EDIT_PLANS":
       return state;
     default:

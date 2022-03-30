@@ -15,8 +15,13 @@ export const getPlans = () => {
 export const createPlan = (newPlan) => {
   return async (dispatch) => {
     try {
-      await axios.post(`${url}/plans`, newPlan, await setHeaders());
-      dispatch({ type: "ADD_PLAN" });
+      const response = await axios.post(
+        `${url}/plans`,
+        newPlan,
+        await setHeaders()
+      );
+      const plan = response.data.plan;
+      dispatch({ type: "ADD_PLAN", plan });
     } catch (err) {
       console.log(err);
     }

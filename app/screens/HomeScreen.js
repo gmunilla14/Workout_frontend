@@ -14,17 +14,14 @@ import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 
 function HomeScreen({ navigation }) {
+  let plans = useSelector((state) => state.plans);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getPlans());
-    dispatch(getExercises());
-    dispatch(getMuscles());
   }, []);
-
-  const plans = useSelector((state) => state.plans);
 
   return (
     <View style={styles.container}>

@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, TextInput, Button } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  Button,
+  DevSettings,
+} from "react-native";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
 import { Picker } from "@react-native-picker/picker";
-import { createPlan } from "../store/actions/planActions";
+import { createPlan, getPlans } from "../store/actions/planActions";
 import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch, useSelector } from "react-redux";
 function CreatePlanScreen({ navigation }) {
@@ -32,9 +39,8 @@ function CreatePlanScreen({ navigation }) {
           groups: [],
         }}
         onSubmit={async (values) => {
-          console.log(values);
           dispatch(createPlan(values));
-          navigation.goBack();
+          navigation.navigate("Home", true);
         }}
       >
         {({ handleChange, handleSubmit, values, setFieldValue }) => (
@@ -113,7 +119,6 @@ function CreatePlanScreen({ navigation }) {
                   sets,
                 };
 
-                console.log(values.groups);
                 let currentGroups = values.groups;
                 currentGroups.push(group);
                 setFieldValue("groups", currentGroups);
@@ -123,12 +128,6 @@ function CreatePlanScreen({ navigation }) {
           </>
         )}
       </Formik>
-      <Button
-        title="Get Selected Ex"
-        onPress={() => {
-          console.log(selectedExercise);
-        }}
-      />
     </View>
   );
 }
