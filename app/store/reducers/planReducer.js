@@ -4,8 +4,16 @@ const planReducer = (state = [], action) => {
       return action.plans.data.plans;
     case "ADD_PLAN":
       return [action.plan, ...state];
-    case "EDIT_PLANS":
-      return state;
+    case "EDIT_PLAN":
+      console.log("Reducer");
+      console.log(action.plan);
+      console.log("-----------------------------------------");
+      console.log(
+        state.map((plan) => (plan._id == action.plan._id ? action.plan : plan))
+      );
+      return state.map((plan) =>
+        plan._id == action.plan._id ? action.plan : plan
+      );
     default:
       return state;
   }

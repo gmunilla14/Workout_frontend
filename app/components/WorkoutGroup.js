@@ -28,9 +28,13 @@ function WorkoutGroup({
 
   const exerciseList = exercises.filter((ex) => ex._id === group.exerciseID);
 
-  const muscleList = muscles.filter((mus) =>
-    exerciseList[0].muscles.includes(mus._id)
-  );
+  let muscleList = [];
+
+  if (exerciseList.length > 0) {
+    muscleList = muscles.filter((mus) =>
+      exerciseList[0].muscles.includes(mus._id)
+    );
+  }
 
   useEffect(() => {
     if (selectedPlan) {
@@ -108,7 +112,8 @@ function WorkoutGroup({
           <View style={styles.container}>
             <View style={styles.header}>
               <View>
-                <Text>{exerciseList[0].name}</Text>
+                {exerciseList.length > 0 && <Text>{exerciseList[0].name}</Text>}
+
                 <Text>Muscles</Text>
                 <FlatList
                   data={muscleList}
@@ -165,7 +170,7 @@ function WorkoutGroup({
                         <IncrementPill
                           text={String(item.reps) + " REPS"}
                           field="reps"
-                          groupIndex={index}
+                          groupIndex={groupIndex}
                           index={index}
                           selectedPlan={selectedPlan}
                           setSelectedPlan={setSelectedPlan}
@@ -174,7 +179,7 @@ function WorkoutGroup({
                         <IncrementPill
                           text={String(item.weight) + " LBS"}
                           field="weight"
-                          groupIndex={index}
+                          groupIndex={groupIndex}
                           index={index}
                           selectedPlan={selectedPlan}
                           setSelectedPlan={setSelectedPlan}
@@ -187,7 +192,7 @@ function WorkoutGroup({
                       <IncrementPill
                         text={String(item.duration)}
                         field="duration"
-                        groupIndex={index}
+                        groupIndex={groupIndex}
                         index={index}
                         selectedPlan={selectedPlan}
                         setSelectedPlan={setSelectedPlan}

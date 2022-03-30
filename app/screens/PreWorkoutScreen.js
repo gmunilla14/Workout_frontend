@@ -22,9 +22,7 @@ function PreWorkoutScreen({ route, navigation }) {
     setOGPlan(route.params);
     setSelectedPlan(route.params);
   }, []);
-  const plans = useSelector((state) => state.plans);
   const exercises = useSelector((state) => state.exercises);
-
   return (
     <View style={styles.container}>
       <Button
@@ -66,13 +64,6 @@ function PreWorkoutScreen({ route, navigation }) {
           }
         }}
       />
-      <Button
-        title="Check Plan Matching"
-        onPress={() => {
-          console.log(selectedPlan == ogPlan);
-          console.log(selectedPlan);
-        }}
-      />
       <FlatList
         data={selectedPlan.groups}
         keyExtractor={(group) => group._id.toString()}
@@ -91,14 +82,24 @@ function PreWorkoutScreen({ route, navigation }) {
                 let groups = [...selectedPlan.groups];
                 let groupLength = groups[index].sets.length;
                 let groupSets = groups[index].sets;
-                groupSets.push({
-                  ...groupSets[groupLength - 2],
-                  _id: String(Math.floor(Math.random() * 100000000) + 1),
-                });
+                if (groupLength > 1) {
+                  groupSets.push({
+                    ...groupSets[groupLength - 2],
+                    _id: String(Math.floor(Math.random() * 100000000) + 1),
+                  });
+                } else {
+                  groupSets.push({
+                    type: "rest",
+                    duration: 60,
+                    _id: String(Math.floor(Math.random() * 100000000) + 1),
+                  });
+                }
+
                 groupSets.push({
                   ...groupSets[groupLength - 1],
                   _id: String(Math.floor(Math.random() * 100000000) + 1),
                 });
+
                 groups[index].sets = groupSets;
                 setSelectedPlan({
                   ...selectedPlan,

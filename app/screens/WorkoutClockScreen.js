@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Button, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Button,
+  FlatList,
+  DevSettings,
+} from "react-native";
 import { getPlans } from "../store/actions/planActions";
 import { Picker } from "@react-native-picker/picker";
 import { createWorkout } from "../store/actions/workoutActions";
@@ -7,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import WorkoutGroup from "../components/WorkoutGroup";
-function WorkoutClockScreen({ route }) {
+function WorkoutClockScreen({ route, navigation }) {
   const sentPlan = route.params;
   const [minutes, setMinutes] = useState("00");
   const [seconds, setSeconds] = useState("00");
@@ -25,6 +32,7 @@ function WorkoutClockScreen({ route }) {
 
   const exercises = useSelector((state) => state.exercises);
   const muscles = useSelector((state) => state.muscles);
+  const plans = useSelector((state) => state.plans);
 
   useEffect(() => {
     let sets = [];
@@ -233,7 +241,14 @@ function WorkoutClockScreen({ route }) {
           )}
         </>
       )}
-
+      <Button
+        title="See Workout"
+        onPress={() => {
+          console.log(workout);
+          console.log(maxGroup);
+          console.log(maxSet);
+        }}
+      />
       <Button
         title="Workout"
         onPress={async () => {
@@ -246,6 +261,7 @@ function WorkoutClockScreen({ route }) {
           });
           delete newWorkout.uid;
           dispatch(createWorkout(newWorkout));
+          DevSettings.reload();
         }}
       />
       <FlatList

@@ -29,10 +29,16 @@ export const createPlan = (newPlan) => {
 };
 
 export const editPlan = (id, editedPlan) => {
+  console.log("editing");
   return async (dispatch) => {
     try {
-      await axios.put(`${url}/plans/${id}`, editedPlan, await setHeaders());
-      dispatch({ type: "EDIT_PLAN" });
+      const response = await axios.put(
+        `${url}/plans/${id}`,
+        editedPlan,
+        await setHeaders()
+      );
+      const plan = response.data.plan;
+      dispatch({ type: "EDIT_PLAN", plan });
     } catch (err) {
       console.log(err.response);
     }
