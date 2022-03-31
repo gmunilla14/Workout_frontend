@@ -10,13 +10,13 @@ import { Ionicons } from "@expo/vector-icons";
 import WorkoutSet from "./WorkoutSet";
 import AppButton from "./AppButton";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import { getPlans } from "../store/actions/planActions";
 import Notes from "./Notes";
 import { useState } from "react";
+import { useEffect } from "react";
 function Group({
   group,
   groupIndex,
@@ -27,9 +27,15 @@ function Group({
   const muscles = useSelector((state) => state.muscles);
   const [expanded, setExpanded] = useState(false);
   const exerciseList = exercises.filter((ex) => ex._id === group.exerciseID);
-
+  const [maxGroup, setMaxGroup] = useState(0);
   let muscleList = [];
   const currentExercise = exerciseList[0];
+
+  useEffect(() => {
+    if (selectedPlan) {
+      setMaxGroup(selectedPlan.groups.length - 1);
+    }
+  }, []);
 
   if (exerciseList.length > 0) {
     muscleList = muscles.filter((mus) =>
@@ -38,28 +44,65 @@ function Group({
   }
 
   const sets = group.sets;
+
+  const swapSets = (index1, index2) => {
+    const tempGroup = JSON.parse(JSON.stringify(selectedPlan.groups[index1]));
+    let initialGroups = [...selectedPlan.groups];
+
+    initialGroups[index1] = selectedPlan.groups[index2];
+    initialGroups[index2] = tempGroup;
+
+    console.log(initialGroups);
+
+    setSelectedPlan({ ...selectedPlan, groups: initialGroups });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.leftSection}>
           <View style={styles.arrowHolder}>
-            <TouchableOpacity>
+            {groupIndex === 0 ? (
               <Ionicons
                 name="md-caret-up-sharp"
                 size={36}
-                color="black"
+                color="grey"
                 style={styles.upArrow}
               />
-            </TouchableOpacity>
-
-            <TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  swapSets(groupIndex, groupIndex - 1);
+                }}
+              >
+                <Ionicons
+                  name="md-caret-up-sharp"
+                  size={36}
+                  color="black"
+                  style={styles.upArrow}
+                />
+              </TouchableOpacity>
+            )}
+            {groupIndex === maxGroup ? (
               <Ionicons
                 name="md-caret-down-sharp"
                 size={36}
-                color="black"
+                color="grey"
                 style={styles.downArrow}
               />
-            </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  swapSets(groupIndex, groupIndex + 1);
+                }}
+              >
+                <Ionicons
+                  name="md-caret-down-sharp"
+                  size={36}
+                  color="black"
+                  style={styles.downArrow}
+                />
+              </TouchableOpacity>
+            )}
           </View>
           <View style={styles.titleHolder}>
             {exerciseList.length > 0 && (
