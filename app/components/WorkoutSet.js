@@ -11,6 +11,7 @@ function WorkoutSet({
   setSelectedPlan,
   groupIndex,
   selectedPlan,
+  editable,
 }) {
   return (
     <>
@@ -28,10 +29,10 @@ function WorkoutSet({
                 text={set.reps + " REPS"}
                 field="reps"
                 groupIndex={groupIndex}
-                index={set.type === "exercise" ? currentSet : currentSet - 1}
+                index={index}
                 selectedPlan={selectedPlan}
                 setSelectedPlan={setSelectedPlan}
-                editable={set.type === "rest"}
+                editable={editable}
               />
             </View>
 
@@ -40,10 +41,10 @@ function WorkoutSet({
                 text={set.weight + " LBS"}
                 field="weight"
                 groupIndex={groupIndex}
-                index={set.type === "exercise" ? currentSet : currentSet - 1}
+                index={index}
                 selectedPlan={selectedPlan}
                 setSelectedPlan={setSelectedPlan}
-                editable={set.type === "rest"}
+                editable={editable}
               />
             </View>
           </View>

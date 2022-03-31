@@ -23,6 +23,7 @@ function Group({
   exercises,
   selectedPlan,
   setSelectedPlan,
+  doingWorkout,
 }) {
   const muscles = useSelector((state) => state.muscles);
   const [expanded, setExpanded] = useState(false);
@@ -134,7 +135,14 @@ function Group({
             keyExtractor={() => String(Math.random())}
             renderItem={({ item, index }) => {
               return (
-                <WorkoutSet set={item} index={index} groupIndex={groupIndex} />
+                <WorkoutSet
+                  set={item}
+                  index={index}
+                  groupIndex={groupIndex}
+                  editable={!doingWorkout ? true : false}
+                  selectedPlan={selectedPlan}
+                  setSelectedPlan={setSelectedPlan}
+                />
               );
             }}
           />

@@ -81,6 +81,7 @@ function PreWorkoutScreen({ route, navigation }) {
               exercises={exercises}
               selectedPlan={selectedPlan}
               setSelectedPlan={setSelectedPlan}
+              doingWorkout={false}
             />
 
             <Button
