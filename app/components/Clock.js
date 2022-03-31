@@ -37,7 +37,11 @@ function Clock({ timeString, workout, currentGroup, currentSet, setWorkout }) {
       <Text style={styles.status}>{status}</Text>
       <View style={styles.pillHolder}>
         <IncrementPill
-          text={set.reps + " REPS"}
+          text={
+            set.type === "exercise"
+              ? set.reps + " REPS"
+              : workout.groups[currentGroup].sets[currentSet - 1].reps + " REPS"
+          }
           field="reps"
           groupIndex={currentGroup}
           index={set.type === "exercise" ? currentSet : currentSet - 1}
@@ -46,7 +50,12 @@ function Clock({ timeString, workout, currentGroup, currentSet, setWorkout }) {
           editable={set.type === "rest"}
         />
         <IncrementPill
-          text={set.weight + " LBS"}
+          text={
+            set.type === "exercise"
+              ? set.weight + " LBS"
+              : workout.groups[currentGroup].sets[currentSet - 1].weight +
+                " LBS"
+          }
           field="weight"
           groupIndex={currentGroup}
           index={set.type === "exercise" ? currentSet : currentSet - 1}
