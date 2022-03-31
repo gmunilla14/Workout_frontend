@@ -10,10 +10,6 @@ import { Ionicons } from "@expo/vector-icons";
 import WorkoutSet from "./WorkoutSet";
 import AppButton from "./AppButton";
 import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { getExercises } from "../store/actions/exerciseActions";
-import { getMuscles } from "../store/actions/muscleActions";
-import { getPlans } from "../store/actions/planActions";
 import Notes from "./Notes";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -181,6 +177,7 @@ function Group({
               onPress={() => {
                 addSet();
               }}
+              size={18}
             />
           </View>
 
@@ -201,6 +198,7 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 16,
     backgroundColor: "white",
+    marginVertical: 4,
   },
   header: {
     flexDirection: "row",

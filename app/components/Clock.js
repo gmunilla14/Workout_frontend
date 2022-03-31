@@ -2,6 +2,7 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import IncrementPill from "./IncrementPill";
 import { useSelector } from "react-redux";
+import Notes from "./Notes";
 function Clock({ timeString, workout, currentGroup, currentSet, setWorkout }) {
   let status = "";
 
@@ -55,19 +56,7 @@ function Clock({ timeString, workout, currentGroup, currentSet, setWorkout }) {
         />
       </View>
 
-      {set.type === "exercise" ? (
-        <>
-          <View style={styles.notesHolder}>
-            <View style={styles.notesBar}></View>
-            <View style={styles.notesContent}>
-              <Text style={styles.notesHeader}>NOTES</Text>
-              <Text style={styles.notes}>{notes}</Text>
-            </View>
-          </View>
-        </>
-      ) : (
-        <></>
-      )}
+      {set.type === "exercise" ? <Notes notes={notes} /> : <></>}
     </View>
   );
 }

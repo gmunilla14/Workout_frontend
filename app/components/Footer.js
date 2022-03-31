@@ -1,0 +1,37 @@
+import React from "react";
+import { View, StyleSheet, Text } from "react-native";
+import AppButton from "./AppButton";
+import Link from "./Link";
+function Footer({ buttonText, topText, linkText, onButtonPress }) {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.topText}>{topText}</Text>
+      <View style={styles.buttonHolder}>
+        <AppButton text={buttonText} onPress={onButtonPress} size={24} />
+      </View>
+      <Link text={linkText} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    backgroundColor: "white",
+    height: 120,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonHolder: {
+    width: "80%",
+    marginVertical: 8,
+  },
+  topText: {
+    color: "blue",
+    fontSize: 18,
+    fontWeight: "700",
+  },
+});
+
+export default Footer;

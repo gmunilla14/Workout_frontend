@@ -38,7 +38,7 @@ function HomeScreen({ navigation }) {
           renderItem={({ item }) => (
             <TouchableWithoutFeedback
               onPress={() => {
-                navigation.navigate("Pre Workout", item);
+                navigation.navigate("Begin Workout", item);
               }}
             >
               <View style={styles.planHolder}>

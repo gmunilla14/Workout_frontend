@@ -6,6 +6,7 @@ import {
   Button,
   FlatList,
   DevSettings,
+  ScrollView,
 } from "react-native";
 import { getPlans } from "../store/actions/planActions";
 import { Picker } from "@react-native-picker/picker";
@@ -15,6 +16,8 @@ import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import WorkoutGroup from "../components/WorkoutGroup";
 import Clock from "../components/Clock";
+import Footer from "../components/Footer";
+import Group from "../components/Group";
 function WorkoutClockScreen({ route, navigation }) {
   const sentPlan = route.params;
   const [minutes, setMinutes] = useState("00");
@@ -37,6 +40,8 @@ function WorkoutClockScreen({ route, navigation }) {
   const plans = useSelector((state) => state.plans);
 
   useEffect(() => {
+    dispatch(getPlans());
+
     let sets = [];
     sentPlan.groups.forEach((group) => {
       group.sets.forEach((set) => {
@@ -51,10 +56,8 @@ function WorkoutClockScreen({ route, navigation }) {
       planID: sentPlan._id,
       groups: sentPlan.groups,
     });
-  }, []);
 
-  useEffect(() => {
-    dispatch(getPlans());
+    setClockRunning(true);
   }, []);
 
   useEffect(() => {
@@ -72,10 +75,6 @@ function WorkoutClockScreen({ route, navigation }) {
       });
     }
   }, [clockRunning]);
-
-  const onStartButton = () => {
-    setClockRunning(true);
-  };
 
   const onIntervalButton = () => {
     const now = new Date();
@@ -162,139 +161,150 @@ function WorkoutClockScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      {workout.groups && (
-        <Clock
-          workout={workout}
-          currentGroup={currentGroup}
-          currentSet={currentSet}
-          timeString={timeString}
-          setWorkout={setWorkout}
+      <ScrollView>
+        {workout.groups && (
+          <Clock
+            workout={workout}
+            currentGroup={currentGroup}
+            currentSet={currentSet}
+            timeString={timeString}
+            setWorkout={setWorkout}
+          />
+        )}
+
+        {!clockRunning ? (
+          <Button title="Start" onPress={() => {}} />
+        ) : (
+          <>
+            {(currentSet === maxSet) & (currentGroup === maxGroup) ? (
+              <Button title="Stop" onPress={onStopButton} />
+            ) : (
+              <Button title="Interval" onPress={onIntervalButton} />
+            )}
+
+            {workout.groups[currentGroup].sets[currentSet].type ===
+            "exercise" ? (
+              <>
+                <Text>Workout</Text>
+                <View>
+                  <Text>
+                    {minutes}:{seconds}.{milliseconds}
+                  </Text>
+                </View>
+                <Text>
+                  {
+                    getCurrentExercise(workout.groups[currentGroup].exerciseID)
+                      .name
+                  }
+                </Text>
+                <Text>
+                  {workout.groups[currentGroup].sets[currentSet].reps} Reps
+                </Text>
+                <Text>
+                  {workout.groups[currentGroup].sets[currentSet].weight} LBS
+                </Text>
+                <Text>Notes</Text>
+                <Text>
+                  {
+                    getCurrentExercise(workout.groups[currentGroup].exerciseID)
+                      .notes
+                  }
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text>Workout</Text>
+                <View>
+                  <Text>
+                    {minutes}:{seconds}.{milliseconds}
+                  </Text>
+                </View>
+                <Text>Review Last Set</Text>
+                <Text>
+                  {workout.groups[currentGroup].sets[currentSet - 1].reps} Reps
+                </Text>
+                <Button
+                  title="+"
+                  onPress={() => {
+                    incrementWorkout("reps", 1, currentGroup, currentSet - 1);
+                  }}
+                />
+                <Button
+                  title="-"
+                  onPress={() => {
+                    incrementWorkout("reps", -1, currentGroup, currentSet - 1);
+                  }}
+                />
+                <Text>
+                  {workout.groups[currentGroup].sets[currentSet - 1].weight} LBS
+                </Text>
+
+                <Button
+                  title="+"
+                  onPress={() => {
+                    incrementWorkout("weight", 1, currentGroup, currentSet - 1);
+                  }}
+                />
+                <Button
+                  title="-"
+                  onPress={() => {
+                    incrementWorkout(
+                      "weight",
+                      -1,
+                      currentGroup,
+                      currentSet - 1
+                    );
+                  }}
+                />
+              </>
+            )}
+          </>
+        )}
+        <Button
+          title="See Workout"
+          onPress={() => {
+            console.log(workout);
+            console.log(maxGroup);
+            console.log(maxSet);
+          }}
         />
-      )}
-
-      {!clockRunning ? (
-        <Button title="Start" onPress={onStartButton} />
-      ) : (
-        <>
-          {(currentSet === maxSet) & (currentGroup === maxGroup) ? (
-            <Button title="Stop" onPress={onStopButton} />
-          ) : (
-            <Button title="Interval" onPress={onIntervalButton} />
-          )}
-
-          {workout.groups[currentGroup].sets[currentSet].type === "exercise" ? (
-            <>
-              <Text>Workout</Text>
-              <View>
-                <Text>
-                  {minutes}:{seconds}.{milliseconds}
-                </Text>
-              </View>
-              <Text>
-                {
-                  getCurrentExercise(workout.groups[currentGroup].exerciseID)
-                    .name
-                }
-              </Text>
-              <Text>
-                {workout.groups[currentGroup].sets[currentSet].reps} Reps
-              </Text>
-              <Text>
-                {workout.groups[currentGroup].sets[currentSet].weight} LBS
-              </Text>
-              <Text>Notes</Text>
-              <Text>
-                {
-                  getCurrentExercise(workout.groups[currentGroup].exerciseID)
-                    .notes
-                }
-              </Text>
-            </>
-          ) : (
-            <>
-              <Text>Workout</Text>
-              <View>
-                <Text>
-                  {minutes}:{seconds}.{milliseconds}
-                </Text>
-              </View>
-              <Text>Review Last Set</Text>
-              <Text>
-                {workout.groups[currentGroup].sets[currentSet - 1].reps} Reps
-              </Text>
-              <Button
-                title="+"
-                onPress={() => {
-                  incrementWorkout("reps", 1, currentGroup, currentSet - 1);
-                }}
-              />
-              <Button
-                title="-"
-                onPress={() => {
-                  incrementWorkout("reps", -1, currentGroup, currentSet - 1);
-                }}
-              />
-              <Text>
-                {workout.groups[currentGroup].sets[currentSet - 1].weight} LBS
-              </Text>
-
-              <Button
-                title="+"
-                onPress={() => {
-                  incrementWorkout("weight", 1, currentGroup, currentSet - 1);
-                }}
-              />
-              <Button
-                title="-"
-                onPress={() => {
-                  incrementWorkout("weight", -1, currentGroup, currentSet - 1);
-                }}
-              />
-            </>
-          )}
-        </>
-      )}
-      <Button
-        title="See Workout"
-        onPress={() => {
-          console.log(workout);
-          console.log(maxGroup);
-          console.log(maxSet);
-        }}
-      />
-      <Button
-        title="Workout"
-        onPress={async () => {
-          let newWorkout = { ...workout };
-          newWorkout.groups.forEach((group, index) => {
-            delete newWorkout.groups[index]._id;
-            group.sets.forEach((set, setIndex) => {
-              delete newWorkout.groups[index].sets[setIndex]._id;
+        <Button
+          title="Workout"
+          onPress={async () => {
+            let newWorkout = { ...workout };
+            newWorkout.groups.forEach((group, index) => {
+              delete newWorkout.groups[index]._id;
+              group.sets.forEach((set, setIndex) => {
+                delete newWorkout.groups[index].sets[setIndex]._id;
+              });
             });
-          });
-          delete newWorkout.uid;
-          dispatch(createWorkout(newWorkout));
-          navigation.navigate("Home");
-        }}
-      />
-      <FlatList
-        data={workout.groups}
-        keyExtractor={(group) => group._id.toString()}
-        renderItem={({ item, index }) => {
-          if (index < currentGroup) {
-            return <Text>Done</Text>;
-          } else {
-            return (
-              <WorkoutGroup
-                group={item}
-                exercises={exercises}
-                doingWorkout={true}
-                currentSet={currentSet}
-              />
-            );
-          }
-        }}
-      />
+            delete newWorkout.uid;
+            dispatch(createWorkout(newWorkout));
+            navigation.navigate("Home");
+          }}
+        />
+        <FlatList
+          data={workout.groups}
+          keyExtractor={(group) => group._id.toString()}
+          renderItem={({ item, index }) => {
+            if (index < currentGroup) {
+              return <Text>Done</Text>;
+            } else {
+              return (
+                <Group
+                  group={item}
+                  exercises={exercises}
+                  currentSet={currentSet}
+                  currentGroup={currentGroup}
+                  doingWorkout={true}
+                />
+              );
+            }
+          }}
+        />
+      </ScrollView>
+
+      <Footer />
     </View>
   );
 }

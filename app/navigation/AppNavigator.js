@@ -38,18 +38,14 @@ function AppNavigator({ navigation }) {
       screenOptions={{
         header: ({ navigation, route, options, back }) => {
           const title = getHeaderTitle(options, route.name);
-          if (title === "Create Plan" || title === "Create Exercise") {
+          if (
+            title === "Create Plan" ||
+            title === "Create Exercise" ||
+            title === "Begin Workout"
+          ) {
             return <Header title={title} back={true} navigation={navigation} />;
           } else if (title === "Home" || title === "Activate") {
             return <Header title={title} navigation={navigation} />;
-          } else if (title === "Pre Workout") {
-            return (
-              <Header
-                title={route.params.name}
-                back={true}
-                navigation={navigation}
-              />
-            );
           } else {
             return <Header title={route.params.name} navigation={navigation} />;
           }
@@ -57,7 +53,7 @@ function AppNavigator({ navigation }) {
       }}
     >
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Pre Workout" component={PreWorkoutScreen} />
+      <Stack.Screen name="Begin Workout" component={PreWorkoutScreen} />
       <Stack.Screen name="Clock" component={WorkoutClockScreen} />
       <Stack.Screen name="Create Plan" component={CreatePlanScreen} />
       <Stack.Screen name="Create Exercise" component={CreateExerciseScreen} />
