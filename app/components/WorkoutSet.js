@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import IncrementPill from "./IncrementPill";
+import Link from "./Link";
 
 function WorkoutSet({
   set,
@@ -13,6 +14,18 @@ function WorkoutSet({
   selectedPlan,
   editable,
 }) {
+  const handleDelete = (index) => {
+    const newPlan = JSON.parse(JSON.stringify(selectedPlan));
+    const maxSet = newPlan.groups[groupIndex].sets.length - 1;
+
+    if (index === maxSet) {
+      newPlan.groups[groupIndex].sets.splice(index - 1, 2);
+    } else {
+      newPlan.groups[groupIndex].sets.splice(index, 2);
+    }
+    setSelectedPlan(newPlan);
+  };
+
   return (
     <>
       {set.type === "exercise" ? (
@@ -21,7 +34,14 @@ function WorkoutSet({
             <Text style={styles.title}>
               {"Set " + (Math.floor((index + 1) / 2) + 1)}
             </Text>
-            <Text> Delete</Text>
+            <View style={styles.deleteHolder}>
+              <Link
+                text="Delete"
+                onPress={() => {
+                  handleDelete(index);
+                }}
+              />
+            </View>
           </View>
           <View style={styles.buttonParent}>
             <View style={styles.buttonHolderLeft}>
@@ -99,6 +119,9 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderRightWidth: 0,
     alignItems: "center",
+  },
+  deleteHolder: {
+    alignSelf: "center",
   },
 });
 
