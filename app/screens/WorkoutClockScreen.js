@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import WorkoutGroup from "../components/WorkoutGroup";
+import Clock from "../components/Clock";
 function WorkoutClockScreen({ route, navigation }) {
   const sentPlan = route.params;
   const [minutes, setMinutes] = useState("00");
@@ -24,6 +25,7 @@ function WorkoutClockScreen({ route, navigation }) {
   const [currentSet, setCurrentSet] = useState(0);
   const [maxSet, setMaxSet] = useState(0);
   const [maxGroup, setMaxGroup] = useState(0);
+  const [timeString, setTimeString] = useState("00:00.000");
 
   const [startBound, setStartBound] = useState(0);
   const [workout, setWorkout] = useState({});
@@ -136,6 +138,7 @@ function WorkoutClockScreen({ route, navigation }) {
         setMilliseconds(ms);
         setSeconds(secs);
         setMinutes(mins);
+        setTimeString(mins + ":" + secs + "." + ms);
       }, 1);
 
       return () => clearInterval(interval);
@@ -159,6 +162,16 @@ function WorkoutClockScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      {workout.groups && (
+        <Clock
+          workout={workout}
+          currentGroup={currentGroup}
+          currentSet={currentSet}
+          timeString={timeString}
+          setWorkout={setWorkout}
+        />
+      )}
+
       {!clockRunning ? (
         <Button title="Start" onPress={onStartButton} />
       ) : (
@@ -261,7 +274,7 @@ function WorkoutClockScreen({ route, navigation }) {
           });
           delete newWorkout.uid;
           dispatch(createWorkout(newWorkout));
-          DevSettings.reload();
+          navigation.navigate("Home");
         }}
       />
       <FlatList

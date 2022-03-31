@@ -1,5 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  editable,
+} from "react-native";
 
 function IncrementPill({
   text,
@@ -8,6 +14,7 @@ function IncrementPill({
   field,
   groupIndex,
   index,
+  editable,
 }) {
   const handleIncrement = (amount) => {
     let currentGroups = selectedPlan.groups;
@@ -18,27 +25,59 @@ function IncrementPill({
       groups: currentGroups,
     });
   };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.buttonHolderMinus}
-        onPress={() => {
-          handleIncrement(-1);
-        }}
-      >
-        <Text style={styles.textCenter}>-</Text>
-      </TouchableOpacity>
+      {editable ? (
+        <>
+          <TouchableOpacity
+            style={styles.buttonHolderMinus}
+            onPress={() => {
+              handleIncrement(-1);
+            }}
+          >
+            <Text style={styles.textCenter}>-</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <View
+            style={styles.buttonHolderMinus}
+            onPress={
+              editable
+                ? () => {
+                    handleIncrement(-1);
+                  }
+                : null
+            }
+          >
+            <Text style={styles.none}>-</Text>
+          </View>
+        </>
+      )}
+
       <View style={styles.pillText}>
         <Text style={styles.textCenter}>{text}</Text>
       </View>
-      <TouchableOpacity
-        style={styles.buttonHolderPlus}
-        onPress={() => {
-          handleIncrement(1);
-        }}
-      >
-        <Text style={styles.textCenter}>+</Text>
-      </TouchableOpacity>
+
+      {editable ? (
+        <>
+          <TouchableOpacity
+            style={styles.buttonHolderPlus}
+            onPress={() => {
+              handleIncrement(1);
+            }}
+          >
+            <Text style={styles.textCenter}>+</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <View style={styles.buttonHolderPlus}>
+            <Text style={styles.none}>+</Text>
+          </View>
+        </>
+      )}
     </View>
   );
 }
@@ -72,6 +111,12 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
     height: 50,
     paddingHorizontal: 4,
+  },
+  none: {
+    color: "grey",
+    textAlign: "center",
+    fontSize: 18,
+    paddingTop: 14,
   },
 });
 
