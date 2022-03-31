@@ -8,7 +8,7 @@ import { getPlans } from "../store/actions/planActions";
 import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import { editPlan } from "../store/actions/planActions";
-
+import Group from "../components/Group";
 function PreWorkoutScreen({ route, navigation }) {
   const [selectedPlan, setSelectedPlan] = useState(false);
   const [ogPlan, setOGPlan] = useState(false);
@@ -25,6 +25,12 @@ function PreWorkoutScreen({ route, navigation }) {
   const exercises = useSelector((state) => state.exercises);
   return (
     <View style={styles.container}>
+      <Button
+        title="Get Plan"
+        onPress={() => {
+          console.log(selectedPlan);
+        }}
+      />
       <Button
         title="Go to Clock"
         onPress={() => {
@@ -69,13 +75,14 @@ function PreWorkoutScreen({ route, navigation }) {
         keyExtractor={(group) => group._id.toString()}
         renderItem={({ item, index }) => (
           <>
-            <WorkoutGroup
+            <Group
               group={item}
               groupIndex={index}
               exercises={exercises}
-              setSelectedPlan={setSelectedPlan}
               selectedPlan={selectedPlan}
+              setSelectedPlan={setSelectedPlan}
             />
+
             <Button
               title="+ Add Set"
               onPress={() => {
