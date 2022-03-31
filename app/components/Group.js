@@ -57,6 +57,35 @@ function Group({
 
     setSelectedPlan({ ...selectedPlan, groups: initialGroups });
   };
+
+  const addSet = () => {
+    let groups = [...selectedPlan.groups];
+    let groupLength = groups[groupIndex].sets.length;
+    let groupSets = groups[groupIndex].sets;
+    if (groupLength > 1) {
+      groupSets.push({
+        ...groupSets[groupLength - 2],
+        _id: String(Math.floor(Math.random() * 100000000) + 1),
+      });
+    } else {
+      groupSets.push({
+        type: "rest",
+        duration: 60,
+        _id: String(Math.floor(Math.random() * 100000000) + 1),
+      });
+    }
+
+    groupSets.push({
+      ...groupSets[groupLength - 1],
+      _id: String(Math.floor(Math.random() * 100000000) + 1),
+    });
+
+    groups[groupIndex].sets = groupSets;
+    setSelectedPlan({
+      ...selectedPlan,
+      groups: groups,
+    });
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -147,7 +176,12 @@ function Group({
             }}
           />
           <View style={styles.buttonHolder}>
-            <AppButton />
+            <AppButton
+              text="+ Add Another Set"
+              onPress={() => {
+                addSet();
+              }}
+            />
           </View>
 
           {exerciseList.length > 0 && (

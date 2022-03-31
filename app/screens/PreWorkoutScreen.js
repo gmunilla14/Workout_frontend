@@ -70,54 +70,56 @@ function PreWorkoutScreen({ route, navigation }) {
           }
         }}
       />
-      <FlatList
-        data={selectedPlan.groups}
-        keyExtractor={(group) => group._id.toString()}
-        renderItem={({ item, index }) => (
-          <>
-            <Group
-              group={item}
-              groupIndex={index}
-              exercises={exercises}
-              selectedPlan={selectedPlan}
-              setSelectedPlan={setSelectedPlan}
-              doingWorkout={false}
-            />
+      {selectedPlan && (
+        <FlatList
+          data={selectedPlan.groups}
+          keyExtractor={(group) => group._id.toString()}
+          renderItem={({ item, index }) => (
+            <>
+              <Group
+                group={item}
+                groupIndex={index}
+                exercises={exercises}
+                selectedPlan={selectedPlan}
+                setSelectedPlan={setSelectedPlan}
+                doingWorkout={false}
+              />
 
-            <Button
-              title="+ Add Set"
-              onPress={() => {
-                let groups = [...selectedPlan.groups];
-                let groupLength = groups[index].sets.length;
-                let groupSets = groups[index].sets;
-                if (groupLength > 1) {
+              <Button
+                title="+ Add Set"
+                onPress={() => {
+                  let groups = [...selectedPlan.groups];
+                  let groupLength = groups[index].sets.length;
+                  let groupSets = groups[index].sets;
+                  if (groupLength > 1) {
+                    groupSets.push({
+                      ...groupSets[groupLength - 2],
+                      _id: String(Math.floor(Math.random() * 100000000) + 1),
+                    });
+                  } else {
+                    groupSets.push({
+                      type: "rest",
+                      duration: 60,
+                      _id: String(Math.floor(Math.random() * 100000000) + 1),
+                    });
+                  }
+
                   groupSets.push({
-                    ...groupSets[groupLength - 2],
+                    ...groupSets[groupLength - 1],
                     _id: String(Math.floor(Math.random() * 100000000) + 1),
                   });
-                } else {
-                  groupSets.push({
-                    type: "rest",
-                    duration: 60,
-                    _id: String(Math.floor(Math.random() * 100000000) + 1),
+
+                  groups[index].sets = groupSets;
+                  setSelectedPlan({
+                    ...selectedPlan,
+                    groups: groups,
                   });
-                }
-
-                groupSets.push({
-                  ...groupSets[groupLength - 1],
-                  _id: String(Math.floor(Math.random() * 100000000) + 1),
-                });
-
-                groups[index].sets = groupSets;
-                setSelectedPlan({
-                  ...selectedPlan,
-                  groups: groups,
-                });
-              }}
-            />
-          </>
-        )}
-      />
+                }}
+              />
+            </>
+          )}
+        />
+      )}
     </View>
   );
 }
