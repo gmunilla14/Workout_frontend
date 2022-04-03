@@ -20,6 +20,8 @@ function Group({
   selectedPlan,
   setSelectedPlan,
   doingWorkout,
+  currentSet,
+  currentGroup,
 }) {
   const muscles = useSelector((state) => state.muscles);
   const [expanded, setExpanded] = useState(false);
@@ -159,12 +161,16 @@ function Group({
             data={sets}
             keyExtractor={() => String(Math.random())}
             renderItem={({ item, index }) => {
+              let editable = false;
+              if (!(currentSet > index)) {
+                editable = true;
+              }
               return (
                 <WorkoutSet
                   set={item}
                   index={index}
                   groupIndex={groupIndex}
-                  editable={!doingWorkout ? true : false}
+                  editable={editable}
                   selectedPlan={selectedPlan}
                   setSelectedPlan={setSelectedPlan}
                 />

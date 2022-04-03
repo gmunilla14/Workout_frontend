@@ -34,15 +34,16 @@ function WorkoutSet({
             <Text style={styles.title}>
               {"Set " + (Math.floor((index + 1) / 2) + 1)}
             </Text>
-            <Button title="test" style={styles.testButton} />
-            <View style={styles.deleteHolder}>
-              <Link
-                text="Delete"
-                onPress={() => {
-                  handleDelete(index);
-                }}
-              />
-            </View>
+            {editable && (
+              <View style={styles.deleteHolder}>
+                <Link
+                  text="Delete"
+                  onPress={() => {
+                    handleDelete(index);
+                  }}
+                />
+              </View>
+            )}
           </View>
           <View style={styles.buttonParent}>
             <View style={styles.buttonHolderLeft}>

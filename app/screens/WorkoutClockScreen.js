@@ -227,23 +227,8 @@ function WorkoutClockScreen({ route, navigation }) {
               />
             )}
 
-            <Button
-              title="Workout"
-              onPress={async () => {
-                let newWorkout = { ...workout };
-                newWorkout.groups.forEach((group, index) => {
-                  delete newWorkout.groups[index]._id;
-                  group.sets.forEach((set, setIndex) => {
-                    delete newWorkout.groups[index].sets[setIndex]._id;
-                  });
-                });
-                delete newWorkout.uid;
-                dispatch(createWorkout(newWorkout));
-                navigation.navigate("Home");
-              }}
-            />
-
-            {workout.groups[currentGroup].sets[currentSet].type === "rest" && (
+            {(workout.groups[currentGroup].sets[currentSet].type === "rest" ||
+              inBetween) && (
               <>
                 <View>
                   <FlatList
@@ -260,6 +245,9 @@ function WorkoutClockScreen({ route, navigation }) {
                             currentSet={currentSet}
                             currentGroup={currentGroup}
                             doingWorkout={true}
+                            groupIndex={index}
+                            selectedPlan={workout}
+                            setSelectedPlan={setWorkout}
                           />
                         );
                       }
