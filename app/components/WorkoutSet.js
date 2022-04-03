@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Button } from "react-native";
 import IncrementPill from "./IncrementPill";
 import Link from "./Link";
 
@@ -34,6 +34,7 @@ function WorkoutSet({
             <Text style={styles.title}>
               {"Set " + (Math.floor((index + 1) / 2) + 1)}
             </Text>
+            <Button title="test" style={styles.testButton} />
             <View style={styles.deleteHolder}>
               <Link
                 text="Delete"
@@ -122,6 +123,9 @@ const styles = StyleSheet.create({
   },
   deleteHolder: {
     alignSelf: "center",
+  },
+  testButton: {
+    zIndex: 1000,
   },
 });
 

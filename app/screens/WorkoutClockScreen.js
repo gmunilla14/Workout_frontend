@@ -166,13 +166,11 @@ function WorkoutClockScreen({ route, navigation }) {
           .toString()
           .padStart(2, "0");
         const secs = (Math.floor(time / 1000) % 60).toString().padStart(2, "0");
-        const ms = (time % 1000).toString().padStart(3, "0");
 
-        setMilliseconds(ms);
         setSeconds(secs);
         setMinutes(mins);
-        setTimeString(mins + ":" + secs + "." + ms);
-      }, 1);
+        setTimeString(mins + ":" + secs);
+      }, 200);
 
       return () => clearInterval(interval);
     }
@@ -181,6 +179,37 @@ function WorkoutClockScreen({ route, navigation }) {
   const getCurrentExercise = (exerciseID) => {
     const exerciseList = exercises.filter((ex) => ex._id === exerciseID);
     return exerciseList[0];
+  };
+
+  const onStop = () => {
+    const now = new Date();
+    const endTime = now.getTime();
+    let workoutGroups = workout.groups;
+    let workoutSets = workoutGroups[currentGroup].sets;
+    workoutSets[currentSet] = {
+      ...workoutSets[currentSet],
+      startTime: startBound,
+      endTime: now.getTime(),
+    };
+    workoutGroups[currentGroup] = {
+      ...workoutGroups[currentGroup],
+      sets: workoutSets,
+    };
+
+    let newWorkout = { ...workout, groups: workoutGroups, endTime };
+
+    setWorkout({ ...workout, groups: workoutGroups, endTime });
+
+    newWorkout.groups.forEach((group, index) => {
+      delete newWorkout.groups[index]._id;
+      group.sets.forEach((set, setIndex) => {
+        delete newWorkout.groups[index].sets[setIndex]._id;
+      });
+    });
+    delete newWorkout.uid;
+    dispatch(createWorkout(newWorkout));
+
+    navigation.navigate("Home");
   };
 
   return (
@@ -214,64 +243,82 @@ function WorkoutClockScreen({ route, navigation }) {
               }}
             />
 
-            {workout.groups[currentGroup].sets[currentSet].type === "rest" ||
-              (inBetween && (
-                <FlatList
-                  data={workout.groups}
-                  keyExtractor={(group) => group._id.toString()}
-                  renderItem={({ item, index }) => {
-                    if (index < currentGroup) {
-                      return <Text>Done</Text>;
-                    } else {
-                      return (
-                        <Group
-                          group={item}
-                          exercises={exercises}
-                          currentSet={currentSet}
-                          currentGroup={currentGroup}
-                          doingWorkout={true}
-                        />
-                      );
-                    }
-                  }}
-                />
-              ))}
+            {workout.groups[currentGroup].sets[currentSet].type === "rest" && (
+              <>
+                <View>
+                  <FlatList
+                    data={workout.groups}
+                    keyExtractor={(group) => group._id.toString()}
+                    renderItem={({ item, index }) => {
+                      if (index < currentGroup) {
+                        return <Text>Done</Text>;
+                      } else {
+                        return (
+                          <Group
+                            group={item}
+                            exercises={exercises}
+                            currentSet={currentSet}
+                            currentGroup={currentGroup}
+                            doingWorkout={true}
+                          />
+                        );
+                      }
+                    }}
+                  />
+                </View>
+              </>
+            )}
           </ScrollView>
-
-          {inBetween ? (
-            <Footer
-              buttonText={
-                "Start " +
-                getCurrentExercise(workout.groups[currentGroup].exerciseID).name
-              }
-              onButtonPress={onIntervalButton}
-            />
-          ) : (
+          {!(currentSet === maxSet && currentGroup === maxGroup) ? (
             <>
-              {workout.groups[currentGroup].sets[currentSet].type ===
-              "exercise" ? (
+              {inBetween ? (
                 <Footer
                   buttonText={
-                    currentSet < maxSet
-                      ? "Begin Rest"
-                      : "Start Moving to Next Exercise"
-                  }
-                  topText={
-                    currentSet < maxSet
-                      ? nextSet.duration + " SECONDS"
-                      : getCurrentExercise(
-                          workout.groups[currentGroup + 1].exerciseID
-                        ).name
+                    "Start " +
+                    getCurrentExercise(workout.groups[currentGroup].exerciseID)
+                      .name
                   }
                   onButtonPress={onIntervalButton}
                 />
               ) : (
-                <Footer
-                  buttonText="Start Next Set"
-                  topText={nextSet.reps + " REPS, " + nextSet.weight + " LBS"}
-                  onButtonPress={onIntervalButton}
-                />
+                <>
+                  {workout.groups[currentGroup].sets[currentSet].type ===
+                  "exercise" ? (
+                    <Footer
+                      buttonText={
+                        currentSet < maxSet
+                          ? "Begin Rest"
+                          : "Start Moving to Next Exercise"
+                      }
+                      topText={
+                        currentSet < maxSet
+                          ? nextSet.duration + " SECONDS"
+                          : getCurrentExercise(
+                              workout.groups[currentGroup + 1].exerciseID
+                            ).name
+                      }
+                      onButtonPress={onIntervalButton}
+                    />
+                  ) : (
+                    <Footer
+                      buttonText="Start Next Set"
+                      topText={
+                        nextSet.reps + " REPS, " + nextSet.weight + " LBS"
+                      }
+                      onButtonPress={onIntervalButton}
+                    />
+                  )}
+                </>
               )}
+            </>
+          ) : (
+            <>
+              <Footer
+                buttonText="Complete Workout"
+                onButtonPress={() => {
+                  onStop();
+                }}
+              />
             </>
           )}
         </>
