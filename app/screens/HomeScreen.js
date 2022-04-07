@@ -25,6 +25,12 @@ function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Button
+        title="Data"
+        onPress={() => {
+          navigation.navigate("Data");
+        }}
+      />
       <Text style={styles.title}>All Workouts</Text>
       <Text
         style={{ ...styles.subtext, textAlign: "center", marginBottom: 20 }}

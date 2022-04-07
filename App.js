@@ -17,6 +17,7 @@ import HomeScreen from "./app/screens/HomeScreen";
 import AppNavigator from "./app/navigation/AppNavigator";
 import ParentNavigator from "./app/navigation/ParentNavigator";
 import IncrementPill from "./app/components/IncrementPill";
+import DataScreen from "./app/screens/DataScreen";
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default function App() {

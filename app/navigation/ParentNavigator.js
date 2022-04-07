@@ -12,6 +12,7 @@ import { useState } from "react";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
 import TitleScreen from "../screens/TitleScreen";
+import DataScreen from "../screens/DataScreen";
 const Stack = createStackNavigator();
 
 function ParentNavigator(props) {
