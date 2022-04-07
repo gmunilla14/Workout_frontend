@@ -10,6 +10,10 @@ import { line } from "d3-shape";
 import { curveBasis } from "d3-shape";
 import { axisLeft } from "d3-axis";
 import { ticks } from "d3";
+import { Picker } from "@react-native-picker/picker";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { getExercises } from "../store/actions/exerciseActions";
 
 const height = 300;
 const width = 325;
@@ -34,9 +38,14 @@ const createGraph = (data) => {
   const nextDay = new Date(next.getFullYear(), next.getMonth(), next.getDate());
   const prevDay = new Date(prev.getFullYear(), prev.getMonth(), prev.getDate());
 
-  const diff = Math.ceil(
+  let diff = Math.ceil(
     (nextDay.getTime() - prevDay.getTime()) / (1000 * 64 * 64 * 24)
   );
+
+  console.log(diff);
+  while (diff > 10) {
+    diff /= 2;
+  }
 
   const xScale = scaleTime()
     .domain([prevDay, nextDay])
@@ -77,6 +86,11 @@ function DataScreen(props) {
   const [circles, setCircles] = useState([]);
   const [yTicks, setyTicks] = useState([]);
   const [xTicks, setxTicks] = useState([]);
+  const [selectedExercise, setSelectedExercise] = useState({});
+
+  const exercises = useSelector((state) => state.exercises);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const { max, min, curvedLine, circles, yTicks, xTicks } = createGraph(data);
@@ -86,25 +100,40 @@ function DataScreen(props) {
     setxTicks(xTicks);
   }, [data]);
 
+  useEffect(() => {
+    dispatch(getExercises());
+  }, []);
   return (
     <View style={styles.container}>
       <Button
         title="Get data"
         onPress={async () => {
           const response = await axios.get(
-            `${url}/data?type=volpersec&exercise=62465c7da6c7baaf6b58b514`,
+            `${url}/data?type=volpersec&exercise=${selectedExercise}`,
             await setHeaders()
           );
           setData(response.data.data);
+          setShowCurve(true);
+          console.log(selectedExercise);
         }}
       />
 
-      <Button
-        title="Show curve"
-        onPress={() => {
-          setShowCurve(!showCurve);
+      <Picker
+        selectedValue={selectedExercise}
+        onValueChange={(itemValue) => {
+          setSelectedExercise(itemValue);
         }}
-      />
+      >
+        {exercises.map((exercise) => {
+          return (
+            <Picker.Item
+              key={exercise._id}
+              label={exercise.name}
+              value={exercise._id}
+            />
+          );
+        })}
+      </Picker>
 
       <Svg width={width} height={height} stroke="#6231ff">
         <G y={0}>
@@ -184,7 +213,7 @@ function DataScreen(props) {
                       textAnchor="middle"
                       key={tick.x + "x"}
                     >
-                      {tick.val.getMonth() + "/" + tick.val.getDate()}
+                      {tick.val.getMonth() + 1 + "/" + tick.val.getDate()}
                     </Text>
                   </>
                 );
