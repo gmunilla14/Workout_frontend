@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import IncrementPill from "./IncrementPill";
 import { useSelector } from "react-redux";
 import Notes from "./Notes";
-function Clock({ timeString, workout, currentGroup, currentSet, setWorkout }) {
+import { useState } from "react";
+function Clock({ mins, secs, workout, currentGroup, currentSet, setWorkout }) {
   let status = "";
-
+  const [overTime, setOverTime] = useState(false);
   const exercises = useSelector((state) => state.exercises);
 
   const getCurrentExercise = (exerciseID) => {
@@ -28,11 +29,30 @@ function Clock({ timeString, workout, currentGroup, currentSet, setWorkout }) {
   }
 
   const set = workout.groups[currentGroup].sets[currentSet];
+  const durationMin = Math.floor(set.duration / 60)
+    .toString()
+    .padStart(2, "0");
+  const durationSec = (set.duration % 60).toString().padStart(2, "0");
+
+  const timeString = mins + ":" + secs;
+
+  useEffect(() => {
+    if (Number(mins) > Number(durationMin)) {
+      setOverTime(true);
+    } else if (Number(mins) === Number(durationMin)) {
+      if (Number(secs) > Number(durationSec)) {
+        setOverTime(true);
+      }
+    } else {
+      setOverTime(false);
+    }
+  }, secs);
 
   return (
     <View style={styles.container}>
-      <View style={styles.clock}>
+      <View style={{ ...styles.clock, borderWidth: overTime ? 5 : 0 }}>
         <Text style={styles.time}>{timeString}</Text>
+        {set.type === "rest" && <Text>{durationMin + ":" + durationSec}</Text>}
       </View>
       <Text style={styles.status}>{status}</Text>
       <View style={styles.pillHolder}>

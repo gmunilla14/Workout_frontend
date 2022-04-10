@@ -169,7 +169,6 @@ function WorkoutClockScreen({ route, navigation }) {
 
         setSeconds(secs);
         setMinutes(mins);
-        setTimeString(mins + ":" + secs);
       }, 200);
 
       return () => clearInterval(interval);
@@ -224,6 +223,8 @@ function WorkoutClockScreen({ route, navigation }) {
                 currentSet={currentSet}
                 timeString={timeString}
                 setWorkout={setWorkout}
+                mins={minutes}
+                secs={seconds}
               />
             )}
 
