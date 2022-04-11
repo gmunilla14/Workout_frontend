@@ -236,6 +236,7 @@ function WorkoutClockScreen({ route, navigation }) {
                             groupIndex={index}
                             selectedPlan={workout}
                             setSelectedPlan={setWorkout}
+                            inBetween={inBetween}
                           />
                         );
                       }

@@ -23,6 +23,7 @@ function Group({
   doingWorkout,
   currentSet,
   currentGroup,
+  inBetween,
 }) {
   const muscles = useSelector((state) => state.muscles);
   const [expanded, setExpanded] = useState(false);
@@ -90,7 +91,9 @@ function Group({
       <View style={styles.header}>
         <View style={styles.leftSection}>
           <View style={styles.arrowHolder}>
-            {groupIndex === 0 ? (
+            {groupIndex === 0 ||
+            (doingWorkout && !inBetween && groupIndex <= currentGroup + 1) ||
+            (doingWorkout && inBetween && currentGroup === groupIndex) ? (
               <Ionicons
                 name="md-caret-up-sharp"
                 size={36}
@@ -111,7 +114,8 @@ function Group({
                 />
               </TouchableOpacity>
             )}
-            {groupIndex === maxGroup ? (
+            {groupIndex === maxGroup ||
+            (doingWorkout && groupIndex == currentGroup && !inBetween) ? (
               <Ionicons
                 name="md-caret-down-sharp"
                 size={36}
@@ -163,8 +167,13 @@ function Group({
             keyExtractor={() => String(Math.random())}
             renderItem={({ item, index }) => {
               let editable = false;
-              if (!(currentSet > index)) {
+
+              if (groupIndex > currentGroup) {
                 editable = true;
+              } else if (groupIndex === currentGroup) {
+                if (index >= currentSet) {
+                  editable = true;
+                }
               }
               return (
                 <WorkoutSet
