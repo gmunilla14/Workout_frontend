@@ -1,0 +1,189 @@
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import { Circle, G, Line, Path, Svg, Text } from "react-native-svg";
+import { scaleTime, scaleLinear } from "d3-scale";
+import { line } from "d3-shape";
+import { useState } from "react";
+import { useEffect } from "react";
+
+function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
+  const [circles, setCircles] = useState([]);
+  const [yTicks, setyTicks] = useState([]);
+  const [xTicks, setxTicks] = useState([]);
+  const [curve, setCurve] = useState("");
+
+  useEffect(() => {
+    const { curvedLine, circles, yTicks, xTicks } = createGraph(data);
+    setCurve(curvedLine);
+    setCircles(circles);
+    setyTicks(yTicks);
+    setxTicks(xTicks);
+  }, [data]);
+
+  const createGraph = (data) => {
+    const max = Math.max(...data.map((val) => val.y)) + 5;
+    const min = Math.min(...data.map((val) => val.y)) - 5;
+
+    const minTime = new Date(data[0].x);
+    const maxTime = new Date(data[data.length - 1].x);
+
+    const next = new Date(maxTime);
+    next.setDate(next.getDate() + 1);
+
+    const prev = new Date(minTime);
+    prev.setDate(prev.getDate() - 1);
+
+    const nextDay = new Date(
+      next.getFullYear(),
+      next.getMonth(),
+      next.getDate()
+    );
+    const prevDay = new Date(
+      prev.getFullYear(),
+      prev.getMonth(),
+      prev.getDate()
+    );
+
+    let diff = Math.ceil(
+      (nextDay.getTime() - prevDay.getTime()) / (1000 * 64 * 64 * 24)
+    );
+
+    while (diff > 10) {
+      diff /= 2;
+    }
+
+    const xScale = scaleTime()
+      .domain([prevDay, nextDay])
+      .range([leftPadding, width - rightPadding]);
+    const yScale = scaleLinear()
+      .domain([min, max])
+      .range([height - yPadding, yPadding]);
+    const curvedLine = line()
+      .x((d) => xScale(new Date(d.x)))
+      .y((d) => yScale(d.y))(data);
+
+    const circles = data.map((point) => {
+      return { cx: xScale(new Date(point.x)), cy: yScale(point.y) };
+    });
+
+    let xTicks = [];
+    let yTicks = [];
+    const minTimeInt = prevDay.getTime();
+    const maxTimeInt = nextDay.getTime();
+
+    for (let i = 0; i < 10; i++) {
+      const yVal = (min + ((max - min) / 9) * i).toFixed(1);
+      yTicks.push({ y: yScale(yVal), val: yVal });
+    }
+
+    for (let i = 0; i <= diff; i++) {
+      const xVal = minTimeInt + ((maxTimeInt - minTimeInt) / diff) * i;
+      xTicks.push({ x: xScale(new Date(xVal)), val: new Date(xVal) });
+    }
+
+    return { curvedLine, circles, yTicks, xTicks };
+  };
+
+  const yAxisString = "translate(15, " + (height / 2 + 45) + ") rotate(-90)";
+  return (
+    <View style={styles.container}>
+      <Svg width={width} height={height} stroke="#6231ff">
+        <G y={0}>
+          <Line
+            x1={leftPadding}
+            y1={height - yPadding}
+            x2={width - rightPadding}
+            y2={height - yPadding}
+            stroke={"black"}
+            strokeWidth="3"
+          />
+          <Line
+            x1={leftPadding}
+            y1={yPadding}
+            x2={leftPadding}
+            y2={height - yPadding}
+            stroke={"black"}
+            strokeWidth="3"
+          />
+
+          <Text x={0} y={0} transform={yAxisString} stroke="black">
+            Volume (Lbs/sec)
+          </Text>
+
+          <>
+            <Path d={curve} strokeWidth={2} stroke="blue" />
+            {circles.map((circle) => {
+              return (
+                <>
+                  <Circle
+                    cx={circle.cx}
+                    cy={circle.cy}
+                    fill="blue"
+                    r="2"
+                    key={circle.cx}
+                  />
+                </>
+              );
+            })}
+            {yTicks.map((tick) => {
+              return (
+                <>
+                  <Line
+                    x1={leftPadding - 5}
+                    y1={tick.y}
+                    x2={leftPadding + 5}
+                    y2={tick.y}
+                    stroke={"black"}
+                    strokeWidth="3"
+                    key={tick.y}
+                  />
+                  <Text
+                    x={leftPadding - 6}
+                    y={tick.y + 3}
+                    fontSize="10"
+                    textAnchor="end"
+                    key={tick.y + "t"}
+                    stroke="black"
+                  >
+                    {tick.val}
+                  </Text>
+                </>
+              );
+            })}
+            {xTicks.map((tick) => {
+              return (
+                <>
+                  <Line
+                    x1={tick.x}
+                    y1={height - yPadding - 5}
+                    x2={tick.x}
+                    y2={height - yPadding + 5}
+                    stroke={"black"}
+                    strokeWidth="3"
+                    key={tick.x}
+                  />
+                  <Text
+                    x={tick.x}
+                    y={height - 5}
+                    fontSize="10"
+                    textAnchor="middle"
+                    key={tick.x + "x"}
+                    stroke="black"
+                  >
+                    {tick.val.getMonth() + 1 + "/" + tick.val.getDate()}
+                  </Text>
+                </>
+              );
+            })}
+          </>
+        </G>
+      </Svg>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {},
+});
+
+export default Graph;

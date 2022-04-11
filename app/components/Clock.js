@@ -46,7 +46,7 @@ function Clock({ mins, secs, workout, currentGroup, currentSet, setWorkout }) {
     } else {
       setOverTime(false);
     }
-  }, secs);
+  }, [secs]);
 
   return (
     <View style={styles.container}>

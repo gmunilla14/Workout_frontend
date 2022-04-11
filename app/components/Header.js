@@ -3,6 +3,8 @@ import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 function Header({ title, back, navigation }) {
   return (
@@ -17,6 +19,26 @@ function Header({ title, back, navigation }) {
           >
             <Entypo name="arrow-long-left" size={24} color="black" />
           </TouchableOpacity>
+        )}
+        {title === "Home" && (
+          <>
+            <TouchableOpacity
+              style={{ ...styles.backButton, left: 0 }}
+              onPress={() => {
+                navigation.navigate("Data");
+              }}
+            >
+              <SimpleLineIcons name="graph" size={24} />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ ...styles.backButton, left: 56 }}
+              onPress={() => {
+                navigation.navigate("Workout History");
+              }}
+            >
+              <FontAwesome name="history" size={24} />
+            </TouchableOpacity>
+          </>
         )}
         <Text style={styles.headerTitle}>{title}</Text>
         <TouchableOpacity

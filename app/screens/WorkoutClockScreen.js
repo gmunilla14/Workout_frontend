@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Button,
-  FlatList,
-  DevSettings,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Text, FlatList, ScrollView } from "react-native";
 import { getPlans } from "../store/actions/planActions";
-import { Picker } from "@react-native-picker/picker";
 import { createWorkout } from "../store/actions/workoutActions";
 import { useDispatch, useSelector } from "react-redux";
-import { getExercises } from "../store/actions/exerciseActions";
-import { getMuscles } from "../store/actions/muscleActions";
-import WorkoutGroup from "../components/WorkoutGroup";
 import Clock from "../components/Clock";
 import Footer from "../components/Footer";
 import Group from "../components/Group";
@@ -22,7 +10,6 @@ function WorkoutClockScreen({ route, navigation }) {
   const sentPlan = route.params;
   const [minutes, setMinutes] = useState("00");
   const [seconds, setSeconds] = useState("00");
-  const [milliseconds, setMilliseconds] = useState("000");
   const [clockRunning, setClockRunning] = useState(false);
   const [currentGroup, setCurrentGroup] = useState(0);
   const [currentSet, setCurrentSet] = useState(0);
@@ -42,8 +29,6 @@ function WorkoutClockScreen({ route, navigation }) {
   const dispatch = useDispatch();
 
   const exercises = useSelector((state) => state.exercises);
-  const muscles = useSelector((state) => state.muscles);
-  const plans = useSelector((state) => state.plans);
 
   useEffect(() => {
     dispatch(getPlans());
@@ -231,7 +216,8 @@ function WorkoutClockScreen({ route, navigation }) {
             {(workout.groups[currentGroup].sets[currentSet].type === "rest" ||
               inBetween) && (
               <>
-                <View>
+                <Text style={styles.title}>Up Next</Text>
+                <View style={styles.groupsHolder}>
                   <FlatList
                     data={workout.groups}
                     keyExtractor={(group) => group._id.toString()}
@@ -319,6 +305,16 @@ function WorkoutClockScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  groupsHolder: {
+    width: "90%",
+    alignSelf: "center",
+    marginTop: 24,
+  },
+  title: {
+    fontSize: 24,
+    textAlign: "center",
+    marginTop: 24,
   },
 });
 

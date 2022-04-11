@@ -14,7 +14,7 @@ import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import AppButton from "../components/AppButton";
 function HomeScreen({ navigation }) {
   let plans = useSelector((state) => state.plans);
   const dispatch = useDispatch();
@@ -25,17 +25,11 @@ function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Button
-        title="Data"
-        onPress={() => {
-          navigation.navigate("Data");
-        }}
-      />
-      <Text style={styles.title}>All Workouts</Text>
+      <Text style={styles.title}>All Plans</Text>
       <Text
         style={{ ...styles.subtext, textAlign: "center", marginBottom: 20 }}
       >
-        Click on a workout to begin
+        Click a plan to get started
       </Text>
       <View style={styles.workoutsHolder}>
         <FlatList
@@ -50,37 +44,36 @@ function HomeScreen({ navigation }) {
               <View style={styles.planHolder}>
                 <Text style={styles.planTitle}>{item.name}</Text>
                 <Text style={{ ...styles.subtext, marginVertical: 8 }}>
-                  {"LATER MINUTES | " + item.groups.length + " exercises"}
+                  {item.groups.length + " exercises"}
                 </Text>
               </View>
             </TouchableWithoutFeedback>
           )}
           ItemSeparatorComponent={() => <View style={styles.line}></View>}
         />
-        <View style={{ marginVertical: 12 }}>
-          <Button title="Show More" />
+      </View>
+      <View style={styles.buttonHolder}>
+        <View style={styles.planButton}>
+          <AppButton
+            text="+ New Plan"
+            onPress={() => {
+              navigation.navigate("Create Plan");
+            }}
+            size={18}
+            secondary={true}
+          />
+        </View>
+        <View style={styles.exerciseButton}>
+          <AppButton
+            text="+ New Exercise"
+            onPress={() => {
+              navigation.navigate("Create Exercise");
+            }}
+            size={18}
+            secondary={true}
+          />
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          navigation.navigate("Create Plan");
-        }}
-      >
-        <Text style={{ ...styles.subtext, fontSize: 18, fontWeight: "700" }}>
-          + New Plan
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => {
-          navigation.navigate("Create Exercise");
-        }}
-      >
-        <Text style={{ ...styles.subtext, fontSize: 18, fontWeight: "700" }}>
-          + Create New Exercise
-        </Text>
-      </TouchableOpacity>
 
       <Button
         title="Sign Out"
@@ -108,7 +101,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     textAlign: "center",
-    marginTop: 36,
+    marginTop: 24,
     marginBottom: 16,
   },
   subtext: {
@@ -147,6 +140,18 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
     borderColor: "#e5e5e5",
+  },
+  buttonHolder: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    marginTop: 12,
+  },
+  planButton: {
+    width: "45%",
+  },
+  exerciseButton: {
+    width: "50%",
   },
 });
 
