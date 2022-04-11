@@ -44,7 +44,7 @@ function HomeScreen({ navigation }) {
             >
               <View style={styles.planHolder}>
                 <Text style={styles.planTitle}>{item.name}</Text>
-                <Text style={{ ...styles.subtext, marginVertical: 8 }}>
+                <Text style={{ ...styles.subtext, marginVertical: 4 }}>
                   {item.groups.length + " exercises"}
                 </Text>
               </View>
@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.mainBG,
     alignItems: "center",
+    height: "100%",
   },
   title: {
     fontSize: 24,
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
   },
   planHolder: {
     marginTop: 20,
-    marginHorizontal: 20,
+    marginHorizontal: "7.5%",
     marginBottom: 10,
   },
   planTitle: {
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
   },
   line: {
     height: 1,
-    width: 240,
+    width: "85%",
     backgroundColor: colors.subtitle,
     alignSelf: "center",
   },

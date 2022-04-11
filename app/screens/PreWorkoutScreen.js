@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "700",
     marginVertical: 30,
+    color: colors.mainDark,
   },
 });
 
