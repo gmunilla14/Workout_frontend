@@ -11,13 +11,13 @@ import {
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import WorkoutGroup from "../components/WorkoutGroup";
 import { getPlans } from "../store/actions/planActions";
 import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import { editPlan } from "../store/actions/planActions";
 import Group from "../components/Group";
 import Footer from "../components/Footer";
+import colors from "../utils/colors";
 function PreWorkoutScreen({ route, navigation }) {
   const [selectedPlan, setSelectedPlan] = useState(false);
   const [ogPlan, setOGPlan] = useState(false);
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-between",
+    backgroundColor: colors.mainBG,
   },
   groupsHolder: {
     width: "90%",

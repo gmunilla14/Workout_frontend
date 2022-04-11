@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
+import colors from "../utils/colors";
 
 function Notes({ notes }) {
   return (
@@ -18,14 +19,13 @@ const styles = StyleSheet.create({
     width: "80%",
     flexDirection: "row",
     paddingVertical: 16,
-    backgroundColor: "white",
-    marginTop: 24,
+    backgroundColor: colors.lightBG,
   },
   notesBar: {
     marginHorizontal: 12,
     height: "100%",
     width: 7,
-    backgroundColor: "orange",
+    backgroundColor: colors.secondaryAccent,
     borderRadius: 4,
   },
   notesHeader: {

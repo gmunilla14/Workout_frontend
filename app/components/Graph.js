@@ -5,6 +5,7 @@ import { scaleTime, scaleLinear } from "d3-scale";
 import { line } from "d3-shape";
 import { useState } from "react";
 import { useEffect } from "react";
+import colors from "../utils/colors";
 
 function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
   const [circles, setCircles] = useState([]);
@@ -94,7 +95,7 @@ function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
             y1={height - yPadding}
             x2={width - rightPadding}
             y2={height - yPadding}
-            stroke={"black"}
+            stroke={colors.mainDark}
             strokeWidth="3"
           />
           <Line
@@ -102,27 +103,25 @@ function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
             y1={yPadding}
             x2={leftPadding}
             y2={height - yPadding}
-            stroke={"black"}
+            stroke={colors.mainDark}
             strokeWidth="3"
           />
 
-          <Text x={0} y={0} transform={yAxisString} stroke="black">
+          <Text x={0} y={0} transform={yAxisString} stroke={colors.mainDark}>
             Volume (Lbs/sec)
           </Text>
 
           <>
-            <Path d={curve} strokeWidth={2} stroke="blue" />
+            <Path d={curve} strokeWidth={2} stroke={colors.accent} />
             {circles.map((circle) => {
               return (
-                <>
-                  <Circle
-                    cx={circle.cx}
-                    cy={circle.cy}
-                    fill="blue"
-                    r="2"
-                    key={circle.cx}
-                  />
-                </>
+                <Circle
+                  cx={circle.cx}
+                  cy={circle.cy}
+                  fill={colors.accent}
+                  r="2"
+                  key={circle.cx}
+                />
               );
             })}
             {yTicks.map((tick) => {
@@ -133,7 +132,7 @@ function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
                     y1={tick.y}
                     x2={leftPadding + 5}
                     y2={tick.y}
-                    stroke={"black"}
+                    stroke={colors.mainDark}
                     strokeWidth="3"
                     key={tick.y}
                   />
@@ -143,7 +142,7 @@ function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
                     fontSize="10"
                     textAnchor="end"
                     key={tick.y + "t"}
-                    stroke="black"
+                    stroke={colors.mainDark}
                   >
                     {tick.val}
                   </Text>
@@ -158,7 +157,7 @@ function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
                     y1={height - yPadding - 5}
                     x2={tick.x}
                     y2={height - yPadding + 5}
-                    stroke={"black"}
+                    stroke={colors.mainDark}
                     strokeWidth="3"
                     key={tick.x}
                   />
@@ -168,7 +167,7 @@ function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
                     fontSize="10"
                     textAnchor="middle"
                     key={tick.x + "x"}
-                    stroke="black"
+                    stroke={colors.mainDark}
                   >
                     {tick.val.getMonth() + 1 + "/" + tick.val.getDate()}
                   </Text>

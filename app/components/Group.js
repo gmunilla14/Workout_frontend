@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import Notes from "./Notes";
 import { useState } from "react";
 import { useEffect } from "react";
+import colors from "../utils/colors";
 function Group({
   group,
   groupIndex,
@@ -93,7 +94,7 @@ function Group({
               <Ionicons
                 name="md-caret-up-sharp"
                 size={36}
-                color="grey"
+                color={colors.subtitle}
                 style={styles.upArrow}
               />
             ) : (
@@ -105,7 +106,7 @@ function Group({
                 <Ionicons
                   name="md-caret-up-sharp"
                   size={36}
-                  color="black"
+                  color={colors.black}
                   style={styles.upArrow}
                 />
               </TouchableOpacity>
@@ -114,7 +115,7 @@ function Group({
               <Ionicons
                 name="md-caret-down-sharp"
                 size={36}
-                color="grey"
+                color={colors.subtitle}
                 style={styles.downArrow}
               />
             ) : (
@@ -126,7 +127,7 @@ function Group({
                 <Ionicons
                   name="md-caret-down-sharp"
                   size={36}
-                  color="black"
+                  color={colors.black}
                   style={styles.downArrow}
                 />
               </TouchableOpacity>
@@ -148,7 +149,7 @@ function Group({
             <Ionicons
               name={expanded ? "md-caret-up-sharp" : "md-caret-down-sharp"}
               size={36}
-              color="black"
+              color={colors.black}
               style={styles.downArrow}
             />
           </TouchableOpacity>
@@ -186,7 +187,6 @@ function Group({
               size={18}
             />
           </View>
-
           {exerciseList.length > 0 && (
             <>
               {currentExercise.notes !== "" && (
@@ -203,7 +203,7 @@ function Group({
 const styles = StyleSheet.create({
   container: {
     borderRadius: 16,
-    backgroundColor: "white",
+    backgroundColor: colors.lightBG,
     marginVertical: 4,
   },
   header: {
@@ -228,6 +228,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: "700",
+    color: colors.mainDark,
   },
   dropDown: {
     justifyContent: "center",

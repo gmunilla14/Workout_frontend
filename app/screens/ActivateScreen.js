@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { activate } from "../routes/authRoutes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import colors from "../utils/colors";
 
 const validationSchema = Yup.object().shape({
   token: Yup.string().required().min(4).max(32).trim().label("Username"),
@@ -48,7 +49,9 @@ function ActivateScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: colors.mainBG,
+  },
 });
 
 export default ActivateScreen;

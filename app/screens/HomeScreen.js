@@ -15,6 +15,7 @@ import { getMuscles } from "../store/actions/muscleActions";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppButton from "../components/AppButton";
+import colors from "../utils/colors";
 function HomeScreen({ navigation }) {
   let plans = useSelector((state) => state.plans);
   const dispatch = useDispatch();
@@ -95,7 +96,7 @@ function HomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#EFF3F8",
+    backgroundColor: colors.mainBG,
     alignItems: "center",
   },
   title: {
@@ -105,11 +106,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   subtext: {
-    color: "#BEC2C5",
+    color: colors.subtitle,
     fontSize: 15,
   },
   workoutsHolder: {
-    backgroundColor: "white",
+    backgroundColor: colors.lightBG,
     width: "80%",
     borderRadius: 16,
     height: "50%",
@@ -126,20 +127,8 @@ const styles = StyleSheet.create({
   line: {
     height: 1,
     width: 240,
-    backgroundColor: "#EFF3F8",
+    backgroundColor: colors.subtitle,
     alignSelf: "center",
-  },
-  addButton: {
-    width: "80%",
-    height: "8%",
-    backgroundColor: "white",
-    marginVertical: 4,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 16,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: "#e5e5e5",
   },
   buttonHolder: {
     flexDirection: "row",

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   editable,
 } from "react-native";
+import colors from "../utils/colors";
 
 function IncrementPill({
   text,
@@ -89,14 +90,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonHolderPlus: {
-    backgroundColor: "grey",
+    backgroundColor: colors.lightBG,
     borderTopRightRadius: 16,
     borderBottomRightRadius: 16,
     height: 50,
     paddingHorizontal: 10,
   },
   buttonHolderMinus: {
-    backgroundColor: "grey",
+    backgroundColor: colors.lightBG,
     borderTopLeftRadius: 16,
     borderBottomLeftRadius: 16,
     height: 50,
@@ -106,14 +107,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     paddingTop: 14,
+    color: colors.mainDark,
+    fontWeight: "700",
   },
   pillText: {
-    backgroundColor: "grey",
+    backgroundColor: colors.lightBG,
     height: 50,
     paddingHorizontal: 4,
   },
   none: {
-    color: "grey",
+    color: colors.lightBG,
     textAlign: "center",
     fontSize: 18,
     paddingTop: 14,

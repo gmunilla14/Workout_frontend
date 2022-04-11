@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { getExercises } from "../store/actions/exerciseActions";
 import AppButton from "../components/AppButton";
 import Graph from "../components/Graph";
+import colors from "../utils/colors";
 
 function DataScreen(props) {
   const [data, setData] = useState([{ x: 0, y: 0 }]);
@@ -54,7 +55,9 @@ function DataScreen(props) {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
+    padding: 20,
+    backgroundColor: colors.mainBG,
+    height: "100%",
   },
 });
 

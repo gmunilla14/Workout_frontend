@@ -5,6 +5,7 @@ import { Octicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import colors from "../utils/colors";
 
 function Header({ title, back, navigation }) {
   return (
@@ -17,7 +18,7 @@ function Header({ title, back, navigation }) {
             }}
             style={{ ...styles.backButton, left: 0 }}
           >
-            <Entypo name="arrow-long-left" size={24} color="black" />
+            <Entypo name="arrow-long-left" size={24} />
           </TouchableOpacity>
         )}
         {title === "Home" && (
@@ -65,6 +66,7 @@ function Header({ title, back, navigation }) {
 const styles = StyleSheet.create({
   container: {
     height: 80,
+    backgroundColor: colors.mainBG,
   },
   contentHolder: {
     flexDirection: "row",
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     height: 48,
     width: 48,
-    backgroundColor: "white",
+    backgroundColor: colors.lightBG,
     position: "absolute",
     justifyContent: "center",
     alignItems: "center",
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     fontWeight: "700",
-    color: "#5E6069",
+    color: colors.mainDark,
   },
 });
 

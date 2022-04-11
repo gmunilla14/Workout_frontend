@@ -8,6 +8,7 @@ import { getMuscles } from "../store/actions/muscleActions";
 import { createExercise } from "../store/actions/exerciseActions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import colors from "../utils/colors";
 function CreateExerciseScreen({ navigation }) {
   const [chosenMuscles, setChosenMuscles] = useState([]);
 
@@ -83,7 +84,10 @@ function CreateExerciseScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: colors.mainBG,
+    height: "100%",
+  },
 });
 
 export default CreateExerciseScreen;

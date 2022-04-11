@@ -2,7 +2,6 @@ import React from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import WorkoutClockScreen from "../screens/WorkoutClockScreen";
-import ChooseWorkoutScreen from "../screens/ChooseWorkoutScreen";
 import HomeScreen from "../screens/HomeScreen";
 import PreWorkoutScreen from "../screens/PreWorkoutScreen";
 import CreatePlanScreen from "../screens/CreatePlanScreen";

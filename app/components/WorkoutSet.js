@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text, Button } from "react-native";
+import colors from "../utils/colors";
 import IncrementPill from "./IncrementPill";
 import Link from "./Link";
 
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    color: "grey",
+    color: colors.subtitle,
     fontWeight: "700",
     marginVertical: 8,
   },
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   buttonHolderLeft: {
     borderStyle: "solid",
     borderWidth: 2,
-    borderColor: "black",
+    borderColor: colors.subtitle,
     width: "50%",
     borderLeftWidth: 0,
     borderRightWidth: 1,
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
   buttonHolderRight: {
     borderStyle: "solid",
     borderWidth: 2,
-    borderColor: "black",
+    borderColor: colors.subtitle,
     width: "50%",
     borderLeftWidth: 1,
     borderRightWidth: 0,

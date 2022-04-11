@@ -1,18 +1,9 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import WorkoutClockScreen from "../screens/WorkoutClockScreen";
-import ChooseWorkoutScreen from "../screens/ChooseWorkoutScreen";
-import HomeScreen from "../screens/HomeScreen";
-import PreWorkoutScreen from "../screens/PreWorkoutScreen";
-import CreatePlanScreen from "../screens/CreatePlanScreen";
-import CreateExerciseScreen from "../screens/CreateExerciseScreen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useState } from "react";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
 import TitleScreen from "../screens/TitleScreen";
-import DataScreen from "../screens/DataScreen";
 const Stack = createStackNavigator();
 
 function ParentNavigator(props) {

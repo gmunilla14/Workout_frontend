@@ -1,14 +1,14 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-
+import colors from "../utils/colors";
 function AppButton({ text, onPress, size = 24, secondary = false }) {
   return (
     <TouchableOpacity
       style={{
         ...styles.container,
-        backgroundColor: secondary ? "#EFF3F8" : "blue",
+        backgroundColor: secondary ? colors.mainBG : colors.accent,
         borderWidth: secondary ? 2 : 0,
-        borderColor: "blue",
+        borderColor: colors.accent,
       }}
       onPress={onPress}
     >
@@ -16,7 +16,7 @@ function AppButton({ text, onPress, size = 24, secondary = false }) {
         style={{
           ...styles.buttonText,
           fontSize: size,
-          color: secondary ? "blue" : "white",
+          color: secondary ? colors.accent : colors.lightBG,
         }}
       >
         {text}
@@ -27,14 +27,14 @@ function AppButton({ text, onPress, size = 24, secondary = false }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "blue",
+    backgroundColor: colors.accent,
     borderRadius: 8,
     alignItems: "center",
   },
   buttonText: {
     marginVertical: 12,
     textAlign: "center",
-    color: "white",
+    color: colors.lightBG,
   },
 });
 

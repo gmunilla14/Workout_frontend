@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import colors from "../utils/colors";
 
 function Link({ text, onPress }) {
   return (
@@ -12,7 +13,7 @@ function Link({ text, onPress }) {
 const styles = StyleSheet.create({
   container: {},
   text: {
-    color: "#3A5DAA",
+    color: colors.accent,
     textDecorationLine: "underline",
     fontSize: 18,
     fontWeight: "700",

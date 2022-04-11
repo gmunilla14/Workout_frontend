@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Clock from "../components/Clock";
 import Footer from "../components/Footer";
 import Group from "../components/Group";
+import colors from "../utils/colors";
 function WorkoutClockScreen({ route, navigation }) {
   const sentPlan = route.params;
   const [minutes, setMinutes] = useState("00");
@@ -305,6 +306,7 @@ function WorkoutClockScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.mainBG,
   },
   groupsHolder: {
     width: "90%",

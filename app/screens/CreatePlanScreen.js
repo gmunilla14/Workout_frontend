@@ -15,6 +15,7 @@ import { Picker } from "@react-native-picker/picker";
 import { createPlan, getPlans } from "../store/actions/planActions";
 import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch, useSelector } from "react-redux";
+import colors from "../utils/colors";
 function CreatePlanScreen({ navigation }) {
   const [selectedExercise, setSelectedExercise] = useState();
   const [selectedSets, setSelectedSets] = useState(0);
@@ -133,7 +134,10 @@ function CreatePlanScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: colors.mainBG,
+    height: "100%",
+  },
 });
 
 export default CreatePlanScreen;

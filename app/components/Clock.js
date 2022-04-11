@@ -4,6 +4,7 @@ import IncrementPill from "./IncrementPill";
 import { useSelector } from "react-redux";
 import Notes from "./Notes";
 import { useState } from "react";
+import colors from "../utils/colors";
 function Clock({ mins, secs, workout, currentGroup, currentSet, setWorkout }) {
   let status = "";
   const [overTime, setOverTime] = useState(false);
@@ -84,7 +85,7 @@ function Clock({ mins, secs, workout, currentGroup, currentSet, setWorkout }) {
           editable={set.type === "rest"}
         />
       </View>
-
+      <View style={styles.notesHolder}></View>
       {set.type === "exercise" ? <Notes notes={notes} /> : <></>}
     </View>
   );
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
   clock: {
     height: 224,
     width: 320,
-    backgroundColor: "white",
+    backgroundColor: colors.lightBG,
     borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
@@ -115,25 +116,7 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   notesHolder: {
-    width: "80%",
-    flexDirection: "row",
-    paddingVertical: 16,
-    backgroundColor: "white",
-    marginTop: 24,
-  },
-  notesBar: {
-    marginHorizontal: 12,
-    height: "100%",
-    width: 7,
-    backgroundColor: "orange",
-    borderRadius: 4,
-  },
-  notesHeader: {
-    fontSize: 18,
-    fontWeight: "700",
-  },
-  notesContent: {
-    width: "80%",
+    marginTop: 16,
   },
 });
 

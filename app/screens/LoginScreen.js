@@ -11,6 +11,7 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import { signIn } from "../routes/authRoutes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import colors from "../utils/colors";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().trim().label("Email"),
@@ -84,12 +85,13 @@ function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    height: 1000,
+    paddingTop: 50,
+    height: "100%",
+    backgroundColor: colors.mainBG,
   },
   holder: {
     padding: 10,
-    backgroundColor: "white",
+    backgroundColor: colors.lightBG,
     margin: 20,
   },
 });
