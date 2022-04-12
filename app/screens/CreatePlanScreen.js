@@ -27,19 +27,22 @@ import AppButton from "../components/AppButton";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().min(1).max(100).label("Name"),
-  groups: Yup.array().of(
-    Yup.object().shape({
-      exerciseID: Yup.string().required(),
-      sets: Yup.array().of(
-        Yup.object().shape({
-          type: Yup.string().required().oneOf(["rest", "exercise"]),
-          reps: Yup.number(),
-          weight: Yup.number(),
-          duration: Yup.number(),
-        })
-      ),
-    })
-  ),
+  groups: Yup.array()
+    .of(
+      Yup.object().shape({
+        exerciseID: Yup.string().required(),
+        sets: Yup.array().of(
+          Yup.object().shape({
+            type: Yup.string().required().oneOf(["rest", "exercise"]),
+            reps: Yup.number(),
+            weight: Yup.number(),
+            duration: Yup.number(),
+          })
+        ),
+      })
+    )
+    .min(1)
+    .label("Groups"),
 });
 function CreatePlanScreen({ navigation }) {
   const [selectedExercise, setSelectedExercise] = useState();
@@ -116,7 +119,7 @@ function CreatePlanScreen({ navigation }) {
                     setSelectedValue={setSelectedExercise}
                     values={exercises}
                     placeholder="-- Exercise --"
-                    error={exerciseError}
+                    error={errors["groups"] ? errors["groups"] : exerciseError}
                     setError={setExerciseError}
                   />
                 </View>
