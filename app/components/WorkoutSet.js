@@ -19,12 +19,16 @@ function WorkoutSet({
   const handleDelete = (index) => {
     const newPlan = JSON.parse(JSON.stringify(selectedPlan));
     const maxSet = newPlan.groups[groupIndex].sets.length - 1;
-
-    if (index === maxSet) {
-      newPlan.groups[groupIndex].sets.splice(index - 1, 2);
+    if (newPlan.groups[groupIndex].sets.length === 1) {
+      newPlan.groups.splice(groupIndex, 1);
     } else {
-      newPlan.groups[groupIndex].sets.splice(index, 2);
+      if (index === maxSet) {
+        newPlan.groups[groupIndex].sets.splice(index - 1, 2);
+      } else {
+        newPlan.groups[groupIndex].sets.splice(index, 2);
+      }
     }
+
     setSelectedPlan(newPlan);
   };
 
