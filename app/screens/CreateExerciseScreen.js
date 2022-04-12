@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
@@ -48,27 +49,26 @@ function CreateExerciseScreen({ navigation }) {
   const [muscleError, setMuscleError] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <Formik
-        initialValues={{
-          name: "",
-          muscles: [],
-          notes: "",
-        }}
-        onSubmit={async (values) => {
-          console.log(values);
-          dispatch(createExercise(values));
-          navigation.goBack();
-        }}
-        validationSchema={validationSchema}
-      >
-        {({ handleChange, handleSubmit, errors, setFieldValue, touched }) => (
-          <ScrollView
-            onPress={() => {
-              Keyboard.dismiss();
-              console.log("yeet");
-            }}
-          >
+    <TouchableWithoutFeedback
+      onPress={() => {
+        Keyboard.dismiss();
+      }}
+    >
+      <View style={styles.container}>
+        <Formik
+          initialValues={{
+            name: "",
+            muscles: [],
+            notes: "",
+          }}
+          onSubmit={async (values) => {
+            console.log(values);
+            dispatch(createExercise(values));
+            navigation.goBack();
+          }}
+          validationSchema={validationSchema}
+        >
+          {({ handleChange, handleSubmit, errors, setFieldValue, touched }) => (
             <>
               <View style={styles.nameHolder}>
                 <View style={styles.nameInput}>
@@ -100,19 +100,18 @@ function CreateExerciseScreen({ navigation }) {
               <View style={styles.musclesHolder}>
                 <View style={styles.muscleList}>
                   <Text style={{ color: colors.subtitle }}>Muscles:</Text>
-                  <View style={styles.muscleChoices}>
-                    {chosenMuscles.map((muscle) => {
+                  <FlatList
+                    data={chosenMuscles}
+                    keyExtractor={(item) => item._id.toString()}
+                    renderItem={({ item }) => {
                       return (
                         <View style={styles.muscleChoice}>
-                          <Text>{muscle.name}</Text>
+                          <Text>{item.name}</Text>
                           <TouchableOpacity
                             onPress={() => {
-                              setRemainingMuscles([
-                                ...remainingMuscles,
-                                muscle,
-                              ]);
+                              setRemainingMuscles([...remainingMuscles, item]);
                               setChosenMuscles(
-                                chosenMuscles.filter((item) => {
+                                chosenMuscles.filter((muscle) => {
                                   return item._id !== muscle._id;
                                 })
                               );
@@ -120,7 +119,7 @@ function CreateExerciseScreen({ navigation }) {
                                 setFieldValue(
                                   "muscles",
                                   chosenMuscles
-                                    .filter((item) => {
+                                    .filter((muscle) => {
                                       return item._id !== muscle._id;
                                     })
                                     .map((mus) => mus._id)
@@ -134,8 +133,8 @@ function CreateExerciseScreen({ navigation }) {
                           </TouchableOpacity>
                         </View>
                       );
-                    })}
-                  </View>
+                    }}
+                  />
                 </View>
 
                 <View style={styles.dropdownHolder}>
@@ -160,10 +159,10 @@ function CreateExerciseScreen({ navigation }) {
                 </View>
               </View>
             </>
-          </ScrollView>
-        )}
-      </Formik>
-    </View>
+          )}
+        </Formik>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

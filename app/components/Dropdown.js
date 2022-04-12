@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     top: 32,
     left: 8,
-    maxHeight: 200,
+    maxHeight: 150,
     zIndex: 100,
   },
   dropDownItem: {

@@ -22,6 +22,7 @@ function HomeScreen({ navigation }) {
 
   useEffect(() => {
     dispatch(getPlans());
+    dispatch(getMuscles());
   }, []);
 
   return (
