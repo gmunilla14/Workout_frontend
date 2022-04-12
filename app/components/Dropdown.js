@@ -1,16 +1,22 @@
 import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  FlatList,
+} from "react-native";
 import colors from "../utils/colors";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-function Dropdown({ selectedValue, setSelectedValue, values }) {
+function Dropdown({ selectedValue, setSelectedValue, values, placeholder }) {
   const [open, setOpen] = useState(false);
   return (
-    <View>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <View style={styles.headerContainer}>
         <Text selectedValue={selectedValue} style={styles.valueName}>
-          {selectedValue ? selectedValue.name : "Blank"}
+          {selectedValue ? selectedValue.name : placeholder}
         </Text>
         <View style={styles.dropDown}>
           <TouchableOpacity
@@ -33,25 +39,31 @@ function Dropdown({ selectedValue, setSelectedValue, values }) {
           marginTop: open ? 4 : 0,
           marginLeft: open ? 8 : 0,
           padding: open ? 12 : 0,
+          borderWidth: open ? 1 : 0,
         }}
       >
         {open && (
           <View>
-            {values.map((value) => {
-              return (
-                <TouchableOpacity
-                  onPress={() => {
-                    setSelectedValue(value);
-                    setOpen(!open);
-                  }}
-                  style={styles.dropDownItem}
-                >
-                  <Text key={value._id} style={styles.valueName}>
-                    {value.name}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
+            <FlatList
+              data={values}
+              keyExtractor={(value) => value._id.toString()}
+              renderItem={({ item }) => {
+                return (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelectedValue(item);
+                      setOpen(!open);
+                    }}
+                    style={styles.dropDownItem}
+                  >
+                    <Text style={styles.valueName}>{item.name}</Text>
+                  </TouchableOpacity>
+                );
+              }}
+              ItemSeparatorComponent={() => {
+                return <View style={styles.line}></View>;
+              }}
+            />
           </View>
         )}
       </View>
@@ -61,6 +73,9 @@ function Dropdown({ selectedValue, setSelectedValue, values }) {
 
 const styles = StyleSheet.create({
   container: {
+    position: "relative",
+  },
+  headerContainer: {
     backgroundColor: colors.lightBG,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -68,19 +83,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 4,
     paddingLeft: 8,
+    minWidth: 130,
   },
   dropDown: {
     marginHorizontal: 8,
+    position: "relative",
   },
   dropDownItems: {
+    position: "absolute",
     backgroundColor: colors.lightBG,
     borderRadius: 4,
+    top: 32,
+    left: 8,
+    maxHeight: 200,
   },
   dropDownItem: {
     marginVertical: 1,
   },
   valueName: {
     fontWeight: "500",
+  },
+  line: {
+    height: 1,
+    backgroundColor: colors.mainDark,
   },
 });
 

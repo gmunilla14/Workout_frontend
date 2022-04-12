@@ -2,11 +2,15 @@ import React from "react";
 import { View, StyleSheet, TextInput, Text } from "react-native";
 import colors from "../utils/colors";
 
-function AppTextInput({ title, onChangeText }) {
+function AppTextInput({ title, onChangeText, keyboardType = "default" }) {
   return (
     <View style={styles.container}>
       <Text style={styles.inputTitle}>{title}</Text>
-      <TextInput style={styles.textInput} onChangeText={onChangeText} />
+      <TextInput
+        style={styles.textInput}
+        onChangeText={onChangeText}
+        keyboardType={keyboardType}
+      />
     </View>
   );
 }
@@ -15,7 +19,6 @@ const styles = StyleSheet.create({
   container: {},
   textInput: {
     backgroundColor: colors.lightBG,
-    width: 300,
     height: 32,
     borderRadius: 4,
     paddingHorizontal: 8,
