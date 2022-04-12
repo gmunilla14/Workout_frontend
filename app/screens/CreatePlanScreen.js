@@ -17,6 +17,7 @@ import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch, useSelector } from "react-redux";
 import colors from "../utils/colors";
 import AppTextInput from "../components/AppTextInput";
+import Dropdown from "../components/Dropdown";
 function CreatePlanScreen({ navigation }) {
   const [selectedExercise, setSelectedExercise] = useState();
   const [selectedSets, setSelectedSets] = useState(0);
@@ -48,6 +49,11 @@ function CreatePlanScreen({ navigation }) {
         {({ handleChange, handleSubmit, values, setFieldValue }) => (
           <>
             <Text>Plan</Text>
+            <Dropdown
+              selectedValue={selectedExercise}
+              setSelectedValue={setSelectedExercise}
+              exercises={exercises}
+            />
 
             <AppTextInput
               title="Plan Name"

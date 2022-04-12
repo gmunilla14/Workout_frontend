@@ -59,8 +59,6 @@ function Group({
     setSelectedPlan({ ...selectedPlan, groups: initialGroups });
   };
 
-  console.log(exercises);
-
   const addSet = () => {
     let groups = [...selectedPlan.groups];
     let groupLength = groups[groupIndex].sets.length;
