@@ -6,6 +6,8 @@ import {
   TextInput,
   Button,
   DevSettings,
+  FlatList,
+  ScrollView,
 } from "react-native";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
@@ -18,11 +20,12 @@ import { useDispatch, useSelector } from "react-redux";
 import colors from "../utils/colors";
 import AppTextInput from "../components/AppTextInput";
 import Dropdown from "../components/Dropdown";
+import Group from "../components/Group";
 function CreatePlanScreen({ navigation }) {
   const [selectedExercise, setSelectedExercise] = useState();
   const [selectedSets, setSelectedSets] = useState(0);
   const [selectedReps, setSelectedReps] = useState(0);
-
+  const [groups, setGroups] = useState([]);
   const [selectedWeight, setSelectedWeight] = useState(0);
 
   const [selectedRest, setSelectedRest] = useState(0);
@@ -49,33 +52,18 @@ function CreatePlanScreen({ navigation }) {
         {({ handleChange, handleSubmit, values, setFieldValue }) => (
           <>
             <Text>Plan</Text>
-            <Dropdown
-              selectedValue={selectedExercise}
-              setSelectedValue={setSelectedExercise}
-              exercises={exercises}
-            />
+            <View style={styles.dropdownHolder}>
+              <Dropdown
+                selectedValue={selectedExercise}
+                setSelectedValue={setSelectedExercise}
+                values={exercises}
+              />
+            </View>
 
             <AppTextInput
               title="Plan Name"
               onChangeText={handleChange("name")}
             />
-
-            <Picker
-              selectedValue={selectedExercise}
-              onValueChange={(itemValue, itemIndex) => {
-                setSelectedExercise(itemValue);
-              }}
-            >
-              {exercises.map((exercise) => {
-                return (
-                  <Picker.Item
-                    key={exercise._id}
-                    label={exercise.name}
-                    value={exercise}
-                  />
-                );
-              })}
-            </Picker>
 
             <AppTextInput
               title="Sets"
@@ -130,9 +118,33 @@ function CreatePlanScreen({ navigation }) {
                 let currentGroups = values.groups;
                 currentGroups.push(group);
                 setFieldValue("groups", currentGroups);
+                setGroups(currentGroups);
               }}
             />
             <Button title="Create Plan" onPress={handleSubmit} />
+
+            {groups && (
+              <FlatList
+                data={values.groups}
+                keyExtractor={(group, index) =>
+                  group.exerciseID + index + values.groups.length
+                }
+                renderItem={({ item, index }) => (
+                  <>
+                    <Group
+                      group={item}
+                      groupIndex={index}
+                      exercises={exercises}
+                      selectedPlan={values}
+                      doingWorkout={false}
+                      setSelectedPlan={(plan) => {
+                        setFieldValue("groups", plan.groups);
+                      }}
+                    />
+                  </>
+                )}
+              />
+            )}
           </>
         )}
       </Formik>
@@ -144,6 +156,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.mainBG,
     height: "100%",
+  },
+  dropdownHolder: {
+    alignItems: "flex-start",
   },
 });
 

@@ -171,14 +171,18 @@ function Group({
             keyExtractor={() => String(Math.random())}
             renderItem={({ item, index }) => {
               let editable = false;
-
-              if (groupIndex > currentGroup) {
-                editable = true;
-              } else if (groupIndex === currentGroup) {
-                if (index >= currentSet) {
+              if (doingWorkout) {
+                if (groupIndex > currentGroup) {
                   editable = true;
+                } else if (groupIndex === currentGroup) {
+                  if (index >= currentSet) {
+                    editable = true;
+                  }
                 }
+              } else {
+                editable = true;
               }
+
               return (
                 <WorkoutSet
                   set={item}
