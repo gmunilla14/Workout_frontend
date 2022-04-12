@@ -16,6 +16,7 @@ import { createPlan, getPlans } from "../store/actions/planActions";
 import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch, useSelector } from "react-redux";
 import colors from "../utils/colors";
+import AppTextInput from "../components/AppTextInput";
 function CreatePlanScreen({ navigation }) {
   const [selectedExercise, setSelectedExercise] = useState();
   const [selectedSets, setSelectedSets] = useState(0);
@@ -47,9 +48,9 @@ function CreatePlanScreen({ navigation }) {
         {({ handleChange, handleSubmit, values, setFieldValue }) => (
           <>
             <Text>Plan</Text>
-            <TextInput
-              placeholder="Name"
-              name="name"
+
+            <AppTextInput
+              title="Plan Name"
               onChangeText={handleChange("name")}
             />
 
@@ -70,23 +71,23 @@ function CreatePlanScreen({ navigation }) {
               })}
             </Picker>
 
-            <TextInput
-              placeholder="Sets"
+            <AppTextInput
+              title="Sets"
               onChangeText={(text) => setSelectedSets(text)}
             />
 
-            <TextInput
-              placeholder="Reps"
+            <AppTextInput
+              title="Reps"
               onChangeText={(text) => setSelectedReps(text)}
             />
 
-            <TextInput
-              placeholder="Weight"
+            <AppTextInput
+              title="Weight (lbs)"
               onChangeText={(text) => setSelectedWeight(text)}
             />
 
-            <TextInput
-              placeholder="Rest Duration"
+            <AppTextInput
+              title="Rest Duration (seconds)"
               onChangeText={(text) => setSelectedRest(text)}
             />
 
