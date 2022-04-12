@@ -24,6 +24,7 @@ function Group({
   currentSet,
   currentGroup,
   inBetween,
+  isWorkout,
 }) {
   const muscles = useSelector((state) => state.muscles);
   const [expanded, setExpanded] = useState(false);
@@ -58,6 +59,8 @@ function Group({
     setSelectedPlan({ ...selectedPlan, groups: initialGroups });
   };
 
+  console.log(exercises);
+
   const addSet = () => {
     let groups = [...selectedPlan.groups];
     let groupLength = groups[groupIndex].sets.length;
@@ -90,53 +93,56 @@ function Group({
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.leftSection}>
-          <View style={styles.arrowHolder}>
-            {groupIndex === 0 ||
-            (doingWorkout && !inBetween && groupIndex <= currentGroup + 1) ||
-            (doingWorkout && inBetween && currentGroup === groupIndex) ? (
-              <Ionicons
-                name="md-caret-up-sharp"
-                size={36}
-                color={colors.subtitle}
-                style={styles.upArrow}
-              />
-            ) : (
-              <TouchableOpacity
-                onPress={() => {
-                  swapSets(groupIndex, groupIndex - 1);
-                }}
-              >
+          {!isWorkout && (
+            <View style={styles.arrowHolder}>
+              {groupIndex === 0 ||
+              (doingWorkout && !inBetween && groupIndex <= currentGroup + 1) ||
+              (doingWorkout && inBetween && currentGroup === groupIndex) ? (
                 <Ionicons
                   name="md-caret-up-sharp"
                   size={36}
-                  color={colors.black}
+                  color={colors.subtitle}
                   style={styles.upArrow}
                 />
-              </TouchableOpacity>
-            )}
-            {groupIndex === maxGroup ||
-            (doingWorkout && groupIndex == currentGroup && !inBetween) ? (
-              <Ionicons
-                name="md-caret-down-sharp"
-                size={36}
-                color={colors.subtitle}
-                style={styles.downArrow}
-              />
-            ) : (
-              <TouchableOpacity
-                onPress={() => {
-                  swapSets(groupIndex, groupIndex + 1);
-                }}
-              >
+              ) : (
+                <TouchableOpacity
+                  onPress={() => {
+                    swapSets(groupIndex, groupIndex - 1);
+                  }}
+                >
+                  <Ionicons
+                    name="md-caret-up-sharp"
+                    size={36}
+                    color={colors.black}
+                    style={styles.upArrow}
+                  />
+                </TouchableOpacity>
+              )}
+              {groupIndex === maxGroup ||
+              (doingWorkout && groupIndex == currentGroup && !inBetween) ? (
                 <Ionicons
                   name="md-caret-down-sharp"
                   size={36}
-                  color={colors.black}
+                  color={colors.subtitle}
                   style={styles.downArrow}
                 />
-              </TouchableOpacity>
-            )}
-          </View>
+              ) : (
+                <TouchableOpacity
+                  onPress={() => {
+                    swapSets(groupIndex, groupIndex + 1);
+                  }}
+                >
+                  <Ionicons
+                    name="md-caret-down-sharp"
+                    size={36}
+                    color={colors.black}
+                    style={styles.downArrow}
+                  />
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+
           <View style={styles.titleHolder}>
             {exerciseList.length > 0 && (
               <Text style={styles.title}>{currentExercise.name}</Text>
@@ -183,19 +189,25 @@ function Group({
                   editable={editable}
                   selectedPlan={selectedPlan}
                   setSelectedPlan={setSelectedPlan}
+                  isWorkout={isWorkout}
                 />
               );
             }}
           />
-          <View style={styles.buttonHolder}>
-            <AppButton
-              text="+ Add Another Set"
-              onPress={() => {
-                addSet();
-              }}
-              size={18}
-            />
-          </View>
+          {!isWorkout ? (
+            <View style={styles.buttonHolder}>
+              <AppButton
+                text="+ Add Another Set"
+                onPress={() => {
+                  addSet();
+                }}
+                size={18}
+              />
+            </View>
+          ) : (
+            <View style={{ marginBottom: 12 }}></View>
+          )}
+
           {exerciseList.length > 0 && (
             <>
               {currentExercise.notes !== "" && (

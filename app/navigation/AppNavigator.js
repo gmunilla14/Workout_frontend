@@ -14,6 +14,7 @@ import Header from "../components/Header";
 import { getHeaderTitle } from "@react-navigation/elements";
 import DataScreen from "../screens/DataScreen";
 import WorkoutHistoryScreen from "../screens/WorkoutHistoryScreen";
+import ViewWorkoutScreen from "../screens/ViewWorkoutScreen";
 const Stack = createStackNavigator();
 
 function AppNavigator({ navigation }) {
@@ -43,7 +44,8 @@ function AppNavigator({ navigation }) {
             title === "Create Exercise" ||
             title === "Begin Workout" ||
             title === "Data" ||
-            title == "Workout History"
+            title == "Workout History" ||
+            title == "View Workout"
           ) {
             return <Header title={title} back={true} navigation={navigation} />;
           } else if (title === "Home" || title === "Activate") {
@@ -62,6 +64,7 @@ function AppNavigator({ navigation }) {
       <Stack.Screen name="Activate" component={ActivateScreen} />
       <Stack.Screen name="Data" component={DataScreen} />
       <Stack.Screen name="Workout History" component={WorkoutHistoryScreen} />
+      <Stack.Screen name="View Workout" component={ViewWorkoutScreen} />
     </Stack.Navigator>
   );
 }

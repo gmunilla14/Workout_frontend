@@ -1,7 +1,9 @@
 const workoutReducer = (state = [], action) => {
   switch (action.type) {
-    case "ADD_EXERCISE":
-      return state;
+    case "GET_WORKOUTS":
+      return action.workouts.data.workouts;
+    case "ADD_WORKOUT":
+      return [action.workout.data.workout, ...state];
     default:
       return state;
   }

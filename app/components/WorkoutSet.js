@@ -14,6 +14,7 @@ function WorkoutSet({
   groupIndex,
   selectedPlan,
   editable,
+  isWorkout,
 }) {
   const handleDelete = (index) => {
     const newPlan = JSON.parse(JSON.stringify(selectedPlan));
@@ -76,7 +77,11 @@ function WorkoutSet({
         <>
           <View style={styles.restHolder}></View>
           <Text style={{ ...styles.title, textAlign: "center" }}>
-            {"Rest " + set.duration + " Seconds"}{" "}
+            {!isWorkout
+              ? "Rest " + set.duration + " Seconds"
+              : "Rested " +
+                Math.round((set.endTime - set.startTime) / 100) / 10 +
+                " Seconds"}
           </Text>
         </>
       )}
