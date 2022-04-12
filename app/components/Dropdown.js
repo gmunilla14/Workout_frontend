@@ -16,7 +16,8 @@ function Dropdown({
   values,
   placeholder,
   error,
-  setError,
+  setError = () => {},
+  automaticallyClose = true,
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -61,7 +62,7 @@ function Dropdown({
                   <TouchableOpacity
                     onPress={() => {
                       setSelectedValue(item);
-                      setOpen(!open);
+                      if (automaticallyClose) setOpen(!open);
                       setError(false);
                     }}
                     style={styles.dropDownItem}
@@ -107,6 +108,7 @@ const styles = StyleSheet.create({
     top: 32,
     left: 8,
     maxHeight: 200,
+    zIndex: 100,
   },
   dropDownItem: {
     marginVertical: 1,

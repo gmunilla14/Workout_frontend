@@ -9,6 +9,8 @@ function AppTextInput({
   onChangeText,
   keyboardType = "default",
   error,
+  multiline = false,
+  numberOfLines = 1,
 }) {
   return (
     <View style={styles.container}>
@@ -18,9 +20,15 @@ function AppTextInput({
         {title}
       </Text>
       <TextInput
-        style={{ ...styles.textInput, borderWidth: error ? 2 : 0 }}
+        style={{
+          ...styles.textInput,
+          borderWidth: error ? 2 : 0,
+          height: numberOfLines * 32,
+        }}
         onChangeText={onChangeText}
         keyboardType={keyboardType}
+        numberOfLines={numberOfLines}
+        multiline={multiline}
       />
       <Text style={{ color: "red" }}>{error}</Text>
     </View>
@@ -31,11 +39,11 @@ const styles = StyleSheet.create({
   container: {},
   textInput: {
     backgroundColor: colors.lightBG,
-    height: 32,
     borderRadius: 4,
     paddingHorizontal: 8,
     marginTop: 4,
     borderColor: "red",
+    height: 32,
   },
   inputTitle: {
     color: colors.subtitle,

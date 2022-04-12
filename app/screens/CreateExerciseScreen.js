@@ -1,5 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, TextInput, Button } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
+} from "react-native";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,9 +19,18 @@ import { createExercise } from "../store/actions/exerciseActions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import colors from "../utils/colors";
-function CreateExerciseScreen({ navigation }) {
-  const [chosenMuscles, setChosenMuscles] = useState([]);
+import AppTextInput from "../components/AppTextInput";
+import Dropdown from "../components/Dropdown";
+import { AntDesign } from "@expo/vector-icons";
+import AppButton from "../components/AppButton";
 
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required().min(1).max(32).label("Name"),
+  notes: Yup.string().max(200).label("Notes"),
+  muscles: Yup.array().of(Yup.string()).min(1).label("Muscles"),
+});
+
+function CreateExerciseScreen({ navigation }) {
   const dispatch = useDispatch();
   useEffect(async () => {
     const userToken = await AsyncStorage.getItem("token");
@@ -24,12 +43,10 @@ function CreateExerciseScreen({ navigation }) {
 
   const muscles = useSelector((state) => state.muscles);
 
-  const handleChangeMuscle = (id, values, setFieldValue) => {
-    let currentMuscles = values.muscles;
-    currentMuscles.push(id);
-    console.log(values.muscles);
-    setFieldValue("muscles", currentMuscles);
-  };
+  const [chosenMuscles, setChosenMuscles] = useState([]);
+  const [remainingMuscles, setRemainingMuscles] = useState(muscles);
+  const [muscleError, setMuscleError] = useState(false);
+
   return (
     <View style={styles.container}>
       <Formik
@@ -38,47 +55,114 @@ function CreateExerciseScreen({ navigation }) {
           muscles: [],
           notes: "",
         }}
-        onSubmit={async (values, { resetForm }) => {
+        onSubmit={async (values) => {
           console.log(values);
           dispatch(createExercise(values));
           navigation.goBack();
         }}
+        validationSchema={validationSchema}
       >
-        {({ handleChange, handleSubmit, errors, values, setFieldValue }) => (
-          <>
-            <Text>Exercise</Text>
-            <TextInput
-              placeholder="Name"
-              name="name"
-              onChangeText={handleChange("name")}
-              value={values.name || ""}
-            />
+        {({ handleChange, handleSubmit, errors, setFieldValue, touched }) => (
+          <ScrollView
+            onPress={() => {
+              Keyboard.dismiss();
+              console.log("yeet");
+            }}
+          >
+            <>
+              <View style={styles.nameHolder}>
+                <View style={styles.nameInput}>
+                  <AppTextInput
+                    title="Exercise Name"
+                    onChangeText={handleChange("name")}
+                    error={touched["name"] && errors["name"]}
+                  />
+                </View>
 
-            <TextInput
-              placeholder="Notes"
-              name="notes"
-              onChangeText={handleChange("notes")}
-              value={values.notes || ""}
-            />
+                <View style={styles.createButton}>
+                  <AppButton
+                    text="Create Exercise"
+                    onPress={handleSubmit}
+                    size={16}
+                  />
+                </View>
+              </View>
 
-            {muscles.map((muscle) => {
-              return (
-                <Button
-                  key={muscle._id}
-                  title={muscle.name}
-                  onPress={() =>
-                    handleChangeMuscle(muscle._id, values, setFieldValue)
-                  }
+              <View style={styles.notesHolder}>
+                <AppTextInput
+                  title="Notes"
+                  onChangeText={handleChange("notes")}
+                  error={errors["notes"]}
+                  multiline={true}
+                  numberOfLines={3}
                 />
-              );
-            })}
+              </View>
+              <View style={styles.musclesHolder}>
+                <View style={styles.muscleList}>
+                  <Text style={{ color: colors.subtitle }}>Muscles:</Text>
+                  <View style={styles.muscleChoices}>
+                    {chosenMuscles.map((muscle) => {
+                      return (
+                        <View style={styles.muscleChoice}>
+                          <Text>{muscle.name}</Text>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setRemainingMuscles([
+                                ...remainingMuscles,
+                                muscle,
+                              ]);
+                              setChosenMuscles(
+                                chosenMuscles.filter((item) => {
+                                  return item._id !== muscle._id;
+                                })
+                              );
+                              if (chosenMuscles.length > 1) {
+                                setFieldValue(
+                                  "muscles",
+                                  chosenMuscles
+                                    .filter((item) => {
+                                      return item._id !== muscle._id;
+                                    })
+                                    .map((mus) => mus._id)
+                                );
+                              } else {
+                                setFieldValue("muscles", []);
+                              }
+                            }}
+                          >
+                            <AntDesign name="close" />
+                          </TouchableOpacity>
+                        </View>
+                      );
+                    })}
+                  </View>
+                </View>
 
-            <Button title="Create Exercise" onPress={handleSubmit} />
-          </>
+                <View style={styles.dropdownHolder}>
+                  <Dropdown
+                    setSelectedValue={(item) => {
+                      setRemainingMuscles(
+                        remainingMuscles.filter((muscle) => {
+                          return muscle._id !== item._id;
+                        })
+                      );
+                      setChosenMuscles([...chosenMuscles, item]);
+                      setFieldValue(
+                        "muscles",
+                        [...chosenMuscles, item].map((mus) => mus._id)
+                      );
+                    }}
+                    error={errors["muscles"]}
+                    values={remainingMuscles}
+                    automaticallyClose={false}
+                    placeholder="Choose Muscle"
+                  />
+                </View>
+              </View>
+            </>
+          </ScrollView>
         )}
       </Formik>
-
-      <Button title="Get Muscles" onPress={getMuscles} />
     </View>
   );
 }
@@ -87,6 +171,47 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.mainBG,
     height: "100%",
+    paddingTop: 24,
+  },
+  musclesHolder: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+  },
+  muscleList: {
+    width: "40%",
+    marginLeft: "10%",
+  },
+  muscleChoice: {
+    flexDirection: "row",
+    backgroundColor: colors.lightBG,
+    width: 140,
+    marginVertical: 4,
+    borderRadius: 4,
+    padding: 4,
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  nameHolder: {
+    width: "80%",
+    alignSelf: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  nameInput: {
+    width: "55%",
+  },
+  notesHolder: {
+    width: "80%",
+    alignSelf: "center",
+  },
+
+  dropdownHolder: {
+    width: "40%",
+  },
+  createButton: {
+    marginTop: 8,
+    width: "40%",
+    alignSelf: "center",
   },
 });
 
