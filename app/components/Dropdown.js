@@ -10,11 +10,18 @@ import colors from "../utils/colors";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 
-function Dropdown({ selectedValue, setSelectedValue, values, placeholder }) {
+function Dropdown({
+  selectedValue,
+  setSelectedValue,
+  values,
+  placeholder,
+  error,
+  setError,
+}) {
   const [open, setOpen] = useState(false);
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
+      <View style={{ ...styles.headerContainer, borderWidth: error ? 2 : 0 }}>
         <Text selectedValue={selectedValue} style={styles.valueName}>
           {selectedValue ? selectedValue.name : placeholder}
         </Text>
@@ -33,6 +40,8 @@ function Dropdown({ selectedValue, setSelectedValue, values, placeholder }) {
           </TouchableOpacity>
         </View>
       </View>
+      {error && <Text style={{ color: "red" }}>{error}</Text>}
+
       <View
         style={{
           ...styles.dropDownItems,
@@ -53,6 +62,7 @@ function Dropdown({ selectedValue, setSelectedValue, values, placeholder }) {
                     onPress={() => {
                       setSelectedValue(item);
                       setOpen(!open);
+                      setError(false);
                     }}
                     style={styles.dropDownItem}
                   >
@@ -84,6 +94,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingLeft: 8,
     minWidth: 130,
+    borderColor: "red",
   },
   dropDown: {
     marginHorizontal: 8,
