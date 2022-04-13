@@ -224,12 +224,6 @@ function WorkoutClockScreen({ route, navigation }) {
         clockRunning &&
         workout.groups[currentGroup] && (
           <>
-            <Button
-              title="workout"
-              onPress={() => {
-                console.log(workout);
-              }}
-            />
             <ScrollView>
               {!inBetween && (
                 <Clock

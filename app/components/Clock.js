@@ -56,6 +56,12 @@ function Clock({ mins, secs, workout, currentGroup, currentSet, setWorkout }) {
         {set.type === "rest" && <Text>{durationMin + ":" + durationSec}</Text>}
       </View>
       <Text style={styles.status}>{status}</Text>
+      {status === "Review Last Set" && (
+        <Text style={styles.subtitle}>
+          Check to make sure that these numbers reflect the workout you just
+          completed.
+        </Text>
+      )}
       <View style={styles.pillHolder}>
         <IncrementPill
           text={
@@ -108,7 +114,7 @@ const styles = StyleSheet.create({
   },
   status: {
     fontSize: 24,
-    marginVertical: 20,
+    marginTop: 20,
   },
   pillHolder: {
     flexDirection: "row",
@@ -117,6 +123,11 @@ const styles = StyleSheet.create({
   },
   notesHolder: {
     marginTop: 16,
+  },
+  subtitle: {
+    color: colors.subtitle,
+    textAlign: "center",
+    marginVertical: 12,
   },
 });
 

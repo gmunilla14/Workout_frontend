@@ -23,6 +23,10 @@ const styles = StyleSheet.create({
     height: 120,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: colors.mainDark,
+    shadowRadius: 5,
+    shadowOpacity: 1,
+    paddingTop: 24,
   },
   buttonHolder: {
     width: "80%",
