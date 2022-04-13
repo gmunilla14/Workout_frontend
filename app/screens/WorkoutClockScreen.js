@@ -271,6 +271,7 @@ function WorkoutClockScreen({ route, navigation }) {
                             ).name
                       }
                       onButtonPress={onIntervalButton}
+                      size={currentSet < maxSet ? 24 : 18}
                     />
                   ) : (
                     <Footer

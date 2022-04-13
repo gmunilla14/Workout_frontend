@@ -3,12 +3,12 @@ import { View, StyleSheet, Text } from "react-native";
 import colors from "../utils/colors";
 import AppButton from "./AppButton";
 import Link from "./Link";
-function Footer({ buttonText, topText, linkText, onButtonPress }) {
+function Footer({ buttonText, topText, linkText, onButtonPress, size = 24 }) {
   return (
     <View style={styles.container}>
       <Text style={styles.topText}>{topText}</Text>
       <View style={styles.buttonHolder}>
-        <AppButton text={buttonText} onPress={onButtonPress} size={24} />
+        <AppButton text={buttonText} onPress={onButtonPress} size={size} />
       </View>
       <Link text={linkText} />
     </View>
