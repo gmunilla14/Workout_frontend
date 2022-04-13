@@ -16,15 +16,42 @@ function WorkoutSet({
   editable,
   isWorkout,
   done,
+  currentGroup,
+  setCurrentSet,
+  setCurrentGroup,
+  setInBetween,
+  setMaxSet,
+  onStop,
 }) {
   const handleDelete = (index) => {
     const newPlan = JSON.parse(JSON.stringify(selectedPlan));
     const maxSet = newPlan.groups[groupIndex].sets.length - 1;
+
     if (newPlan.groups[groupIndex].sets.length === 1) {
+      if (groupIndex === newPlan.groups.length - 1 && doingWorkout) {
+        onStop();
+        return;
+      }
+
       newPlan.groups.splice(groupIndex, 1);
     } else {
       if (index === maxSet) {
         newPlan.groups[groupIndex].sets.splice(index - 1, 2);
+
+        if (groupIndex === newPlan.groups.length - 1 && doingWorkout) {
+          setSelectedPlan(newPlan);
+
+          onStop();
+          return;
+        } else {
+          newPlan.groups[groupIndex].sets.splice(index - 1, 2);
+          if (currentSet === maxSet - 1 && currentGroup === groupIndex) {
+            setCurrentSet(0);
+            setMaxSet(newPlan.groups[currentGroup + 1].sets.length - 1);
+            setCurrentGroup(currentGroup + 1);
+            setInBetween(true);
+          }
+        }
       } else {
         newPlan.groups[groupIndex].sets.splice(index, 2);
       }

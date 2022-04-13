@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, FlatList, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  FlatList,
+  ScrollView,
+  Button,
+} from "react-native";
 import { getPlans } from "../store/actions/planActions";
 import { createWorkout } from "../store/actions/workoutActions";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +14,7 @@ import Clock from "../components/Clock";
 import Footer from "../components/Footer";
 import Group from "../components/Group";
 import colors from "../utils/colors";
+import { groups } from "d3";
 function WorkoutClockScreen({ route, navigation }) {
   const sentPlan = route.params;
   const [minutes, setMinutes] = useState("00");
@@ -167,19 +175,25 @@ function WorkoutClockScreen({ route, navigation }) {
   };
 
   const onStop = () => {
+    console.log("dispatching");
+
+    setClockRunning(false);
     const now = new Date();
     const endTime = now.getTime();
     let workoutGroups = workout.groups;
-    let workoutSets = workoutGroups[currentGroup].sets;
-    workoutSets[currentSet] = {
-      ...workoutSets[currentSet],
-      startTime: startBound,
-      endTime: now.getTime(),
-    };
-    workoutGroups[currentGroup] = {
-      ...workoutGroups[currentGroup],
-      sets: workoutSets,
-    };
+
+    if (!inBetween) {
+      let workoutSets = workoutGroups[currentGroup].sets;
+      workoutSets[currentSet] = {
+        ...workoutSets[currentSet],
+        startTime: startBound,
+        endTime: now.getTime(),
+      };
+      workoutGroups[currentGroup] = {
+        ...workoutGroups[currentGroup],
+        sets: workoutSets,
+      };
+    }
 
     let newWorkout = { ...workout, groups: workoutGroups, endTime };
 
@@ -187,8 +201,15 @@ function WorkoutClockScreen({ route, navigation }) {
 
     newWorkout.groups.forEach((group, index) => {
       delete newWorkout.groups[index]._id;
+      if (group.sets.length === 1 && !group.sets[0].startTime) {
+        newWorkout.groups.splice(index, 1);
+        return;
+      }
       group.sets.forEach((set, setIndex) => {
         delete newWorkout.groups[index].sets[setIndex]._id;
+        if (set.type === "exercise" && !set.startTime) {
+          newWorkout.groups[index].sets.splice(setIndex - 1, 2);
+        }
       });
     });
     delete newWorkout.uid;
@@ -199,104 +220,118 @@ function WorkoutClockScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
-      {workout.groups.length > 0 && (
-        <>
-          <ScrollView>
-            {!inBetween && (
-              <Clock
-                workout={workout}
-                currentGroup={currentGroup}
-                currentSet={currentSet}
-                timeString={timeString}
-                setWorkout={setWorkout}
-                mins={minutes}
-                secs={seconds}
-              />
-            )}
-
-            {(workout.groups[currentGroup].sets[currentSet].type === "rest" ||
-              inBetween) && (
-              <>
-                <Text style={styles.title}>Up Next</Text>
-                <View style={styles.groupsHolder}>
-                  <FlatList
-                    data={workout.groups}
-                    keyExtractor={(group) => group._id.toString()}
-                    renderItem={({ item, index }) => {
-                      return (
-                        <Group
-                          group={item}
-                          exercises={exercises}
-                          currentSet={currentSet}
-                          currentGroup={currentGroup}
-                          doingWorkout={true}
-                          groupIndex={index}
-                          selectedPlan={workout}
-                          setSelectedPlan={setWorkout}
-                          inBetween={inBetween}
-                        />
-                      );
-                    }}
-                  />
-                </View>
-              </>
-            )}
-          </ScrollView>
-          {!(currentSet === maxSet && currentGroup === maxGroup) ? (
-            <>
-              {inBetween ? (
-                <Footer
-                  buttonText={
-                    "Start " +
-                    getCurrentExercise(workout.groups[currentGroup].exerciseID)
-                      .name
-                  }
-                  onButtonPress={onIntervalButton}
+      {workout.groups.length > 0 &&
+        clockRunning &&
+        workout.groups[currentGroup] && (
+          <>
+            <Button
+              title="workout"
+              onPress={() => {
+                console.log(workout);
+              }}
+            />
+            <ScrollView>
+              {!inBetween && (
+                <Clock
+                  workout={workout}
+                  currentGroup={currentGroup}
+                  currentSet={currentSet}
+                  timeString={timeString}
+                  setWorkout={setWorkout}
+                  mins={minutes}
+                  secs={seconds}
                 />
-              ) : (
+              )}
+
+              {(workout.groups[currentGroup].sets[currentSet].type === "rest" ||
+                inBetween) && (
                 <>
-                  {workout.groups[currentGroup].sets[currentSet].type ===
-                  "exercise" ? (
-                    <Footer
-                      buttonText={
-                        currentSet < maxSet
-                          ? "Begin Rest"
-                          : "Start Moving to Next Exercise"
-                      }
-                      topText={
-                        currentSet < maxSet
-                          ? nextSet.duration + " SECONDS"
-                          : getCurrentExercise(
-                              workout.groups[currentGroup + 1].exerciseID
-                            ).name
-                      }
-                      onButtonPress={onIntervalButton}
-                      size={currentSet < maxSet ? 24 : 18}
+                  <Text style={styles.title}>Up Next</Text>
+                  <View style={styles.groupsHolder}>
+                    <FlatList
+                      data={workout.groups}
+                      keyExtractor={(group) => group._id.toString()}
+                      renderItem={({ item, index }) => {
+                        return (
+                          <Group
+                            group={item}
+                            exercises={exercises}
+                            currentSet={currentSet}
+                            currentGroup={currentGroup}
+                            doingWorkout={true}
+                            groupIndex={index}
+                            selectedPlan={workout}
+                            setSelectedPlan={setWorkout}
+                            inBetween={inBetween}
+                            setCurrentSet={setCurrentSet}
+                            setCurrentGroup={setCurrentGroup}
+                            setInBetween={setInBetween}
+                            setMaxSet={setMaxSet}
+                            onStop={onStop}
+                          />
+                        );
+                      }}
                     />
-                  ) : (
-                    <Footer
-                      buttonText="Start Next Set"
-                      topText={
-                        nextSet.reps + " REPS, " + nextSet.weight + " LBS"
-                      }
-                      onButtonPress={onIntervalButton}
-                    />
-                  )}
+                  </View>
                 </>
               )}
-            </>
-          ) : (
-            <>
-              <Footer
-                buttonText="Complete Workout"
-                onButtonPress={() => {
-                  onStop();
-                }}
-              />
-            </>
-          )}
-        </>
-      )}
+            </ScrollView>
+            {!(currentSet === maxSet && currentGroup === maxGroup) ? (
+              <>
+                {inBetween ? (
+                  <Footer
+                    buttonText={
+                      "Start " +
+                      getCurrentExercise(
+                        workout.groups[currentGroup].exerciseID
+                      ).name
+                    }
+                    onButtonPress={onIntervalButton}
+                  />
+                ) : (
+                  <>
+                    {workout.groups[currentGroup].sets[currentSet].type ===
+                    "exercise" ? (
+                      <Footer
+                        buttonText={
+                          currentSet < maxSet
+                            ? "Begin Rest"
+                            : "Start Moving to Next Exercise"
+                        }
+                        topText={
+                          currentSet < maxSet
+                            ? nextSet.duration + " SECONDS"
+                            : getCurrentExercise(
+                                workout.groups[currentGroup + 1].exerciseID
+                              ).name
+                        }
+                        onButtonPress={onIntervalButton}
+                        size={currentSet < maxSet ? 24 : 18}
+                      />
+                    ) : (
+                      <Footer
+                        buttonText="Start Next Set"
+                        topText={
+                          nextSet.reps + " REPS, " + nextSet.weight + " LBS"
+                        }
+                        onButtonPress={onIntervalButton}
+                      />
+                    )}
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <Footer
+                  buttonText="Complete Workout"
+                  onButtonPress={() => {
+                    onStop();
+                  }}
+                />
+              </>
+            )}
+          </>
+        )}
     </View>
   );
 }

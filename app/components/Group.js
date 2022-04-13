@@ -25,6 +25,11 @@ function Group({
   currentGroup,
   inBetween,
   isWorkout,
+  setCurrentSet,
+  setCurrentGroup,
+  setInBetween,
+  setMaxSet,
+  onStop,
 }) {
   const muscles = useSelector((state) => state.muscles);
   const [expanded, setExpanded] = useState(false);
@@ -199,6 +204,14 @@ function Group({
                   done={done}
                   setMaxGroup={setMaxGroup}
                   maxGroup={maxGroup}
+                  currentSet={currentSet}
+                  setCurrentSet={setCurrentSet}
+                  setMaxSet={setMaxSet}
+                  setCurrentGroup={setCurrentGroup}
+                  setInBetween={setInBetween}
+                  currentGroup={currentGroup}
+                  onStop={onStop}
+                  doingWorkout={doingWorkout}
                 />
               );
             }}
