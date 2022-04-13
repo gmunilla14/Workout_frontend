@@ -12,7 +12,8 @@ import { Formik } from "formik";
 import { signUp } from "../routes/authRoutes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../utils/colors";
-
+import AppTextInput from "../components/AppTextInput";
+import AppButton from "../components/AppButton";
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().min(4).max(32).trim().label("Username"),
   email: Yup.string().required().email().trim().label("Email"),
@@ -55,7 +56,6 @@ function SignUpScreen({ navigation }) {
             password: values.password,
           };
           const response = await signUp(user);
-          console.log(response.data);
           if (response.status === 200) {
             await AsyncStorage.setItem("token", response.data.token);
             navigation.reset({
@@ -72,67 +72,80 @@ function SignUpScreen({ navigation }) {
       >
         {({ handleChange, handleSubmit, errors }) => (
           <>
+            <Text style={styles.title}>Sign Up</Text>
+
             <View style={styles.holder}>
-              <TextInput
-                placeholder="Username"
-                name="username"
+              <AppTextInput
+                title="Username"
                 onChangeText={handleChange("username")}
+                error={errors.username}
               />
-              <Text>{errors.username}</Text>
-            </View>
-            <View style={styles.holder}>
-              <TextInput
-                placeholder="Email"
-                name="email"
+
+              <AppTextInput
+                title="Email"
                 onChangeText={handleChange("email")}
+                error={errors.email}
               />
-              <Text>{errors.email}</Text>
-            </View>
 
-            <View style={styles.holder}>
-              <TextInput
-                placeholder="Password"
-                name="password"
+              <AppTextInput
+                title="Password"
                 onChangeText={handleChange("password")}
+                errors={errors.password}
               />
-              <Text>{errors.password}</Text>
-            </View>
 
-            <View style={styles.holder}>
-              <TextInput
-                placeholder="Confirm Password"
-                name="passwordConfirm"
+              <AppTextInput
+                title="Confirm Password"
                 onChangeText={handleChange("passwordConfirm")}
+                error={errors.passwordConfirm}
               />
-              <Text>{errors.passwordConfirm}</Text>
             </View>
-
-            <Button title="Sign Up" onPress={handleSubmit} />
+            <View style={styles.button}>
+              <AppButton text="Sign Up" onPress={handleSubmit} size={18} />
+            </View>
           </>
         )}
       </Formik>
 
-      <Text>Already have an account? </Text>
-      <Button
-        title="Log In"
-        onPress={() => {
-          navigation.navigate("Login");
-        }}
-      />
+      <Text style={styles.subtitle}>Already have an account? </Text>
+
+      <View style={styles.button}>
+        <AppButton
+          text="Log In"
+          onPress={() => {
+            navigation.navigate("Login");
+          }}
+          size={18}
+        />
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    paddingTop: 56,
     height: "100%",
     backgroundColor: colors.mainBG,
   },
   holder: {
-    padding: 10,
-    backgroundColor: colors.lightBG,
-    margin: 20,
+    width: "80%",
+    alignSelf: "center",
+    marginTop: 24,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: colors.mainDark,
+    textAlign: "center",
+  },
+  subtitle: {
+    color: colors.subtitle,
+    textAlign: "center",
+  },
+  button: {
+    width: "40%",
+    alignSelf: "center",
+    marginVertical: 16,
   },
 });
 

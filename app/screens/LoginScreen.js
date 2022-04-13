@@ -12,6 +12,8 @@ import { Formik } from "formik";
 import { signIn } from "../routes/authRoutes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../utils/colors";
+import AppTextInput from "../components/AppTextInput";
+import AppButton from "../components/AppButton";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().trim().label("Email"),
@@ -50,32 +52,35 @@ function LoginScreen({ navigation }) {
       >
         {({ handleChange, handleSubmit, errors }) => (
           <>
+            <Text style={styles.title}>Log In</Text>
             <View style={styles.holder}>
-              <TextInput
-                placeholder="Email"
-                name="email"
+              <AppTextInput
+                title="Email"
                 onChangeText={handleChange("email")}
+                error={errors.email}
               />
-              <Text>{errors.email}</Text>
-            </View>
 
-            <View style={styles.holder}>
-              <TextInput
-                placeholder="Password"
-                name="password"
+              <AppTextInput
+                title="Password"
                 onChangeText={handleChange("password")}
+                error={errors.password}
               />
-              <Text>{errors.password}</Text>
             </View>
 
-            <Button title="Log In" onPress={handleSubmit} />
-            <Text>Dont have an account?</Text>
-            <Button
-              title="Sign up"
-              onPress={() => {
-                navigation.navigate("Sign Up");
-              }}
-            />
+            <View style={styles.button}>
+              <AppButton text="Log In" onPress={handleSubmit} size={18} />
+            </View>
+            <Text style={styles.subtitle}>Dont have an account?</Text>
+
+            <View style={styles.button}>
+              <AppButton
+                text="Sign up"
+                onPress={() => {
+                  navigation.navigate("Sign Up");
+                }}
+                size={18}
+              />
+            </View>
           </>
         )}
       </Formik>
@@ -85,14 +90,29 @@ function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    paddingTop: 56,
     height: "100%",
     backgroundColor: colors.mainBG,
   },
   holder: {
-    padding: 10,
-    backgroundColor: colors.lightBG,
-    margin: 20,
+    width: "80%",
+    alignSelf: "center",
+    marginTop: 24,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: colors.mainDark,
+    textAlign: "center",
+  },
+  subtitle: {
+    color: colors.subtitle,
+    textAlign: "center",
+  },
+  button: {
+    width: "40%",
+    alignSelf: "center",
+    marginVertical: 16,
   },
 });
 
