@@ -1,7 +1,6 @@
 import { useFormikContext } from "formik";
 import React from "react";
 import { View, StyleSheet, TextInput, Text } from "react-native";
-import { color } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import colors from "../utils/colors";
 
 function AppTextInput({
@@ -15,7 +14,10 @@ function AppTextInput({
   return (
     <View style={styles.container}>
       <Text
-        style={{ ...styles.inputTitle, color: error ? "red" : colors.subtitle }}
+        style={{
+          ...styles.inputTitle,
+          color: error ? colors.error : colors.subtitle,
+        }}
       >
         {title}
       </Text>
@@ -30,7 +32,7 @@ function AppTextInput({
         numberOfLines={numberOfLines}
         multiline={multiline}
       />
-      <Text style={{ color: "red" }}>{error}</Text>
+      <Text style={{ color: colors.error }}>{error}</Text>
     </View>
   );
 }
@@ -42,7 +44,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingHorizontal: 8,
     marginTop: 4,
-    borderColor: "red",
+    borderColor: colors.error,
     height: 32,
   },
   inputTitle: {

@@ -6,4 +6,5 @@ export default colors = {
   subtitle: "#BEC2C5",
   mainDark: "#5E6069",
   black: "#000000",
+  error: "red",
 };

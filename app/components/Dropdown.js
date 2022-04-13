@@ -41,7 +41,7 @@ function Dropdown({
           </TouchableOpacity>
         </View>
       </View>
-      {error && <Text style={{ color: "red" }}>{error}</Text>}
+      {error && <Text style={{ color: colors.error }}>{error}</Text>}
 
       <View
         style={{
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     paddingLeft: 8,
     minWidth: 130,
-    borderColor: "red",
+    borderColor: colors.error,
   },
   dropDown: {
     marginHorizontal: 8,
