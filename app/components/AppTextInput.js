@@ -10,6 +10,7 @@ function AppTextInput({
   error,
   multiline = false,
   numberOfLines = 1,
+  secureTextEntry = false,
 }) {
   return (
     <View style={styles.container}>
@@ -31,6 +32,7 @@ function AppTextInput({
         keyboardType={keyboardType}
         numberOfLines={numberOfLines}
         multiline={multiline}
+        secureTextEntry={secureTextEntry}
       />
       <Text style={{ color: colors.error }}>{error}</Text>
     </View>

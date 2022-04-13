@@ -85,18 +85,21 @@ function SignUpScreen({ navigation }) {
                 title="Email"
                 onChangeText={handleChange("email")}
                 error={errors.email}
+                keyboardType="email-address"
               />
 
               <AppTextInput
                 title="Password"
                 onChangeText={handleChange("password")}
                 errors={errors.password}
+                secureTextEntry={true}
               />
 
               <AppTextInput
                 title="Confirm Password"
                 onChangeText={handleChange("passwordConfirm")}
                 error={errors.passwordConfirm}
+                secureTextEntry={true}
               />
             </View>
             <View style={styles.button}>

@@ -58,12 +58,14 @@ function LoginScreen({ navigation }) {
                 title="Email"
                 onChangeText={handleChange("email")}
                 error={errors.email}
+                keyboardType="email-address"
               />
 
               <AppTextInput
                 title="Password"
                 onChangeText={handleChange("password")}
                 error={errors.password}
+                secureTextEntry={true}
               />
             </View>
 
