@@ -14,12 +14,15 @@ import { getExercises } from "../store/actions/exerciseActions";
 import AppButton from "../components/AppButton";
 import Graph from "../components/Graph";
 import colors from "../utils/colors";
+import Dropdown from "../components/Dropdown";
 
 function DataScreen(props) {
   const [data, setData] = useState([{ x: 0, y: 0 }]);
   const [showCurve, setShowCurve] = useState(false);
-
+  const [selectedExercise, setSelectedExercise] = useState(false);
   const dispatch = useDispatch();
+
+  const exercises = useSelector((state) => state.exercises);
 
   useEffect(() => {
     dispatch(getExercises());
@@ -27,28 +30,42 @@ function DataScreen(props) {
 
   return (
     <View style={styles.container}>
-      <AppButton
-        text="Get data"
-        onPress={async () => {
-          const response = await axios.get(
-            `${url}/data?type=volpersec&exercise=62465c7da6c7baaf6b58b514`,
-            await setHeaders()
-          );
-          setData(response.data.data);
-          setShowCurve(true);
-        }}
-      />
-
-      {showCurve && (
-        <Graph
-          height={300}
-          width={350}
-          leftPadding={50}
-          rightPadding={25}
-          yPadding={20}
-          data={data}
+      <View style={styles.holder}>
+        <Dropdown
+          selectedValue={selectedExercise}
+          setSelectedValue={setSelectedExercise}
+          values={exercises}
+          placeholder="-- Exercise --"
         />
-      )}
+        <View style={styles.dataButton}>
+          <AppButton
+            text="Get data"
+            onPress={async () => {
+              const response = await axios.get(
+                `${url}/data?type=volpersec&exercise=${selectedExercise._id}`,
+                await setHeaders()
+              );
+              console.log(response.data);
+              console.log(selectedExercise);
+              setData(response.data.data);
+              setShowCurve(true);
+            }}
+            size={16}
+          />
+        </View>
+      </View>
+      <View style={{ zIndex: -1 }}>
+        {showCurve && (
+          <Graph
+            height={300}
+            width={350}
+            leftPadding={50}
+            rightPadding={25}
+            yPadding={20}
+            data={data}
+          />
+        )}
+      </View>
     </View>
   );
 }
@@ -58,6 +75,17 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.mainBG,
     height: "100%",
+  },
+  holder: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "80%",
+    alignSelf: "center",
+  },
+  dataButton: {
+    width: 100,
+    marginLeft: 16,
   },
 });
 
