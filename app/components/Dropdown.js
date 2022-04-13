@@ -35,7 +35,7 @@ function Dropdown({
             <Ionicons
               name={open ? "md-caret-up-sharp" : "md-caret-down-sharp"}
               size={18}
-              color={colors.black}
+              color={colors.mainDark}
               style={styles.downArrow}
             />
           </TouchableOpacity>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 4,
     paddingLeft: 8,
-    minWidth: 130,
+    minWidth: 120,
     borderColor: colors.error,
   },
   dropDown: {
@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
   },
   valueName: {
     fontWeight: "500",
+    color: colors.mainDark,
   },
   line: {
     height: 1,

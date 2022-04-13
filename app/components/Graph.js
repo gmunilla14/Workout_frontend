@@ -7,7 +7,15 @@ import { useState } from "react";
 import { useEffect } from "react";
 import colors from "../utils/colors";
 
-function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
+function Graph({
+  height,
+  width,
+  leftPadding,
+  rightPadding,
+  yPadding,
+  data,
+  exerciseName,
+}) {
   const [circles, setCircles] = useState([]);
   const [yTicks, setyTicks] = useState([]);
   const [xTicks, setxTicks] = useState([]);
@@ -93,95 +101,118 @@ function Graph({ height, width, leftPadding, rightPadding, yPadding, data }) {
   return (
     <View style={styles.container}>
       {data.length > 0 ? (
-        <Svg width={width} height={height} stroke="#6231ff">
-          <G y={0}>
-            <Line
-              x1={leftPadding}
-              y1={height - yPadding}
-              x2={width - rightPadding}
-              y2={height - yPadding}
+        <View style={styles.background}>
+          <Svg width={width} height={height} stroke="#6231ff">
+            <Text
+              x={width / 2}
+              y={yPadding}
+              textAnchor="middle"
               stroke={colors.mainDark}
-              strokeWidth="3"
-            />
-            <Line
-              x1={leftPadding}
-              y1={yPadding}
-              x2={leftPadding}
-              y2={height - yPadding}
-              stroke={colors.mainDark}
-              strokeWidth="3"
-            />
-
-            <Text x={0} y={0} transform={yAxisString} stroke={colors.mainDark}>
-              Volume (Lbs/sec)
+            >
+              {exerciseName + " Performance Over Time"}
             </Text>
+            <G y={0}>
+              <Line
+                x1={leftPadding}
+                y1={height - yPadding}
+                x2={width - rightPadding}
+                y2={height - yPadding}
+                stroke={colors.mainDark}
+                strokeWidth="3"
+              />
+              <Line
+                x1={leftPadding}
+                y1={yPadding}
+                x2={leftPadding}
+                y2={height - yPadding}
+                stroke={colors.mainDark}
+                strokeWidth="3"
+              />
 
-            <>
-              <Path d={curve} strokeWidth={2} stroke={colors.accent} />
-              {circles.map((circle) => {
-                return (
-                  <Circle
-                    cx={circle.cx}
-                    cy={circle.cy}
-                    fill={colors.accent}
-                    r="2"
-                    key={circle.cx + "circle" + Math.random()}
-                  />
-                );
-              })}
-              {yTicks.map((tick) => {
-                return (
-                  <>
-                    <Line
-                      x1={leftPadding - 5}
-                      y1={tick.y}
-                      x2={leftPadding + 5}
-                      y2={tick.y}
-                      stroke={colors.mainDark}
-                      strokeWidth="3"
-                      key={tick.y + "tick" + Math.random()}
+              <Text
+                x={0}
+                y={0}
+                transform={yAxisString}
+                stroke={colors.mainDark}
+              >
+                Volume (Lbs/sec)
+              </Text>
+
+              <>
+                <Path d={curve} strokeWidth={2} stroke={colors.accent} />
+                {circles.map((circle) => {
+                  return (
+                    <Circle
+                      cx={circle.cx}
+                      cy={circle.cy}
+                      fill={colors.accent}
+                      r="2"
+                      key={circle.cx + "circle" + Math.random()}
                     />
-                    <Text
-                      x={leftPadding - 6}
-                      y={tick.y + 3}
-                      fontSize="10"
-                      textAnchor="end"
-                      key={tick.y + "ytext" + Math.random()}
-                      stroke={colors.mainDark}
-                    >
-                      {tick.val}
-                    </Text>
-                  </>
-                );
-              })}
-              {xTicks.map((tick) => {
-                return (
-                  <>
-                    <Line
-                      x1={tick.x}
-                      y1={height - yPadding - 5}
-                      x2={tick.x}
-                      y2={height - yPadding + 5}
-                      stroke={colors.mainDark}
-                      strokeWidth="3"
-                      key={tick.x + "tick" + Math.random()}
-                    />
-                    <Text
-                      x={tick.x}
-                      y={height - 5}
-                      fontSize="10"
-                      textAnchor="middle"
-                      key={tick.x + "text" + Math.random()}
-                      stroke={colors.mainDark}
-                    >
-                      {tick.val.getMonth() + 1 + "/" + tick.val.getDate()}
-                    </Text>
-                  </>
-                );
-              })}
-            </>
-          </G>
-        </Svg>
+                  );
+                })}
+                {yTicks.map((tick) => {
+                  return (
+                    <>
+                      <Line
+                        x1={leftPadding - 5}
+                        y1={tick.y}
+                        x2={leftPadding + 5}
+                        y2={tick.y}
+                        stroke={colors.mainDark}
+                        strokeWidth="3"
+                        key={tick.y + "tick" + Math.random()}
+                      />
+                      <Text
+                        x={leftPadding - 6}
+                        y={tick.y + 3}
+                        fontSize="10"
+                        textAnchor="end"
+                        key={tick.y + "ytext" + Math.random()}
+                        stroke={colors.mainDark}
+                      >
+                        {tick.val}
+                      </Text>
+                    </>
+                  );
+                })}
+                {xTicks.map((tick) => {
+                  return (
+                    <>
+                      <Line
+                        x1={tick.x}
+                        y1={height - yPadding - 5}
+                        x2={tick.x}
+                        y2={height - yPadding + 5}
+                        stroke={colors.mainDark}
+                        strokeWidth="3"
+                        key={tick.x + "tick" + Math.random()}
+                      />
+                      <Text
+                        x={tick.x}
+                        y={height - 25}
+                        fontSize="10"
+                        textAnchor="middle"
+                        key={tick.x + "text" + Math.random()}
+                        stroke={colors.mainDark}
+                      >
+                        {tick.val.getMonth() + 1 + "/" + tick.val.getDate()}
+                      </Text>
+                    </>
+                  );
+                })}
+              </>
+            </G>
+            <Text
+              x={width / 2}
+              y={height - 10}
+              textAnchor="middle"
+              stroke={colors.mainDark}
+            >
+              Date
+            </Text>
+          </Svg>
+        </View>
       ) : (
         <View style={styles.noData}>
           <NormalText style={styles.text}>
@@ -208,6 +239,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     color: colors.mainDark,
+  },
+  background: {
+    backgroundColor: colors.lightBG,
+    borderRadius: 8,
   },
 });
 

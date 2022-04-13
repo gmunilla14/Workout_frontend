@@ -39,7 +39,7 @@ function DataScreen(props) {
         />
         <View style={styles.dataButton}>
           <AppButton
-            text="Get data"
+            text="View Performance"
             onPress={async () => {
               const response = await axios.get(
                 `${url}/data?type=volpersec&exercise=${selectedExercise._id}`,
@@ -57,12 +57,13 @@ function DataScreen(props) {
       <View style={{ zIndex: -1 }}>
         {showCurve && (
           <Graph
-            height={300}
-            width={350}
-            leftPadding={50}
-            rightPadding={25}
-            yPadding={20}
+            height={320}
+            width={365}
+            leftPadding={55}
+            rightPadding={35}
+            yPadding={40}
             data={data}
+            exerciseName={selectedExercise.name}
           />
         )}
       </View>
@@ -72,7 +73,8 @@ function DataScreen(props) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
+    paddingVertical: 24,
+    paddingHorizontal: 10,
     backgroundColor: colors.mainBG,
     height: "100%",
   },
@@ -80,12 +82,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "80%",
+    width: "95%",
     alignSelf: "center",
   },
   dataButton: {
-    width: 100,
-    marginLeft: 16,
+    width: 150,
+    marginLeft: 8,
   },
 });
 
