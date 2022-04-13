@@ -188,7 +188,7 @@ function Group({
                   set={item}
                   index={index}
                   groupIndex={groupIndex}
-                  editable={editable}
+                  editable={editable && !isWorkout}
                   selectedPlan={selectedPlan}
                   setSelectedPlan={setSelectedPlan}
                   isWorkout={isWorkout}
