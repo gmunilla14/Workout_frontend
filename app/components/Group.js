@@ -37,7 +37,7 @@ function Group({
     if (selectedPlan) {
       setMaxGroup(selectedPlan.groups.length - 1);
     }
-  }, []);
+  }, [selectedPlan]);
 
   if (exerciseList.length > 0) {
     muscleList = muscles.filter((mus) =>
@@ -53,8 +53,6 @@ function Group({
 
     initialGroups[index1] = selectedPlan.groups[index2];
     initialGroups[index2] = tempGroup;
-
-    console.log(initialGroups);
 
     setSelectedPlan({ ...selectedPlan, groups: initialGroups });
   };
@@ -95,7 +93,7 @@ function Group({
             <View style={styles.arrowHolder}>
               {groupIndex === 0 ||
               (doingWorkout && !inBetween && groupIndex <= currentGroup + 1) ||
-              (doingWorkout && inBetween && currentGroup === groupIndex) ? (
+              (doingWorkout && inBetween && currentGroup >= groupIndex) ? (
                 <Ionicons
                   name="md-caret-up-sharp"
                   size={36}
@@ -117,7 +115,8 @@ function Group({
                 </TouchableOpacity>
               )}
               {groupIndex === maxGroup ||
-              (doingWorkout && groupIndex == currentGroup && !inBetween) ? (
+              (doingWorkout && groupIndex <= currentGroup && !inBetween) ||
+              (inBetween && currentGroup > groupIndex) ? (
                 <Ionicons
                   name="md-caret-down-sharp"
                   size={36}
@@ -171,13 +170,18 @@ function Group({
             keyExtractor={() => String(Math.random())}
             renderItem={({ item, index }) => {
               let editable = false;
+              let done = false;
               if (doingWorkout) {
                 if (groupIndex > currentGroup) {
                   editable = true;
                 } else if (groupIndex === currentGroup) {
                   if (index >= currentSet) {
                     editable = true;
+                  } else {
+                    done = true;
                   }
+                } else {
+                  done = true;
                 }
               } else {
                 editable = true;
@@ -192,11 +196,16 @@ function Group({
                   selectedPlan={selectedPlan}
                   setSelectedPlan={setSelectedPlan}
                   isWorkout={isWorkout}
+                  done={done}
+                  setMaxGroup={setMaxGroup}
+                  maxGroup={maxGroup}
                 />
               );
             }}
           />
-          {!isWorkout ? (
+          {isWorkout || (doingWorkout && currentGroup > groupIndex) ? (
+            <View style={{ marginBottom: 12 }}></View>
+          ) : (
             <View style={styles.buttonHolder}>
               <AppButton
                 text="+ Add Another Set"
@@ -206,8 +215,6 @@ function Group({
                 size={18}
               />
             </View>
-          ) : (
-            <View style={{ marginBottom: 12 }}></View>
           )}
 
           {exerciseList.length > 0 && (

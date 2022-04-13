@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Button } from "react-native";
 import colors from "../utils/colors";
 import IncrementPill from "./IncrementPill";
 import Link from "./Link";
-
+import { AntDesign } from "@expo/vector-icons";
 function WorkoutSet({
   set,
   index,
@@ -15,6 +15,7 @@ function WorkoutSet({
   selectedPlan,
   editable,
   isWorkout,
+  done,
 }) {
   const handleDelete = (index) => {
     const newPlan = JSON.parse(JSON.stringify(selectedPlan));
@@ -37,9 +38,22 @@ function WorkoutSet({
       {set.type === "exercise" ? (
         <>
           <View style={styles.exerciseHeader}>
-            <Text style={styles.title}>
-              {"Set " + (Math.floor((index + 1) / 2) + 1)}
-            </Text>
+            <View style={styles.nameHeader}>
+              <Text style={styles.title}>
+                {"Set " + (Math.floor((index + 1) / 2) + 1)}
+              </Text>
+
+              {done && (
+                <View style={styles.check}>
+                  <AntDesign
+                    name="checkcircle"
+                    size={24}
+                    color={colors.success}
+                  />
+                </View>
+              )}
+            </View>
+
             {editable && (
               <View style={styles.deleteHolder}>
                 <Link
@@ -137,6 +151,13 @@ const styles = StyleSheet.create({
   },
   testButton: {
     zIndex: 1000,
+  },
+  check: {
+    alignSelf: "center",
+    marginLeft: 8,
+  },
+  nameHeader: {
+    flexDirection: "row",
   },
 });
 

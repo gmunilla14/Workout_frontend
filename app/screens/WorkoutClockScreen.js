@@ -223,23 +223,19 @@ function WorkoutClockScreen({ route, navigation }) {
                     data={workout.groups}
                     keyExtractor={(group) => group._id.toString()}
                     renderItem={({ item, index }) => {
-                      if (index < currentGroup) {
-                        return <Text>Done</Text>;
-                      } else {
-                        return (
-                          <Group
-                            group={item}
-                            exercises={exercises}
-                            currentSet={currentSet}
-                            currentGroup={currentGroup}
-                            doingWorkout={true}
-                            groupIndex={index}
-                            selectedPlan={workout}
-                            setSelectedPlan={setWorkout}
-                            inBetween={inBetween}
-                          />
-                        );
-                      }
+                      return (
+                        <Group
+                          group={item}
+                          exercises={exercises}
+                          currentSet={currentSet}
+                          currentGroup={currentGroup}
+                          doingWorkout={true}
+                          groupIndex={index}
+                          selectedPlan={workout}
+                          setSelectedPlan={setWorkout}
+                          inBetween={inBetween}
+                        />
+                      );
                     }}
                   />
                 </View>
