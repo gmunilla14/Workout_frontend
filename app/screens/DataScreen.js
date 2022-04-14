@@ -1,8 +1,7 @@
 import React from "react";
-import { View, StyleSheet, Button } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import axios from "axios";
 import { url, setHeaders } from "../routes/utils";
-import { Circle, G, Line, Path, Svg, Text } from "react-native-svg";
 import { useState } from "react";
 import { scaleTime, scaleLinear } from "d3-scale";
 import { useEffect } from "react";
@@ -30,13 +29,21 @@ function DataScreen(props) {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Performance Data</Text>
+      <Text style={styles.subtitle}>
+        Pick an exercise and see how your performance has changed over time
+      </Text>
       <View style={styles.holder}>
-        <Dropdown
-          selectedValue={selectedExercise}
-          setSelectedValue={setSelectedExercise}
-          values={exercises}
-          placeholder="-- Exercise --"
-        />
+        <View>
+          <Text style={styles.dropdownHeader}>Exercise:</Text>
+          <Dropdown
+            selectedValue={selectedExercise}
+            setSelectedValue={setSelectedExercise}
+            values={exercises}
+            placeholder="-- Exercise --"
+          />
+        </View>
+
         <View style={styles.dataButton}>
           <AppButton
             text="View Performance"
@@ -78,12 +85,32 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mainBG,
     height: "100%",
   },
+  title: {
+    color: colors.mainDark,
+    fontSize: 24,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 16,
+  },
+  subtitle: {
+    color: colors.subtitle,
+    fontSize: 15,
+    marginBottom: 20,
+    textAlign: "center",
+    width: "95%",
+    alignSelf: "center",
+  },
   holder: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     width: "95%",
     alignSelf: "center",
+  },
+  dropdownHeader: {
+    color: colors.subtitle,
+    fontWeight: "500",
+    marginBottom: 4,
   },
   dataButton: {
     width: 150,
