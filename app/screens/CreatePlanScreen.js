@@ -46,9 +46,9 @@ const validationSchema = Yup.object().shape({
 });
 function CreatePlanScreen({ navigation }) {
   const [selectedExercise, setSelectedExercise] = useState();
-  const [selectedSets, setSelectedSets] = useState(0);
-  const [selectedReps, setSelectedReps] = useState(0);
-  const [selectedWeight, setSelectedWeight] = useState(0);
+  const [selectedSets, setSelectedSets] = useState(false);
+  const [selectedReps, setSelectedReps] = useState(false);
+  const [selectedWeight, setSelectedWeight] = useState(false);
   const [setError, setSetError] = useState(false);
   const [repsError, setRepsError] = useState(false);
   const [weightError, setWeightError] = useState(false);
@@ -92,6 +92,7 @@ function CreatePlanScreen({ navigation }) {
                   title="Plan Name"
                   onChangeText={handleChange("name")}
                   error={touched["name"] ? errors["name"] : false}
+                  value={values["name"]}
                 />
               </View>
 
@@ -113,7 +114,7 @@ function CreatePlanScreen({ navigation }) {
             >
               <View style={styles.setInputHolder}>
                 <View style={styles.dropdownHolder}>
-                  <Text>Exercise: </Text>
+                  <Text style={styles.dropDownLabel}>Exercise</Text>
                   <Dropdown
                     selectedValue={selectedExercise}
                     setSelectedValue={setSelectedExercise}
@@ -133,6 +134,7 @@ function CreatePlanScreen({ navigation }) {
                       }}
                       keyboardType="number-pad"
                       error={setError}
+                      value={selectedSets}
                     />
                   </View>
                   <View style={styles.setInput}>
@@ -144,6 +146,7 @@ function CreatePlanScreen({ navigation }) {
                       }}
                       keyboardType="number-pad"
                       error={repsError}
+                      value={selectedReps}
                     />
                   </View>
 
@@ -156,6 +159,7 @@ function CreatePlanScreen({ navigation }) {
                       }}
                       keyboardType="numeric"
                       error={weightError}
+                      value={selectedWeight}
                     />
                   </View>
                 </View>
@@ -168,6 +172,7 @@ function CreatePlanScreen({ navigation }) {
                     }}
                     keyboardType="number-pad"
                     error={restError}
+                    value={selectedRest}
                   />
                   <View style={styles.createPlanButton}>
                     <AppButton
@@ -231,6 +236,11 @@ function CreatePlanScreen({ navigation }) {
                         let currentGroups = values.groups;
                         currentGroups.push(group);
                         setFieldValue("groups", currentGroups);
+                        setSelectedSets(0);
+                        setSelectedWeight(0);
+                        setSelectedReps(0);
+                        setSelectedRest(0);
+                        setSelectedExercise();
                         Keyboard.dismiss();
                       }}
                     />
@@ -291,26 +301,32 @@ const styles = StyleSheet.create({
   line: {
     width: "80%",
     height: 1,
-    backgroundColor: colors.mainDark,
+    backgroundColor: colors.subtitle,
     alignSelf: "center",
     marginVertical: 12,
   },
   dropdownHolder: {
-    flexDirection: "row",
     justifyContent: "flex-start",
-    alignItems: "center",
+    alignItems: "flex-start",
     zIndex: 100,
+    marginBottom: 8,
+  },
+  dropDownLabel: {
+    color: colors.subtitle,
+    marginBottom: 4,
+    fontWeight: "500",
   },
   setInputHolder: {
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
+    marginLeft: "10%",
   },
   setInputRow: {
     flexDirection: "row",
     marginVertical: 8,
   },
   setInput: {
-    marginHorizontal: 8,
+    marginRight: 36,
     minWidth: 50,
   },
   groupHolder: {

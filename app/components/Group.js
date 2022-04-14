@@ -6,7 +6,8 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+
 import WorkoutSet from "./WorkoutSet";
 import AppButton from "./AppButton";
 import { useSelector } from "react-redux";
@@ -99,8 +100,8 @@ function Group({
               {groupIndex === 0 ||
               (doingWorkout && !inBetween && groupIndex <= currentGroup + 1) ||
               (doingWorkout && inBetween && currentGroup >= groupIndex) ? (
-                <Ionicons
-                  name="md-caret-up-sharp"
+                <MaterialIcons
+                  name="keyboard-arrow-up"
                   size={36}
                   color={colors.subtitle}
                   style={styles.upArrow}
@@ -111,10 +112,10 @@ function Group({
                     swapSets(groupIndex, groupIndex - 1);
                   }}
                 >
-                  <Ionicons
-                    name="md-caret-up-sharp"
+                  <MaterialIcons
+                    name="keyboard-arrow-up"
                     size={36}
-                    color={colors.black}
+                    color={colors.mainDark}
                     style={styles.upArrow}
                   />
                 </TouchableOpacity>
@@ -122,8 +123,8 @@ function Group({
               {groupIndex === maxGroup ||
               (doingWorkout && groupIndex <= currentGroup && !inBetween) ||
               (inBetween && currentGroup > groupIndex) ? (
-                <Ionicons
-                  name="md-caret-down-sharp"
+                <MaterialIcons
+                  name="keyboard-arrow-down"
                   size={36}
                   color={colors.subtitle}
                   style={styles.downArrow}
@@ -134,10 +135,10 @@ function Group({
                     swapSets(groupIndex, groupIndex + 1);
                   }}
                 >
-                  <Ionicons
-                    name="md-caret-down-sharp"
+                  <MaterialIcons
+                    name="keyboard-arrow-down"
                     size={36}
-                    color={colors.black}
+                    color={colors.mainDark}
                     style={styles.downArrow}
                   />
                 </TouchableOpacity>
@@ -158,10 +159,10 @@ function Group({
               setExpanded(!expanded);
             }}
           >
-            <Ionicons
-              name={expanded ? "md-caret-up-sharp" : "md-caret-down-sharp"}
+            <MaterialIcons
+              name={expanded ? "keyboard-arrow-up" : "keyboard-arrow-down"}
               size={36}
-              color={colors.black}
+              color={colors.mainDark}
               style={styles.downArrow}
             />
           </TouchableOpacity>
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
   },
   dropDown: {
     justifyContent: "center",
-    marginTop: 20,
+    marginTop: 12,
   },
   buttonHolder: {
     width: "60%",
