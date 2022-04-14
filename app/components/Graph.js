@@ -105,7 +105,7 @@ function Graph({
           <Svg width={width} height={height} stroke="#6231ff">
             <Text
               x={width / 2}
-              y={yPadding}
+              y={yPadding / 2 + 5}
               textAnchor="middle"
               stroke={colors.mainDark}
             >
