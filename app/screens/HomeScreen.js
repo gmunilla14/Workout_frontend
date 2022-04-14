@@ -76,21 +76,6 @@ function HomeScreen({ navigation }) {
           />
         </View>
       </View>
-
-      <Button
-        title="Sign Out"
-        onPress={async () => {
-          await AsyncStorage.removeItem("token");
-          navigation.reset({
-            index: 0,
-            routes: [
-              {
-                name: "Auth Nav",
-              },
-            ],
-          });
-        }}
-      />
     </View>
   );
 }
@@ -106,6 +91,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 24,
     marginBottom: 16,
+    color: colors.mainDark,
+    fontWeight: "700",
   },
   subtext: {
     color: colors.subtitle,
