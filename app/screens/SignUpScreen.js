@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../utils/colors";
 import AppTextInput from "../components/AppTextInput";
 import AppButton from "../components/AppButton";
+import Link from "../components/Link";
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().min(4).max(32).trim().label("Username"),
   email: Yup.string().required().email().trim().label("Email"),
@@ -70,37 +71,49 @@ function SignUpScreen({ navigation }) {
         }}
         validationSchema={validationSchema}
       >
-        {({ handleChange, handleSubmit, errors }) => (
+        {({ handleChange, handleSubmit, errors, values }) => (
           <>
             <Text style={styles.title}>Sign Up</Text>
 
             <View style={styles.holder}>
-              <AppTextInput
-                title="Username"
-                onChangeText={handleChange("username")}
-                error={errors.username}
-              />
+              <View style={styles.inputHolder}>
+                <AppTextInput
+                  title="Username"
+                  onChangeText={handleChange("username")}
+                  error={errors.username}
+                  value={values.username}
+                />
+              </View>
 
-              <AppTextInput
-                title="Email"
-                onChangeText={handleChange("email")}
-                error={errors.email}
-                keyboardType="email-address"
-              />
+              <View style={styles.inputHolder}>
+                <AppTextInput
+                  title="Email"
+                  onChangeText={handleChange("email")}
+                  error={errors.email}
+                  keyboardType="email-address"
+                  value={values.email}
+                />
+              </View>
 
-              <AppTextInput
-                title="Password"
-                onChangeText={handleChange("password")}
-                errors={errors.password}
-                secureTextEntry={true}
-              />
+              <View style={styles.inputHolder}>
+                <AppTextInput
+                  title="Password"
+                  onChangeText={handleChange("password")}
+                  errors={errors.password}
+                  secureTextEntry={true}
+                  value={values.password}
+                />
+              </View>
 
-              <AppTextInput
-                title="Confirm Password"
-                onChangeText={handleChange("passwordConfirm")}
-                error={errors.passwordConfirm}
-                secureTextEntry={true}
-              />
+              <View style={styles.inputHolder}>
+                <AppTextInput
+                  title="Confirm Password"
+                  onChangeText={handleChange("passwordConfirm")}
+                  error={errors.passwordConfirm}
+                  secureTextEntry={true}
+                  value={values.passwordConfirm}
+                />
+              </View>
             </View>
             <View style={styles.button}>
               <AppButton text="Sign Up" onPress={handleSubmit} size={18} />
@@ -111,13 +124,13 @@ function SignUpScreen({ navigation }) {
 
       <Text style={styles.subtitle}>Already have an account? </Text>
 
-      <View style={styles.button}>
-        <AppButton
-          text="Log In"
+      <View style={styles.link}>
+        <Link
+          text="Login"
           onPress={() => {
             navigation.navigate("Login");
           }}
-          size={18}
+          fontWeight="500"
         />
       </View>
     </ScrollView>
@@ -135,6 +148,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 24,
   },
+  inputHolder: {
+    marginVertical: 8,
+  },
   title: {
     fontSize: 24,
     fontWeight: "700",
@@ -149,6 +165,9 @@ const styles = StyleSheet.create({
     width: "40%",
     alignSelf: "center",
     marginVertical: 16,
+  },
+  link: {
+    alignSelf: "center",
   },
 });
 

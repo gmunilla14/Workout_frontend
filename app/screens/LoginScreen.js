@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import colors from "../utils/colors";
 import AppTextInput from "../components/AppTextInput";
 import AppButton from "../components/AppButton";
+import Link from "../components/Link";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().trim().label("Email"),
@@ -54,33 +55,37 @@ function LoginScreen({ navigation }) {
           <>
             <Text style={styles.title}>Log In</Text>
             <View style={styles.holder}>
-              <AppTextInput
-                title="Email"
-                onChangeText={handleChange("email")}
-                error={errors.email}
-                keyboardType="email-address"
-              />
+              <View style={styles.inputHolder}>
+                <AppTextInput
+                  title="Email"
+                  onChangeText={handleChange("email")}
+                  error={errors.email}
+                  keyboardType="email-address"
+                />
+              </View>
 
-              <AppTextInput
-                title="Password"
-                onChangeText={handleChange("password")}
-                error={errors.password}
-                secureTextEntry={true}
-              />
+              <View style={styles.inputHolder}>
+                <AppTextInput
+                  title="Password"
+                  onChangeText={handleChange("password")}
+                  error={errors.password}
+                  secureTextEntry={true}
+                />
+              </View>
             </View>
 
             <View style={styles.button}>
               <AppButton text="Log In" onPress={handleSubmit} size={18} />
             </View>
-            <Text style={styles.subtitle}>Dont have an account?</Text>
+            <Text style={styles.subtitle}>Don't have an account?</Text>
 
-            <View style={styles.button}>
-              <AppButton
-                text="Sign up"
+            <View style={styles.link}>
+              <Link
+                text="Sign Up"
                 onPress={() => {
                   navigation.navigate("Sign Up");
                 }}
-                size={18}
+                fontWeight="500"
               />
             </View>
           </>
@@ -101,6 +106,9 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 24,
   },
+  inputHolder: {
+    marginVertical: 8,
+  },
   title: {
     fontSize: 24,
     fontWeight: "700",
@@ -115,6 +123,9 @@ const styles = StyleSheet.create({
     width: "40%",
     alignSelf: "center",
     marginVertical: 16,
+  },
+  link: {
+    alignSelf: "center",
   },
 });
 

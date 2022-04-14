@@ -2,10 +2,10 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../utils/colors";
 
-function Link({ text, onPress }) {
+function Link({ text, onPress, fontWeight = "700", fontSize = 18 }) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text style={styles.text}>{text}</Text>
+      <Text style={{ ...styles.text, fontWeight, fontSize }}>{text}</Text>
     </TouchableOpacity>
   );
 }
@@ -15,8 +15,6 @@ const styles = StyleSheet.create({
   text: {
     color: colors.accent,
     textDecorationLine: "underline",
-    fontSize: 18,
-    fontWeight: "700",
   },
 });
 
