@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     shadowColor: colors.mainDark,
     shadowRadius: 5,
-    shadowOpacity: 1,
+    shadowOpacity: 0.17,
     paddingTop: 24,
   },
   buttonHolder: {
