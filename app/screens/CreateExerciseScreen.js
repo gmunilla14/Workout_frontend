@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   createButton: {
     marginTop: 8,
-    width: "40%",
+    width: "42.5%",
     alignSelf: "center",
   },
 });
