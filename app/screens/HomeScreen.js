@@ -46,7 +46,8 @@ function HomeScreen({ navigation }) {
               <View style={styles.planHolder}>
                 <Text style={styles.planTitle}>{item.name}</Text>
                 <Text style={{ ...styles.subtext, marginVertical: 4 }}>
-                  {item.groups.length + " exercises"}
+                  {item.groups.length +
+                    (item.groups.length > 1 ? " exercises" : " exercise")}
                 </Text>
               </View>
             </TouchableWithoutFeedback>

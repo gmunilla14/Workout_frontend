@@ -51,7 +51,10 @@ function WorkoutHistoryScreen({ navigation }) {
                 <View style={styles.planHolder}>
                   <Text style={styles.planTitle}>{planName}</Text>
                   <Text style={{ ...styles.subtext }}>
-                    {item.groups.length + " exercises | " + startString}
+                    {item.groups.length +
+                      (item.groups.length > 1 ? " exercises" : " exercise") +
+                      " | " +
+                      startString}
                   </Text>
                 </View>
               </TouchableOpacity>
