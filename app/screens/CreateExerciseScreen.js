@@ -68,7 +68,14 @@ function CreateExerciseScreen({ navigation }) {
           }}
           validationSchema={validationSchema}
         >
-          {({ handleChange, handleSubmit, errors, setFieldValue, touched }) => (
+          {({
+            handleChange,
+            handleSubmit,
+            errors,
+            setFieldValue,
+            touched,
+            values,
+          }) => (
             <>
               <View style={styles.nameHolder}>
                 <View style={styles.nameInput}>
@@ -76,6 +83,7 @@ function CreateExerciseScreen({ navigation }) {
                     title="Exercise Name"
                     onChangeText={handleChange("name")}
                     error={touched["name"] && errors["name"]}
+                    value={values.name}
                   />
                 </View>
 
@@ -95,6 +103,7 @@ function CreateExerciseScreen({ navigation }) {
                   error={errors["notes"]}
                   multiline={true}
                   numberOfLines={3}
+                  value={values.notes}
                 />
               </View>
               <View style={styles.musclesHolder}>

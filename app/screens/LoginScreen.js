@@ -51,7 +51,7 @@ function LoginScreen({ navigation }) {
         }}
         validationSchema={validationSchema}
       >
-        {({ handleChange, handleSubmit, errors }) => (
+        {({ handleChange, handleSubmit, errors, values }) => (
           <>
             <Text style={styles.title}>Log In</Text>
             <View style={styles.holder}>
@@ -61,6 +61,7 @@ function LoginScreen({ navigation }) {
                   onChangeText={handleChange("email")}
                   error={errors.email}
                   keyboardType="email-address"
+                  value={values.email}
                 />
               </View>
 
@@ -70,6 +71,7 @@ function LoginScreen({ navigation }) {
                   onChangeText={handleChange("password")}
                   error={errors.password}
                   secureTextEntry={true}
+                  value={values.password}
                 />
               </View>
             </View>
