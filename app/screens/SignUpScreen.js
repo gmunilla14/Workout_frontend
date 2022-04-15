@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Text,
-  StyleSheet,
-  TextInput,
-  View,
-  Button,
-  ScrollView,
-} from "react-native";
+import { Text, StyleSheet, View, ScrollView } from "react-native";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { signUp } from "../routes/authRoutes";
@@ -15,6 +8,7 @@ import colors from "../utils/colors";
 import AppTextInput from "../components/AppTextInput";
 import AppButton from "../components/AppButton";
 import Link from "../components/Link";
+
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().min(4).max(32).trim().label("Username"),
   email: Yup.string().required().email().trim().label("Email"),
@@ -45,10 +39,10 @@ function SignUpScreen({ navigation }) {
     <ScrollView style={styles.container} keyboardShouldPersistTaps="never">
       <Formik
         initialValues={{
-          username: "User1",
-          email: "user1@mail.com",
-          password: "Password1",
-          passwordConfirm: "Password1",
+          username: "",
+          email: "",
+          password: "",
+          passwordConfirm: "",
         }}
         onSubmit={async (values) => {
           const user = {
@@ -56,7 +50,10 @@ function SignUpScreen({ navigation }) {
             email: values.email,
             password: values.password,
           };
+          //Sign Up User
           const response = await signUp(user);
+
+          //If successful, add token to storage and navigate to App
           if (response.status === 200) {
             await AsyncStorage.setItem("token", response.data.token);
             navigation.reset({

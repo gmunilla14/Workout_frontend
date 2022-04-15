@@ -3,20 +3,14 @@ import {
   View,
   StyleSheet,
   Text,
-  TextInput,
-  Button,
-  DevSettings,
   FlatList,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { Formik, Field, Form } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwtDecode from "jwt-decode";
-import { Picker } from "@react-native-picker/picker";
-import { createPlan, getPlans } from "../store/actions/planActions";
+import { createPlan } from "../store/actions/planActions";
 import { getExercises } from "../store/actions/exerciseActions";
 import { useDispatch, useSelector } from "react-redux";
 import colors from "../utils/colors";
@@ -45,21 +39,23 @@ const validationSchema = Yup.object().shape({
     .label("Groups"),
 });
 function CreatePlanScreen({ navigation }) {
+  //State and errors for sets to be added
   const [selectedExercise, setSelectedExercise] = useState();
   const [selectedSets, setSelectedSets] = useState(false);
   const [selectedReps, setSelectedReps] = useState(false);
   const [selectedWeight, setSelectedWeight] = useState(false);
+  const [selectedRest, setSelectedRest] = useState(0);
+
   const [setError, setSetError] = useState(false);
   const [repsError, setRepsError] = useState(false);
   const [weightError, setWeightError] = useState(false);
   const [restError, setRestError] = useState(false);
   const [exerciseError, setExerciseError] = useState(false);
 
-  const [selectedRest, setSelectedRest] = useState(0);
-
   const dispatch = useDispatch();
   const exercises = useSelector((state) => state.exercises);
 
+  //Get Exercises on load
   useEffect(() => {
     dispatch(getExercises());
   }, []);
@@ -72,6 +68,7 @@ function CreatePlanScreen({ navigation }) {
           groups: [],
         }}
         onSubmit={async (values) => {
+          //Send plan to database
           dispatch(createPlan(values));
           navigation.navigate("Home", true);
         }}
@@ -179,6 +176,7 @@ function CreatePlanScreen({ navigation }) {
                       text="Add Sets"
                       size={16}
                       onPress={() => {
+                        //Set errors if any fields are empty
                         let error = false;
                         if (selectedSets <= 0) {
                           setSetError(true);
@@ -207,6 +205,8 @@ function CreatePlanScreen({ navigation }) {
 
                         if (error) return;
                         let sets = [];
+
+                        //Push sets into new group
                         for (let i = 0; i < Number(selectedSets); i++) {
                           if (i === 0) {
                             sets.push({
@@ -232,10 +232,12 @@ function CreatePlanScreen({ navigation }) {
                           exerciseID: selectedExercise._id,
                           sets,
                         };
-
+                        //Add group to current plan
                         let currentGroups = values.groups;
                         currentGroups.push(group);
                         setFieldValue("groups", currentGroups);
+
+                        //Reset values
                         setSelectedSets(0);
                         setSelectedWeight(0);
                         setSelectedReps(0);

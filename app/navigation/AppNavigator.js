@@ -1,5 +1,4 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import WorkoutClockScreen from "../screens/WorkoutClockScreen";
 import HomeScreen from "../screens/HomeScreen";
@@ -15,9 +14,11 @@ import { getHeaderTitle } from "@react-navigation/elements";
 import DataScreen from "../screens/DataScreen";
 import WorkoutHistoryScreen from "../screens/WorkoutHistoryScreen";
 import ViewWorkoutScreen from "../screens/ViewWorkoutScreen";
+
 const Stack = createStackNavigator();
 
 function AppNavigator({ navigation }) {
+  //Check for token on load and navigate accordingly
   useEffect(async () => {
     const userToken = await AsyncStorage.getItem("token");
     const user = jwtDecode(userToken);
@@ -68,9 +69,5 @@ function AppNavigator({ navigation }) {
     </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default AppNavigator;

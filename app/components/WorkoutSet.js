@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text, Button } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import colors from "../utils/colors";
 import IncrementPill from "./IncrementPill";
 import Link from "./Link";
@@ -27,24 +27,36 @@ function WorkoutSet({
     const newPlan = JSON.parse(JSON.stringify(selectedPlan));
     const maxSet = newPlan.groups[groupIndex].sets.length - 1;
 
+    //If this is the only set in the group
     if (newPlan.groups[groupIndex].sets.length === 1) {
+      //If a workout is being done and this is the last group
       if (groupIndex === newPlan.groups.length - 1 && doingWorkout) {
+        //Stop the workout
         onStop();
         return;
       }
 
+      //Remove set
       newPlan.groups.splice(groupIndex, 1);
     } else {
+      //If this is the last set in the group
       if (index === maxSet) {
+        //Get rid of set and rest above it
         newPlan.groups[groupIndex].sets.splice(index - 1, 2);
-
-        if (groupIndex === newPlan.groups.length - 1 && doingWorkout) {
+        //If this is the last group and set and is the current set
+        //in workout, end the workout
+        if (
+          groupIndex === newPlan.groups.length - 1 &&
+          doingWorkout &&
+          currentSet === index &&
+          currentGroup === groupIndex
+        ) {
           setSelectedPlan(newPlan);
 
           onStop();
           return;
         } else {
-          newPlan.groups[groupIndex].sets.splice(index - 1, 2);
+          //If deleted set is last one in current exercise, go to next group
           if (currentSet === maxSet - 1 && currentGroup === groupIndex) {
             setCurrentSet(0);
             setMaxSet(newPlan.groups[currentGroup + 1].sets.length - 1);

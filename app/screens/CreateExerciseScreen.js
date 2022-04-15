@@ -3,18 +3,13 @@ import {
   View,
   StyleSheet,
   Text,
-  TextInput,
-  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
   FlatList,
 } from "react-native";
-import { Formik, Field, Form } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwtDecode from "jwt-decode";
 import { getMuscles } from "../store/actions/muscleActions";
 import { createExercise } from "../store/actions/exerciseActions";
 import { useDispatch } from "react-redux";
@@ -33,20 +28,19 @@ const validationSchema = Yup.object().shape({
 
 function CreateExerciseScreen({ navigation }) {
   const dispatch = useDispatch();
-  useEffect(async () => {
-    const userToken = await AsyncStorage.getItem("token");
-    if (userToken) {
-      console.log(jwtDecode(userToken));
-    }
 
+  //Get Muscles on Load
+  useEffect(async () => {
     dispatch(getMuscles());
   }, []);
 
   const muscles = useSelector((state) => state.muscles);
 
+  //State for muscles that have been added to the exercise
   const [chosenMuscles, setChosenMuscles] = useState([]);
+
+  //State for muscles that havent been added to exercise
   const [remainingMuscles, setRemainingMuscles] = useState(muscles);
-  const [muscleError, setMuscleError] = useState(false);
 
   return (
     <TouchableWithoutFeedback
@@ -62,7 +56,7 @@ function CreateExerciseScreen({ navigation }) {
             notes: "",
           }}
           onSubmit={async (values) => {
-            console.log(values);
+            //Send Exercise to database
             dispatch(createExercise(values));
             navigation.goBack();
           }}
@@ -118,12 +112,15 @@ function CreateExerciseScreen({ navigation }) {
                           <Text>{item.name}</Text>
                           <TouchableOpacity
                             onPress={() => {
+                              //Add muscle to remaining muscles and remove from exercise
                               setRemainingMuscles([...remainingMuscles, item]);
                               setChosenMuscles(
                                 chosenMuscles.filter((muscle) => {
                                   return item._id !== muscle._id;
                                 })
                               );
+
+                              //Set the form value of muscles to muscle IDs
                               if (chosenMuscles.length > 1) {
                                 setFieldValue(
                                   "muscles",

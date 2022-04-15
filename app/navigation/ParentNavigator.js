@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import AuthNavigator from "./AuthNavigator";
 import AppNavigator from "./AppNavigator";
 import TitleScreen from "../screens/TitleScreen";
+
 const Stack = createStackNavigator();
 
 function ParentNavigator(props) {
@@ -17,9 +17,5 @@ function ParentNavigator(props) {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default ParentNavigator;

@@ -7,10 +7,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import colors from "../utils/colors";
-import AppButton from "../components/AppButton";
-import axios from "axios";
-import { url, setHeaders } from "../routes/utils";
-import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getWorkouts } from "../store/actions/workoutActions";
@@ -30,6 +26,7 @@ function WorkoutHistoryScreen({ navigation }) {
           data={workouts}
           keyExtractor={(workout) => workout._id.toString()}
           renderItem={({ item }) => {
+            //Get date string for each workout
             const startDate = new Date(item.startTime);
             const startString =
               startDate.getMonth() +
@@ -39,6 +36,7 @@ function WorkoutHistoryScreen({ navigation }) {
               "/" +
               startDate.getFullYear();
 
+            //Get plan name from each workout by ID
             const planName = plans.filter((plan) => {
               return plan._id == item.planID;
             })[0].name;

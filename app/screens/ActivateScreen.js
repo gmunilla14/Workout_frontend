@@ -1,6 +1,6 @@
 import React from "react";
-import { View, StyleSheet, TextInput, Button, Text } from "react-native";
-import { ErrorMessage, Formik } from "formik";
+import { View, StyleSheet, Text } from "react-native";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import { activate } from "../routes/authRoutes";
 import colors from "../utils/colors";
@@ -11,6 +11,7 @@ import { setHeaders, url } from "../routes/utils";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import Link from "../components/Link";
+
 const validationSchema = Yup.object().shape({
   token: Yup.string().required().min(4).max(32).trim().label("Username"),
 });
@@ -22,9 +23,11 @@ function ActivateScreen({ navigation }) {
       <Formik
         initialValues={{ token: "" }}
         onSubmit={async (values) => {
+          //Activate User
           const response = await activate(values);
+
+          //If activation is successful, go to the app
           if (response.status === 200) {
-            console.log(response.data);
             await AsyncStorage.setItem("token", response.data.token);
             navigation.reset({
               index: 0,
@@ -34,10 +37,9 @@ function ActivateScreen({ navigation }) {
                 },
               ],
             });
-          } else {
-            console.log(response.data);
           }
         }}
+        validationSchema={validationSchema}
       >
         {({ handleChange, handleSubmit, values, errors }) => (
           <View style={styles.inputHolder}>
@@ -66,9 +68,7 @@ function ActivateScreen({ navigation }) {
                 await setHeaders()
               );
               setToken(response.data.token);
-            } catch (err) {
-              console.log(err);
-            }
+            } catch (err) {}
           }}
         />
         {token !== "" && (

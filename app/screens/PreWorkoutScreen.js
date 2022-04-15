@@ -2,7 +2,6 @@ import React from "react";
 import {
   View,
   StyleSheet,
-  Button,
   Text,
   FlatList,
   Alert,
@@ -18,11 +17,17 @@ import { editPlan } from "../store/actions/planActions";
 import Group from "../components/Group";
 import Footer from "../components/Footer";
 import colors from "../utils/colors";
+
 function PreWorkoutScreen({ route, navigation }) {
-  const [selectedPlan, setSelectedPlan] = useState(false);
+  //State for originally chosen plan
   const [ogPlan, setOGPlan] = useState(false);
 
+  //State for new plan
+  const [selectedPlan, setSelectedPlan] = useState(false);
+
   const dispatch = useDispatch();
+
+  //On load, get plans, exercises, and muscles and set plan states to chosen plan
   useEffect(() => {
     dispatch(getPlans());
     dispatch(getExercises());
@@ -31,13 +36,18 @@ function PreWorkoutScreen({ route, navigation }) {
     setOGPlan(route.params);
     setSelectedPlan(route.params);
   }, []);
+
   const exercises = useSelector((state) => state.exercises);
 
   const handlePlanChange = () => {
+    //Deep copy chosen plan
     let editedPlan = JSON.parse(JSON.stringify(selectedPlan));
+
+    //Delete undesired attributes for plan
     delete editedPlan._id;
     delete editedPlan.creatorID;
     delete editedPlan.__v;
+
     editedPlan.groups.forEach((group, index) => {
       delete editedPlan.groups[index]._id;
       group.sets.forEach((set, setIndex) => {
@@ -46,6 +56,34 @@ function PreWorkoutScreen({ route, navigation }) {
     });
 
     dispatch(editPlan(ogPlan._id, editedPlan));
+  };
+
+  const handleBeginWorkout = () => {
+    //If the plan has changed, ask user if they would like to implement
+    //changes to the original plan
+    if (selectedPlan != ogPlan) {
+      Alert.alert(
+        "Plan Edits",
+        "You have updated the original plan. Would you like to save those changes for the future?",
+        [
+          {
+            text: "Yes",
+            onPress: () => {
+              handlePlanChange();
+              navigation.navigate("Clock", selectedPlan);
+            },
+          },
+          {
+            text: "No",
+            onPress: () => {
+              navigation.navigate("Clock", selectedPlan);
+            },
+          },
+        ]
+      );
+    } else {
+      navigation.navigate("Clock", selectedPlan);
+    }
   };
   return (
     <View style={styles.container}>
@@ -77,29 +115,7 @@ function PreWorkoutScreen({ route, navigation }) {
             topText={selectedPlan.groups.length + " EXERCISES"}
             buttonText="Begin Workout"
             onButtonPress={() => {
-              if (selectedPlan != ogPlan) {
-                Alert.alert(
-                  "Plan Edits",
-                  "You have updated the original plan. Would you like to save those changes for the future?",
-                  [
-                    {
-                      text: "Yes",
-                      onPress: () => {
-                        handlePlanChange();
-                        navigation.navigate("Clock", selectedPlan);
-                      },
-                    },
-                    {
-                      text: "No",
-                      onPress: () => {
-                        navigation.navigate("Clock", selectedPlan);
-                      },
-                    },
-                  ]
-                );
-              } else {
-                navigation.navigate("Clock", selectedPlan);
-              }
+              handleBeginWorkout();
             }}
           />
         </>

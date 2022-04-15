@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Text,
-  StyleSheet,
-  TextInput,
-  View,
-  Button,
-  ScrollView,
-} from "react-native";
+import { Text, StyleSheet, View, ScrollView } from "react-native";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { signIn } from "../routes/authRoutes";
@@ -30,13 +23,14 @@ function LoginScreen({ navigation }) {
           password: "",
         }}
         onSubmit={async (values) => {
-          console.log(values);
+          //Sign in User
           const user = {
             email: values.email,
             password: values.password,
           };
           const response = await signIn(user);
-          console.log(response.status);
+
+          //If signin is successful, add token to storage and navigate to app
           if (response.status === 200) {
             await AsyncStorage.setItem("token", response.data.token);
             navigation.reset({

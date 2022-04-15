@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../utils/colors";
 
 function Link({ text, onPress, fontWeight = "700", fontSize = 18 }) {

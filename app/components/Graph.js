@@ -16,11 +16,13 @@ function Graph({
   data,
   exerciseName,
 }) {
+  //Create state variables for graph
   const [circles, setCircles] = useState([]);
   const [yTicks, setyTicks] = useState([]);
   const [xTicks, setxTicks] = useState([]);
   const [curve, setCurve] = useState("");
 
+  //When data changes, calculate and set the graph values
   useEffect(() => {
     const { curvedLine, circles, yTicks, xTicks } = createGraph(data);
     setCurve(curvedLine);
@@ -31,16 +33,18 @@ function Graph({
 
   const createGraph = (data) => {
     if (data.length > 0) {
+      //Set range of y values
       const max = Math.max(...data.map((val) => val.y)) + 5;
       const min = Math.min(...data.map((val) => val.y)) - 5;
 
+      //Get range of X values
       const minTime = new Date(data[0].x);
       const maxTime = new Date(data[data.length - 1].x);
 
+      //Create day buffers on the x axis
       const next = new Date(maxTime);
-      next.setDate(next.getDate() + 1);
-
       const prev = new Date(minTime);
+      next.setDate(next.getDate() + 1);
       prev.setDate(prev.getDate() - 1);
 
       const nextDay = new Date(
@@ -54,14 +58,17 @@ function Graph({
         prev.getDate()
       );
 
+      //Set number of x ticks to number of days between first and last days
       let diff = Math.ceil(
         (nextDay.getTime() - prevDay.getTime()) / (1000 * 64 * 64 * 24)
       );
 
+      //Cut the number of x ticks to below 10
       while (diff > 10) {
         diff /= 2;
       }
 
+      //Create scales and line
       const xScale = scaleTime()
         .domain([prevDay, nextDay])
         .range([leftPadding, width - rightPadding]);
@@ -72,10 +79,12 @@ function Graph({
         .x((d) => xScale(new Date(d.x)))
         .y((d) => yScale(d.y))(data);
 
+      //Create Data points
       const circles = data.map((point) => {
         return { cx: xScale(new Date(point.x)), cy: yScale(point.y) };
       });
 
+      //Create ticks for axes
       let xTicks = [];
       let yTicks = [];
       const minTimeInt = prevDay.getTime();
@@ -97,6 +106,7 @@ function Graph({
     }
   };
 
+  //Formatting for y axis label
   const yAxisString = "translate(15, " + (height / 2 + 45) + ") rotate(-90)";
   return (
     <View style={styles.container}>

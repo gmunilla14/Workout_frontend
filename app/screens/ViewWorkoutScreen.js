@@ -6,17 +6,23 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getExercises } from "../store/actions/exerciseActions";
 import colors from "../utils/colors";
+
 function ViewWorkoutScreen({ route }) {
   const dispatch = useDispatch();
+
+  //Get exercises on load
   useEffect(() => {
     dispatch(getExercises());
   }, []);
-  const workout = route.params;
-  const startDate = new Date(workout.startTime);
 
   const plans = useSelector((state) => state.plans);
   const exercises = useSelector((state) => state.exercises);
 
+  //Get specific workout object
+  const workout = route.params;
+
+  //Create string for when workout was started
+  const startDate = new Date(workout.startTime);
   const startString =
     startDate.getMonth() +
     1 +
@@ -25,6 +31,7 @@ function ViewWorkoutScreen({ route }) {
     "/" +
     startDate.getFullYear();
 
+  //Get name of plan from ID
   const planName = plans.filter((plan) => {
     return plan._id == workout.planID;
   })[0].name;

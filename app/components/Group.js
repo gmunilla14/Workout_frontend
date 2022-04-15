@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -10,10 +10,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 import WorkoutSet from "./WorkoutSet";
 import AppButton from "./AppButton";
-import { useSelector } from "react-redux";
 import Notes from "./Notes";
-import { useState } from "react";
-import { useEffect } from "react";
 import colors from "../utils/colors";
 function Group({
   group,
@@ -32,27 +29,22 @@ function Group({
   setMaxSet,
   onStop,
 }) {
-  const muscles = useSelector((state) => state.muscles);
   const [expanded, setExpanded] = useState(false);
-  const exerciseList = exercises.filter((ex) => ex._id === group.exerciseID);
   const [maxGroup, setMaxGroup] = useState(0);
-  let muscleList = [];
+
+  const exerciseList = exercises.filter((ex) => ex._id === group.exerciseID);
   const currentExercise = exerciseList[0];
 
+  //When current plan/workout changes, calculate number of groups
   useEffect(() => {
     if (selectedPlan) {
       setMaxGroup(selectedPlan.groups.length - 1);
     }
   }, [selectedPlan]);
 
-  if (exerciseList.length > 0) {
-    muscleList = muscles.filter((mus) =>
-      currentExercise.muscles.includes(mus._id)
-    );
-  }
-
   const sets = group.sets;
 
+  //Swap this group with another based on indices
   const swapSets = (index1, index2) => {
     const tempGroup = JSON.parse(JSON.stringify(selectedPlan.groups[index1]));
     let initialGroups = [...selectedPlan.groups];
@@ -63,10 +55,14 @@ function Group({
     setSelectedPlan({ ...selectedPlan, groups: initialGroups });
   };
 
+  //Add set to group
   const addSet = () => {
     let groups = [...selectedPlan.groups];
     let groupLength = groups[groupIndex].sets.length;
     let groupSets = groups[groupIndex].sets;
+
+    //If there is another rest in the group, use that to add rest
+    //if not, create a rest with 60 seconds
     if (groupLength > 1) {
       groupSets.push({
         ...groupSets[groupLength - 2],
@@ -80,6 +76,7 @@ function Group({
       });
     }
 
+    //Add a copy of the last set to the end of the group
     groupSets.push({
       ...groupSets[groupLength - 1],
       _id: String(Math.floor(Math.random() * 100000000) + 1),
@@ -177,6 +174,7 @@ function Group({
             renderItem={({ item, index }) => {
               let editable = false;
               let done = false;
+              //Determine if the group should be editable
               if (doingWorkout) {
                 if (groupIndex > currentGroup) {
                   editable = true;

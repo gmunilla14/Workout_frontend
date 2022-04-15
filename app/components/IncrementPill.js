@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  editable,
-} from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../utils/colors";
 
 function IncrementPill({
@@ -19,12 +13,15 @@ function IncrementPill({
 }) {
   const handleIncrement = (amount) => {
     let currentGroups = selectedPlan.groups;
-    currentGroups[groupIndex].sets[index][field] =
-      currentGroups[groupIndex].sets[index][field] + amount;
-    setSelectedPlan({
-      ...selectedPlan,
-      groups: currentGroups,
-    });
+
+    if (amount > 0 || currentGroups[groupIndex].sets[index][field] > 1) {
+      currentGroups[groupIndex].sets[index][field] =
+        currentGroups[groupIndex].sets[index][field] + amount;
+      setSelectedPlan({
+        ...selectedPlan,
+        groups: currentGroups,
+      });
+    }
   };
 
   return (

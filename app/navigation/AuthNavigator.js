@@ -1,16 +1,14 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import TitleScreen from "../screens/TitleScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import LoginScreen from "../screens/LoginScreen";
-import ActivateScreen from "../screens/ActivateScreen";
 import { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createStackNavigator();
 
 function AuthNavigator({ navigation }) {
+  //Check for token on load and navigate accordingly
   useEffect(async () => {
     const userToken = await AsyncStorage.getItem("token");
     if (userToken) {
@@ -23,7 +21,7 @@ function AuthNavigator({ navigation }) {
         ],
       });
     }
-  });
+  }, []);
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Sign Up" component={SignUpScreen} />
@@ -31,9 +29,5 @@ function AuthNavigator({ navigation }) {
     </Stack.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-});
 
 export default AuthNavigator;

@@ -1,25 +1,18 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  FlatList,
-  Button,
-  TouchableOpacity,
-} from "react-native";
+import React, { useEffect } from "react";
+import { View, StyleSheet, Text, FlatList } from "react-native";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { getPlans } from "../store/actions/planActions";
-import { getExercises } from "../store/actions/exerciseActions";
 import { getMuscles } from "../store/actions/muscleActions";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppButton from "../components/AppButton";
 import colors from "../utils/colors";
+
 function HomeScreen({ navigation }) {
   let plans = useSelector((state) => state.plans);
   const dispatch = useDispatch();
 
+  //Get plans and muscles on load
   useEffect(() => {
     dispatch(getPlans());
     dispatch(getMuscles());

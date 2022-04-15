@@ -5,11 +5,29 @@ import { useSelector } from "react-redux";
 import Notes from "./Notes";
 import { useState } from "react";
 import colors from "../utils/colors";
+
 function Clock({ mins, secs, workout, currentGroup, currentSet, setWorkout }) {
-  let status = "";
-  const [overTime, setOverTime] = useState(false);
   const exercises = useSelector((state) => state.exercises);
 
+  let status = "";
+  const [overTime, setOverTime] = useState(false);
+
+  const set = workout.groups[currentGroup].sets[currentSet];
+
+  //Check if time has gone over expected duration
+  useEffect(() => {
+    if (Number(mins) > Number(durationMin)) {
+      setOverTime(true);
+    } else if (Number(mins) === Number(durationMin)) {
+      if (Number(secs) > Number(durationSec)) {
+        setOverTime(true);
+      }
+    } else {
+      setOverTime(false);
+    }
+  }, [secs]);
+
+  //Get exercise object from exercise ID
   const getCurrentExercise = (exerciseID) => {
     const exerciseList = exercises.filter((ex) => ex._id === exerciseID);
     return exerciseList[0];
@@ -17,6 +35,8 @@ function Clock({ mins, secs, workout, currentGroup, currentSet, setWorkout }) {
 
   let currentExercise = {};
   let notes = "";
+
+  //Set clock text depending if it is an exercise or a rest
   if (workout.groups[currentGroup].sets[currentSet].type === "exercise") {
     currentExercise = getCurrentExercise(
       workout.groups[currentGroup].exerciseID
@@ -29,25 +49,12 @@ function Clock({ mins, secs, workout, currentGroup, currentSet, setWorkout }) {
     status = "Review Last Set";
   }
 
-  const set = workout.groups[currentGroup].sets[currentSet];
+  //Create time strings for clock
+  const timeString = mins + ":" + secs;
   const durationMin = Math.floor(set.duration / 60)
     .toString()
     .padStart(2, "0");
   const durationSec = (set.duration % 60).toString().padStart(2, "0");
-
-  const timeString = mins + ":" + secs;
-
-  useEffect(() => {
-    if (Number(mins) > Number(durationMin)) {
-      setOverTime(true);
-    } else if (Number(mins) === Number(durationMin)) {
-      if (Number(secs) > Number(durationSec)) {
-        setOverTime(true);
-      }
-    } else {
-      setOverTime(false);
-    }
-  }, [secs]);
 
   return (
     <View style={styles.container}>

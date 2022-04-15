@@ -3,10 +3,7 @@ import { View, StyleSheet, Text } from "react-native";
 import axios from "axios";
 import { url, setHeaders } from "../routes/utils";
 import { useState } from "react";
-import { scaleTime, scaleLinear } from "d3-scale";
 import { useEffect } from "react";
-import { line } from "d3-shape";
-import { Picker } from "@react-native-picker/picker";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getExercises } from "../store/actions/exerciseActions";
@@ -23,6 +20,7 @@ function DataScreen(props) {
 
   const exercises = useSelector((state) => state.exercises);
 
+  //Get Exercises on load
   useEffect(() => {
     dispatch(getExercises());
   }, []);
@@ -52,8 +50,6 @@ function DataScreen(props) {
                 `${url}/data?type=volpersec&exercise=${selectedExercise._id}`,
                 await setHeaders()
               );
-              console.log(response.data);
-              console.log(selectedExercise);
               setData(response.data.data);
               setShowCurve(true);
             }}
