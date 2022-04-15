@@ -15,7 +15,9 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gregmunilla.workouttracker",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
