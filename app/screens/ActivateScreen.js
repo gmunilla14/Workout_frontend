@@ -13,7 +13,7 @@ import { useState } from "react";
 import Link from "../components/Link";
 
 const validationSchema = Yup.object().shape({
-  token: Yup.string().required().min(4).max(32).trim().label("Username"),
+  token: Yup.string().required().min(1).max(32).trim().label("Token"),
 });
 
 function ActivateScreen({ navigation }) {
