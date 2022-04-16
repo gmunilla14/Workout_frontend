@@ -1,12 +1,9 @@
 import axios from "axios";
-import { setHeaders } from "./utils";
+import { url, setHeaders } from "./utils";
 
 export const signUp = async (user) => {
   try {
-    const response = await axios.post(
-      "http://192.168.4.66:3000/api/1.0/signup",
-      user
-    );
+    const response = await axios.post(`${url}/signup`, user);
     return response;
   } catch (err) {
     console.log(err);
@@ -16,10 +13,7 @@ export const signUp = async (user) => {
 
 export const signIn = async (user) => {
   try {
-    const response = await axios.post(
-      "http://192.168.4.66:3000/api/1.0/signin",
-      user
-    );
+    const response = await axios.post(`${url}/signin`, user);
     return response;
   } catch (err) {
     console.log(err);
@@ -30,7 +24,7 @@ export const signIn = async (user) => {
 export const activate = async (token) => {
   try {
     const response = await axios.post(
-      "http://192.168.4.66:3000/api/1.0/activate",
+      `${url}/activate`,
       token,
       await setHeaders()
     );
