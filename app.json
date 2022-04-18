@@ -22,7 +22,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#FFFFFF",
+        "package": "com.gregmunilla.workouttracker",
+        "versionCode": 1
       }
     },
     "web": {
